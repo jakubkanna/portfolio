@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import "../../reset.css";
 import "./App.css";
 import LogoSection from "../sections/Logo.section";
+import CVSection from "../sections/CV.section";
+import ContactSection from "../sections/Contact.section";
 
 function App() {
   // init
@@ -10,7 +12,7 @@ function App() {
     document.title = `JAKUB KANNA — Portfolio (fullstack) ${year}`;
   }, []);
 
-  const sections = [<LogoSection />];
+  const sections = [<LogoSection />, <CVSection />, <ContactSection />];
 
   return (
     <div className="App">
