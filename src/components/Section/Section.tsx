@@ -1,12 +1,8 @@
-import "./Section.css";
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import "./Section.css";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 
-export default function Section({
-  children = <></>,
-  id = "section",
-  title,
-}: SectionProps) {
+export default function Section({ children, id, title }: SectionProps) {
   const ref = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -14,21 +10,21 @@ export default function Section({
     offset: ["start end", "end end"],
   });
 
-  const opacity = useTransform(scrollYProgress, (value) =>
-    value === 1 ? 1 : 0
-  );
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    // set context {boolean, id}
+  });
 
   return (
     <motion.section
-      id={id}
+      id={id + "Section"}
       className="section"
       ref={ref}
       style={{
-        opacity: opacity,
+        opacity: 1,
       }}
     >
       {title && <h1>{title}</h1>}
-      {children}
+      <div className="section-content">{children}</div>
     </motion.section>
   );
 }
