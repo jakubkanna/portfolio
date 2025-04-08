@@ -19,25 +19,16 @@ export default function Section({
   );
 
   return (
-    <div
+    <motion.section
+      id={id}
+      className="section"
+      ref={ref}
       style={{
-        height: "100dvh",
-        position: "sticky",
-        top: 0,
+        opacity: opacity,
       }}
     >
-      <motion.section
-        id={id}
-        className="section"
-        ref={ref}
-        style={{
-          height: "99%", // so it can detect scroll
-          opacity: opacity,
-        }}
-      >
-        {title && <h1>{title}</h1>}
-        {children}
-      </motion.section>
-    </div>
+      {title && <h1>{title}</h1>}
+      {children}
+    </motion.section>
   );
 }

@@ -11,5 +11,5 @@ export default function Sections() {
     <ContactSection key="contact" />,
   ];
 
-  return <div>{sections}</div>;
+  return sections;
 }
