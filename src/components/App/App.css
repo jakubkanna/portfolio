@@ -3,6 +3,8 @@ body {
   background-color: black;
   color: white;
   font-family: Arial, Helvetica, sans-serif !important;
-  height: 100%;
   width: 100%;
+}
+main {
+  height: 100dvh;
 }

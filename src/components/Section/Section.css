@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  border: 1px solid green;
-  height: 90dvh;
+  background-color: black;
   width: 100%;
 }

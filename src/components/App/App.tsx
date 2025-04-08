@@ -1,31 +1,23 @@
-import { useEffect, useState } from "react";
 import "../../reset.css";
 import "./App.css";
-import LogoSection from "../sections/Logo.section";
-import CVSection from "../sections/CV.section";
-import ContactSection from "../sections/Contact.section";
-import Menu from "../Menu/Menu";
+import { useEffect, useState } from "react";
+import Sections from "../sections/Sections";
 import Button from "../Button/Button";
+import Menu from "../Menu/Menu";
 
 function App() {
-  // init
   useEffect(() => {
     const year = new Date().getFullYear();
     document.title = `JAKUB KANNA — Portfolio (fullstack) ${year}`;
   }, []);
 
-  const sections = [<LogoSection />, <CVSection />, <ContactSection />];
   const [menuHidden, setMenuHidden] = useState(true);
-  const toggleMenu = () => {
-    setMenuHidden((prev) => !prev);
-    console.log("is menu hidden?", menuHidden);
-  };
+
+  const toggleMenu = () => setMenuHidden((prev) => !prev);
 
   return (
-    <div className="App">
-      {sections.map((section, index) => (
-        <div key={index}>{section}</div>
-      ))}
+    <main>
+      <Sections />
       <Button
         id="Menu"
         style={{ position: "fixed", bottom: "0", right: "0", margin: "1rem" }}
@@ -34,7 +26,7 @@ function App() {
         Menu
       </Button>
       <Menu hidden={menuHidden} toggle={toggleMenu} />
-    </div>
+    </main>
   );
 }
 
