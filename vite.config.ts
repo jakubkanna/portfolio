@@ -6,5 +6,5 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 export default defineConfig({
   plugins: [react(), viteSingleFile()],
   assetsInclude: ["**/*.md"],
-  base: "/portfolio]/",
+  base: "/portfolio/",
 });
