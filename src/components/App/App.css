@@ -25,6 +25,7 @@ h4,
 h5,
 h6 {
   text-align: center;
+  max-width: 100%;
 }
 
 h1 {
@@ -44,6 +45,16 @@ video {
   height: auto;
 }
 
+table * {
+  text-align: start;
+  padding-left: 0;
+  padding-right: 12px;
+}
+
+thead {
+  font-size: 12px;
+}
+
 .container {
   width: 100%;
   padding-left: 1rem;
@@ -54,6 +65,11 @@ video {
 
 p {
   padding: 1rem;
+}
+
+#menuButton {
+  --progress-bar-color: none;
+  --progress-bar-height: 0px;
 }
 
 @media (min-width: 576px) {

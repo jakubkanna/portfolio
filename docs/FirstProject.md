@@ -2,4 +2,6 @@
 
 ## Hello!
 
-![Screenshot of jakubkanna.com website. Grey menu, two columns, black borders. In the right border spinning black graphic, with sharp edges, smilar to dynamic sun. On the left menu buttons with modern fonts.](/jk-2022/Screenshot%202025-04-09%20143230.png "jakubkanna.com 2022")
+https://github.com/jakubkanna/portfolio/raw/refs/heads/main/public/jk-2022/jk-web-static.mp4
+
+https://github.com/jakubkanna/portfolio/raw/ea491c3c1110d603613c0fd3905ecd1371f33a5f/public/jk-2022/jk-web-presentation.mp4

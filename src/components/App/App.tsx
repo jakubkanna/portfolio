@@ -2,7 +2,6 @@ import "../../reset.css";
 import "./App.css";
 import { useEffect, useState } from "react";
 import Sections from "../sections/Sections";
-import Button from "../Button/Button";
 import Menu from "../Menu/Menu";
 
 function App() {
@@ -18,13 +17,30 @@ function App() {
   return (
     <main>
       <Sections />
-      <Button
-        id="Menu"
-        style={{ position: "fixed", bottom: "0", right: "0", margin: "1rem" }}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "0",
+          right: "0",
+          cursor: "pointer",
+        }}
+        dangerouslySetInnerHTML={{
+          __html: `
+        <model-viewer
+          id="menuButton"
+          src="/jk-logo.glb"
+          tone-mapping="neutral"
+          shadow-intensity="0"
+          auto-rotate
+          interaction-prompt="none"
+          camera-orbit="90deg"
+          style="height:90px; width:120px; padding-right:20px;"
+        ></model-viewer>
+          `,
+        }}
         onClick={toggleMenu}
-      >
-        Menu
-      </Button>
+      ></div>
+
       <Menu hidden={menuHidden} toggle={toggleMenu} />
     </main>
   );
