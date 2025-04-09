@@ -28,7 +28,7 @@ function App() {
           __html: `
         <model-viewer
           id="menuButton"
-          src="/jk-logo.glb"
+          src="./jk-logo.glb"
           tone-mapping="neutral"
           shadow-intensity="0"
           auto-rotate

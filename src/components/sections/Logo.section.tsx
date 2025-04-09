@@ -10,7 +10,7 @@ export default function LogoSection() {
   };
   return (
     <Section id="Logo">
-      <img src="/favicon/android-chrome-512x512.png" style={style}></img>
+      <img src="./favicon/android-chrome-512x512.png" style={style}></img>
     </Section>
   );
 }
