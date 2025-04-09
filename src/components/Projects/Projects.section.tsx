@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Section from "../Section/Section";
 import Markdown from "react-markdown";
 import RehypeVideo from "rehype-video";
+import rehypeRaw from "rehype-raw";
 
 const ProjectsSection = ({ containerYProgress, threshold }: ProjectsProps) => {
   const [files, setFiles] = useState<Record<string, string>>({});
@@ -55,6 +56,7 @@ const ProjectsSection = ({ containerYProgress, threshold }: ProjectsProps) => {
                     details: false,
                   },
                 ],
+                rehypeRaw,
               ]}
             >
               {content}

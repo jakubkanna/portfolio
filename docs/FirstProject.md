@@ -1,4 +1,4 @@
-# I am you first project
+# I am your first project.
 
 ## Hello!
 
