@@ -2,8 +2,4 @@
 
 ## Hello!
 
-![alt text](https://wpu.cfa.arizona.edu/wp-content/uploads/sites/5/2024/08/20094832/4-3.png "Title")
-
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-https://user-images.githubusercontent.com/1680273/138299599-88547edd-859c-44c9-8b52-2cc06f7f2dd3.mov?!#title=Example%20Display
+![Screenshot of jakubkanna.com website. Grey menu, two columns, black borders. In the right border spinning black graphic, with sharp edges, smilar to dynamic sun. On the left menu buttons with modern fonts.](/jk-2022/Screenshot%202025-04-09%20143230.png "jakubkanna.com 2022")

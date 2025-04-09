@@ -1,9 +1,9 @@
 import { useMotionValueEvent, useScroll, useSpring } from "framer-motion";
-import ProjectsSection from "../Projects/Projects.section";
 import ContactSection from "./Contact.section";
 import CVSection from "./CV.section";
 import LogoSection from "./Logo.section";
 import { useState } from "react";
+import ProjectsSection from "./Projects/Projects.section";
 
 export default function Sections() {
   const { scrollYProgress } = useScroll({});
