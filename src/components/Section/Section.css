@@ -1,16 +1,23 @@
 .section {
+  height: 100dvh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  position: fixed;
+  width: 100%;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.section-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: black;
-  width: 100%;
-  min-height: 99svh;
-  overflow: auto;
+  max-height: 100%;
 }
-.section-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+.sections-wrapper {
+  overflow-y: auto;
+  height: 100vh;
 }

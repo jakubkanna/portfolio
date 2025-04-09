@@ -1,4 +1,10 @@
-#ProjectsSection img {
-  width: 100%;
-  height: auto;
+.projects-wrapper {
+  overflow-y: hidden;
+  height: 100%;
+}
+.project {
+  padding-top: 1rem;
+  padding-bottom: 10rem;
+  min-height: 100%;
+  box-sizing: border-box;
 }
