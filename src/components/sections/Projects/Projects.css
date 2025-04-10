@@ -12,3 +12,8 @@
 .project:not(:first-child) {
   padding-top: 10rem;
 }
+.project-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
