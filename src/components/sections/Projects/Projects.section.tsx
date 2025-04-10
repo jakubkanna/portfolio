@@ -1,5 +1,5 @@
 import "./Projects.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import RehypeVideo from "rehype-video";
 import rehypeRaw from "rehype-raw";
@@ -43,7 +43,7 @@ const Icons = ({ behance, github }: IconsProps) => {
   );
 };
 
-const ProjectsSection = ({ containerYProgress, threshold }: ProjectsProps) => {
+const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
   const [files, setFiles] = useState<
     Record<
       string,
@@ -57,10 +57,6 @@ const ProjectsSection = ({ containerYProgress, threshold }: ProjectsProps) => {
       }
     >
   >({});
-  const divRef = useRef<HTMLDivElement>(null);
-  const buffer = (threshold.to - threshold.from) * 0.1;
-  const from = threshold.from + buffer;
-  const to = threshold.to - buffer / 2;
 
   useEffect(() => {
     // Dynamically import all .md files in the docs folder
@@ -100,43 +96,36 @@ const ProjectsSection = ({ containerYProgress, threshold }: ProjectsProps) => {
     loadFiles();
   }, []);
 
-  useEffect(() => {
-    const el = divRef.current;
-    if (!el) return;
-
-    if (containerYProgress >= from && containerYProgress <= to) {
-      const normalizedProgress = (containerYProgress - from) / (to - from);
-      const maxScroll = el.scrollHeight - el.clientHeight;
-      el.scrollTop = normalizedProgress * maxScroll;
-    }
-  }, [containerYProgress, from, to]);
-
   return (
-    <Section id="Projects" title="Projects" subtitle="">
-      <div className="projects-wrapper" ref={divRef}>
-        {Object.entries(files).map(
-          (
-            [filename, { title, subtitle, date, content, github, behance }],
-            i
-          ) => (
-            <div id={"P" + i} className="project" key={filename}>
-              <div className="project-info">
-                <span className="title">{title}</span>
-                <div className="flex-center">
-                  <span className="date">{date.getFullYear()}</span>
-                  <span className="subtitle">{subtitle}</span>
-                  <Icons github={github} behance={behance} />
-                </div>
+    <Section
+      id="Projects"
+      title="Projects"
+      subtitle=""
+      containerYProgress={containerYProgress}
+      threshold={threshold}
+    >
+      {Object.entries(files).map(
+        (
+          [filename, { title, subtitle, date, content, github, behance }],
+          i
+        ) => (
+          <div id={"P" + i} className="project" key={filename}>
+            <div className="project-info">
+              <span className="title">{title}</span>
+              <div className="flex-center">
+                <span className="date">{date.getFullYear()}</span>
+                <span className="subtitle">{subtitle}</span>
+                <Icons github={github} behance={behance} />
               </div>
-              <Markdown
-                rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
-              >
-                {content}
-              </Markdown>
             </div>
-          )
-        )}
-      </div>
+            <Markdown
+              rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
+            >
+              {content}
+            </Markdown>
+          </div>
+        )
+      )}
     </Section>
   );
 };
