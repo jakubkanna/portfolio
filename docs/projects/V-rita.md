@@ -6,4 +6,4 @@ slug: rita
 github: https://github.com/jakubkanna/labguy
 ---
 
-<video autoplay muted loop src="https://github.com/jakubkanna/portfolio/raw/refs/heads/main/public/rita/ritas-www-showcase-2025.mp4"></video>
+<video autoplay muted loop src="https://github.com/jakubkanna/portfolio/raw/refs/heads/main/public/rita/ritas-www-showcase-2025-hd.mp4"></video>
