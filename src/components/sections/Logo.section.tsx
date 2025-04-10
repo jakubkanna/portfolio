@@ -7,6 +7,8 @@ export default function LogoSection() {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "32px",
+    height: "auto",
+    margin: "0",
   };
   return (
     <Section id="Logo">

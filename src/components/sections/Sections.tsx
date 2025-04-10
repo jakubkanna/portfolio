@@ -4,12 +4,13 @@ import CVSection from "./CV.section";
 import LogoSection from "./Logo.section";
 import { useState } from "react";
 import ProjectsSection from "./Projects/Projects.section";
+import MoreSection from "./More.section";
 
 export default function Sections() {
   const { scrollYProgress } = useScroll({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [yProgress, setYProgress] = useState(0);
-  const projectsTreshold = { index: 2, from: 0.3, to: 0.9 }; // Projects gets 60%
+  const projectsTreshold = { index: 2, from: 0.3, to: 0.8 }; // Projects gets 60%
   // Add a spring animation to smooth out the scroll progress
   const smoothScrollYProgress = useSpring(scrollYProgress, {
     damping: 50,
@@ -22,7 +23,8 @@ export default function Sections() {
     { index: 0, from: 0.0, to: 0.1 },
     { index: 1, from: 0.1, to: 0.3 },
     projectsTreshold,
-    { index: 3, from: projectsTreshold.to, to: 1.0 },
+    { index: 3, from: projectsTreshold.to, to: 0.9 },
+    { index: 4, from: 0.9, to: 1.0 },
   ];
 
   useMotionValueEvent(smoothScrollYProgress, "change", (latest) => {
@@ -45,7 +47,8 @@ export default function Sections() {
       containerYProgress={yProgress}
       threshold={projectsTreshold}
     />,
-    <ContactSection key="contact" />,
+    <MoreSection key="more" />,
+    // <ContactSection key="contact" />,
   ];
 
   return sections[currentIndex];

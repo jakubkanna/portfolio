@@ -6,8 +6,7 @@ import Menu from "../Menu/Menu";
 
 function App() {
   useEffect(() => {
-    const year = new Date().getFullYear();
-    document.title = `JAKUB KANNA — Portfolio (fullstack) ${year}`;
+    document.title = `JAKUB KANNA — artist, full-stack developer, graphic designer`;
   }, []);
 
   const [menuHidden, setMenuHidden] = useState(true);
