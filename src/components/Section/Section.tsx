@@ -13,7 +13,7 @@ export default function Section({
   style,
 }: SectionProps) {
   const divRef = useRef<HTMLDivElement>(null);
-  const buffer = 0.05; //(threshold && (threshold.to - threshold.from) * 0.1) || 0;
+  const buffer = 0.075; //(threshold && (threshold.to - threshold.from) * 0.1) || 0;
   const from = (threshold && threshold.from + buffer) || 0;
   const to = (threshold && threshold.to - buffer / 2) || 0;
 

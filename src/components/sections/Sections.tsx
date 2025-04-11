@@ -26,7 +26,7 @@ export default function Sections() {
     { index: 3, from: projectsTreshold.to, to: 1.0 },
   ];
 
-  useMotionValueEvent(smoothScrollYProgress, "change", (latest) => {
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
     setYProgress(latest);
 
     const active = sectionThresholds.find((section) => {
