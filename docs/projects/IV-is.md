@@ -7,4 +7,4 @@ behance: https://www.behance.net/gallery/222938879/Izabela-Sitarska-Website
 github: https://github.com/jakubkanna/labguy
 ---
 
-<video autoplay muted loop src="https://github.com/jakubkanna/portfolio/raw/refs/heads/main/public/is/izabelasitarska-showcase-2025-hd.mp4"></video>
+<video autoplay muted loop controls src="https://github.com/jakubkanna/portfolio/raw/refs/heads/main/public/is/izabelasitarska-showcase-2025-hd.mp4"></video>

@@ -9,7 +9,7 @@ export default function Sections() {
   const { scrollYProgress } = useScroll({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [yProgress, setYProgress] = useState(0);
-  const projectsTreshold = { index: 2, from: 0.3, to: 0.8 }; // Projects gets 60%
+  const projectsTreshold = { index: 2, from: 0.3, to: 0.9 }; // Projects gets 60%
   const cvThreshold = { index: 1, from: 0.1, to: 0.3 };
   // Add a spring animation to smooth out the scroll progress
   const smoothScrollYProgress = useSpring(scrollYProgress, {
@@ -23,8 +23,7 @@ export default function Sections() {
     { index: 0, from: 0.0, to: 0.1 },
     cvThreshold,
     projectsTreshold,
-    { index: 3, from: projectsTreshold.to, to: 0.9 },
-    { index: 4, from: 0.9, to: 1.0 },
+    { index: 3, from: projectsTreshold.to, to: 1.0 },
   ];
 
   useMotionValueEvent(smoothScrollYProgress, "change", (latest) => {

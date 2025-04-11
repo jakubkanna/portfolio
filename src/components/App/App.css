@@ -11,7 +11,7 @@ body {
   line-height: 1.2;
 }
 :root {
-  --body-height: 1000dvh;
+  --body-height: 1200dvh;
 }
 
 #root,
@@ -45,7 +45,7 @@ video {
   max-height: 90dvh;
   margin-top: 5rem;
   margin-bottom: 5rem;
-  background-color: rgb(0, 0, 0);
+  position: static;
 }
 
 table * {
