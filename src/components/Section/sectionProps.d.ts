@@ -3,7 +3,7 @@ interface SectionProps {
   id?: string;
   title?: string;
   subtitle?: string;
-  containerYProgress?: number;
+  containerYProgress: MotionValue<number>;
   threshold?: { index: number; from: number; to: number };
   style?: React.CSSProperties;
   className?: string;

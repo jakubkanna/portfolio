@@ -1,5 +1,6 @@
 .fade {
   position: absolute;
+  justify-self: center;
   top: 0;
   left: 0;
   height: 100%;
@@ -13,7 +14,7 @@
     height: 100%;
     width: 100%;
     content: "";
-    padding: Min(20em, 47vmin);
+    /* padding: Min(20em, 47vmin); */
     background: repeating-linear-gradient(hsl(0, 0%, 52.5%), #fff 6.25%),
       linear-gradient(#000 33.3%, grey 0, #fff 66.7%)
         /* background height is 3x the element's height */ 0/ 100% 300%; /* 6 */

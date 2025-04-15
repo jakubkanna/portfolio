@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
 import "./Section.css";
-import { useEffect, useRef } from "react";
+import { motion, useMotionValueEvent } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import Fade from "../Fade/Fade";
 
 export default function Section({
@@ -12,33 +12,37 @@ export default function Section({
   containerYProgress,
   style,
 }: SectionProps) {
-  const divRef = useRef<HTMLDivElement>(null);
-  const buffer = 0.075; //(threshold && (threshold.to - threshold.from) * 0.1) || 0;
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const buffer = 0.05;
   const from = (threshold && threshold.from + buffer) || 0;
-  const to = (threshold && threshold.to - buffer / 2) || 0;
+  const to = (threshold && threshold.to - buffer) || 0;
+  const [progress, setProgress] = useState(0);
+
+  useMotionValueEvent(containerYProgress, "change", (latest: number) => {
+    setProgress(latest);
+  });
 
   useEffect(() => {
-    const el = divRef.current;
-    if (!el || !containerYProgress) return;
-
-    if (containerYProgress >= from && containerYProgress <= to) {
-      const normalizedProgress = (containerYProgress - from) / (to - from);
-      const maxScroll = el.scrollHeight - el.clientHeight;
-      el.scrollTop = normalizedProgress * maxScroll;
-    }
-  }, [containerYProgress, from, to]);
+    const el = sectionRef.current;
+    if (!el || progress == null) return;
+    const normalizedProgress = (progress - from) / (to - from);
+    const maxScroll = el.scrollHeight - el.clientHeight;
+    el.scrollTop = normalizedProgress * maxScroll;
+  }, [progress, from, to]);
 
   return (
-    <motion.section id={id + "Section"} className="section" style={style}>
+    <motion.section
+      ref={sectionRef}
+      id={id + "Section"}
+      className="section"
+      style={style}
+    >
       {title && <span className="title">{title}</span>}
       {subtitle && <span className="subtitle">{subtitle}</span>}
-      <div className="section-content container">
-        <Fade>
-          <div className="section-wrapper" ref={divRef}>
-            {children}
-          </div>
-        </Fade>
-      </div>
+      <Fade>
+        <div className="section-content">{children}</div>
+      </Fade>
     </motion.section>
   );
 }

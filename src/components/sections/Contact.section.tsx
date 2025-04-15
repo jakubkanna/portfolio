@@ -4,7 +4,7 @@ import Section from "../Section/Section";
 
 export default function ContactSection() {
   return (
-    <Section id="Contact" title="Contact">
+    <Section id="Contact" title="Contact" containerYProgress={undefined}>
       <Markdown>{contact}</Markdown>
     </Section>
   );

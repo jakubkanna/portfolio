@@ -1,12 +1,10 @@
 .project {
-  padding-bottom: 10rem;
+  padding-bottom: 2rem;
   min-height: 100%;
   box-sizing: border-box;
   width: 100%;
 }
-.project:not(:first-child) {
-  padding-top: 10rem;
-}
+
 .project-info {
   display: flex;
   justify-content: space-between;

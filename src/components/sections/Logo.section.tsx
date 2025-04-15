@@ -1,6 +1,9 @@
 import Section from "../Section/Section";
 
-export default function LogoSection() {
+export default function LogoSection({
+  containerYProgress,
+  threshold,
+}: SectionProps) {
   const style: React.CSSProperties = {
     position: "fixed",
     top: "50%",
@@ -11,7 +14,11 @@ export default function LogoSection() {
     margin: "0",
   };
   return (
-    <Section id="Logo">
+    <Section
+      id="Logo"
+      containerYProgress={containerYProgress}
+      threshold={threshold}
+    >
       <img src="./favicon/android-chrome-512x512.png" style={style}></img>
     </Section>
   );
