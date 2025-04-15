@@ -14,7 +14,9 @@ export default function CVSection({
       containerYProgress={containerYProgress}
       threshold={threshold}
     >
-      <Markdown remarkPlugins={[remarkGfm]}>{cv}</Markdown>
+      <div className="container">
+        <Markdown remarkPlugins={[remarkGfm]}>{cv}</Markdown>
+      </div>
     </Section>
   );
 }

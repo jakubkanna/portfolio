@@ -10,7 +10,6 @@ section {
   --lines: 5px;
   overflow: hidden;
   z-index: 0;
-  background: rgb(10, 10, 10);
 }
 
 .title {
@@ -36,4 +35,6 @@ section {
 
 .section-content {
   padding-bottom: 2rem;
+  padding-top: 2rem;
+  height: auto;
 }

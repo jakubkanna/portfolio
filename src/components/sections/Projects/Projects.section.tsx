@@ -5,6 +5,7 @@ import RehypeVideo from "rehype-video";
 import rehypeRaw from "rehype-raw";
 import Section from "../../Section/Section";
 import matter from "gray-matter";
+import MoveIn from "../../MoveIn/MoveIn";
 
 const Icons = ({ behance, github }: IconsProps) => {
   const size = 14;
@@ -110,19 +111,23 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
           i
         ) => (
           <div id={"P" + i} className="project" key={filename}>
-            <div className="project-info">
-              <span className="title">{title}</span>
-              <div className="flex-center">
-                <span className="date">{date.getFullYear()}</span>
-                <span className="subtitle">{subtitle}</span>
-                <Icons github={github} behance={behance} />
+            <MoveIn>
+              <div className="project-info">
+                <span className="title">{title}</span>
+                <div className="flex-center">
+                  <span className="date">{date.getFullYear()}</span>
+                  <span className="subtitle">{subtitle}</span>
+                  <Icons github={github} behance={behance} />
+                </div>
               </div>
-            </div>
-            <Markdown
-              rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
-            >
-              {content}
-            </Markdown>
+            </MoveIn>{" "}
+            <MoveIn>
+              <Markdown
+                rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
+              >
+                {content}
+              </Markdown>{" "}
+            </MoveIn>
           </div>
         )
       )}

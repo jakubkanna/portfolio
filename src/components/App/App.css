@@ -1,6 +1,5 @@
 html,
 body {
-  color: rgb(214, 214, 214);
   font-size: 18px;
   font-family: Arial, Helvetica, sans-serif !important;
   width: 100%;
@@ -8,9 +7,21 @@ body {
   scroll-behavior: smooth;
   height: var(--body-height);
   line-height: 1.2;
+  color: var(--color);
 }
 :root {
   --body-height: 1600dvh;
+  --bg-color: rgb(243, 243, 243);
+  --color: rgb(10, 10, 10);
+}
+
+[data-theme="dark"] {
+  --bg-color: rgb(10, 10, 10);
+  --color: white;
+}
+
+section {
+  background-color: var(--bg-color);
 }
 
 #root,
@@ -28,6 +39,8 @@ h6 {
   max-width: 100%;
   word-break: break-word;
   white-space: normal;
+  text-transform: uppercase;
+  color: var(--color);
 }
 
 h1 {
@@ -38,7 +51,11 @@ h1 {
 }
 h2 {
   font-size: 5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1.75rem;
 }
 
 img,
@@ -65,9 +82,20 @@ video {
 }
 
 table * {
-  text-align: start;
   padding-left: 0;
-  padding-right: 12px;
+  padding-right: 5rem;
+}
+th {
+  text-align: start;
+}
+td {
+  text-align: end;
+}
+table {
+  width: 100%;
+}
+table:not(:last-child) {
+  margin-bottom: 9rem;
 }
 
 thead {
@@ -75,11 +103,14 @@ thead {
 }
 
 .container {
+  height: auto;
   width: 100%;
   padding-left: 1rem;
   padding-right: 1rem;
   margin-right: auto;
   margin-left: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 p {
@@ -87,7 +118,7 @@ p {
 }
 
 a {
-  color: white;
+  color: var(--color);
 }
 
 #menuButton {

@@ -5,5 +5,5 @@ interface FadeProps {
 }
 
 export default function Fade({ children }: FadeProps) {
-  return <div className="fade ">{children}</div>;
+  return <div className="fade">{children}</div>;
 }
