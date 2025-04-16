@@ -43,13 +43,10 @@ export default function Typewriter() {
       }
     };
 
-    // Initial check in case hash is already set on load
-    handleHashChange();
+    handleHashChange(); // Initial check in case hash is already set on load
 
-    // Add event listener
     window.addEventListener("hashchange", handleHashChange);
 
-    // Cleanup
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
@@ -86,6 +83,7 @@ export default function Typewriter() {
       localStorage.setItem("dark_mode", JSON.stringify(response));
       applyDarkMode(response);
       next();
+      window.location.hash = "";
     };
 
     // render buttons
