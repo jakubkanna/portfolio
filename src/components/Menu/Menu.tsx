@@ -7,9 +7,9 @@ export default function Menu({ hidden = true, toggle }: MenuProps) {
     <AnimatePresence>
       {!hidden && (
         <motion.div
-          initial={{ x: "-100%" }}
+          initial={{ x: "120%" }}
           animate={{ x: "0" }}
-          exit={{ x: "100%" }}
+          exit={{ x: "120%" }}
           id="Menu"
           className="menu"
         >
