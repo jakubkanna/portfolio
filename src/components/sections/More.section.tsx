@@ -36,6 +36,7 @@ export default function MoreSection({
       title=""
       containerYProgress={containerYProgress}
       threshold={threshold}
+      label=""
     >
       <Markdown rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}>
         {content}
