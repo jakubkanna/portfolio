@@ -1,0 +1,22 @@
+.btn {
+  background-color: var(--bg-color);
+  color: var(--color);
+
+  --btn-padding: 1;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-radius: 12px;
+  margin: 1rem;
+
+  border: 1px solid var(--btn-border-color);
+  font-size: 1.5rem;
+}
+
+.btn:hover {
+  border-color: white;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}

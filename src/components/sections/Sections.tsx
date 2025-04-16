@@ -12,7 +12,7 @@ export default function Sections() {
   // Example: 0.0–0.1 => Logo, 0.1–0.3 => CV, 0.3–0.8 => Projects, 0.8–1.0 => Contact
   const sectionThresholds = useMemo(() => {
     const cvThreshold = { index: 1, from: 0.1, to: 0.3 };
-    const projectsTreshold = { index: 2, from: 0.3, to: 0.8 }; // Projects gets 60%
+    const projectsTreshold = { index: 2, from: 0.3, to: 0.99 }; // Projects gets 60%
     const moreTreshold = { index: 3, from: projectsTreshold.to, to: 1.0 };
     return [
       { index: 0, from: 0.0, to: 0.1 },

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import AnimatedText from "./AnimatedText";
 import Button from "../../Button/Button";
 import { applyDarkMode } from "../../../utils/applyDarkMode";
+import MenuButtons from "../../Menu/MenuButtons";
 
 export default function Typewriter() {
   const messages: Messages = useMemo(
@@ -14,12 +15,12 @@ export default function Typewriter() {
         text: "My name is Jakub.",
       },
       {
-        text: "This is my fullstack portfolio.",
+        text: "Here are some shortcuts:",
+        prompt_id: "menu",
       },
       {
         text: "Would you like to use dark colors?",
-        prompt: true,
-        prompt_id: "dark_colors",
+        prompt_id: "dark_mode",
       },
       { text: "Please continue by scrolling down." },
     ],
@@ -38,7 +39,7 @@ export default function Typewriter() {
     const current = messages[index];
 
     const isLast = index === messages.length - 1;
-    const shouldPause = current?.prompt || isLast;
+    const shouldPause = current?.prompt_id || isLast;
 
     if (shouldPause) return; // Don't set up interval
 
@@ -55,8 +56,8 @@ export default function Typewriter() {
 
     // timeout prompt
     useEffect(() => {
-      if (!message.prompt) return;
-      const timer = setTimeout(() => next(), 10000); //10s
+      if (!message.prompt_id) return;
+      const timer = setTimeout(() => next(), 30000); //10s
       return () => clearTimeout(timer);
     });
 
@@ -66,15 +67,36 @@ export default function Typewriter() {
       next();
     };
 
-    return (
-      <>
-        <AnimatedText message={message.text} />
-        {message.prompt && (
+    // render buttons
+    const Buttons = () => {
+      if (message.prompt_id == "dark_mode") {
+        return (
           <>
             <Button onClick={() => handleDarkModeResponse(true)}>Yes</Button>
             <Button onClick={() => handleDarkModeResponse(false)}>No</Button>
           </>
-        )}
+        );
+      } else if (message.prompt_id == "menu") {
+        return (
+          <div>
+            <MenuButtons />
+
+            <Button
+              onClick={() => {
+                setIndex(messages.length - 1);
+              }}
+            >
+              Skip
+            </Button>
+          </div>
+        );
+      }
+    };
+
+    return (
+      <>
+        <AnimatedText message={message.text} />
+        <Buttons />
       </>
     );
   };

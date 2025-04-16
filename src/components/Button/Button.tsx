@@ -1,3 +1,5 @@
+import "./Button.css";
+
 export default function Button({
   onClick,
   children,
@@ -8,7 +10,7 @@ export default function Button({
   return (
     <button
       id={id + "Btn"}
-      className={className}
+      className={"btn " + className}
       onClick={onClick}
       style={style}
     >

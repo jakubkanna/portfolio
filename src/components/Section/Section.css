@@ -10,6 +10,7 @@ section {
   --lines: 5px;
   overflow: hidden;
   z-index: 0;
+  background-color: var(--bg-color);
 }
 
 .title {
@@ -20,7 +21,7 @@ section {
   padding-bottom: 0.5rem;
 }
 .subtitle {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .date {
@@ -34,7 +35,7 @@ section {
 }
 
 .section-content {
-  padding-bottom: 2rem;
-  padding-top: 2rem;
+  padding-bottom: 4rem;
+  padding-top: 4rem;
   height: auto;
 }

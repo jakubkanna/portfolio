@@ -7,28 +7,28 @@
   width: 100%;
   padding: 1rem;
   content: "";
-  &::after {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    content: "";
-    /* padding: Min(20em, 47vmin); */
-    background: repeating-linear-gradient(hsl(0, 0%, 52.5%), #fff 6.25%),
-      linear-gradient(#000 33.3%, grey 0, #fff 66.7%)
-        /* background height is 3x the element's height */ 0/ 100% 300%; /* 6 */
+}
 
-    -webkit-background-blend-mode: multiply;
-    background-blend-mode: multiply;
-    filter: contrast(999);
-    -webkit-filter: contrast(999);
-    mix-blend-mode: multiply;
-    -webkit-mix-blend-mode: multiply;
-    animation: p 1s linear forwards;
-    content: "";
-    pointer-events: none;
-  }
+.fade::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: repeating-linear-gradient(hsl(0, 0%, 52.5%), #fff 6.25%),
+    linear-gradient(#000 33.3%, grey 0, #fff 66.7%)
+      /* background height is 3x the element's height */ 0/ 100% 300%; /* 6 */
+
+  -webkit-background-blend-mode: multiply;
+  background-blend-mode: multiply;
+  filter: contrast(999);
+  -webkit-filter: contrast(999);
+  mix-blend-mode: multiply;
+  -webkit-mix-blend-mode: multiply;
+  animation: p 1s linear forwards;
+  content: "";
+  pointer-events: none;
 }
 
 @keyframes p {

@@ -14,11 +14,13 @@ body {
   --body-height: 1600dvh;
   --bg-color: rgb(243, 243, 243);
   --color: rgb(10, 10, 10);
+  --btn-border-color: black;
 }
 
 [data-theme="dark"] {
   --bg-color: rgb(10, 10, 10);
   --color: white;
+  --btn-border-color: white;
 }
 
 section {
@@ -42,6 +44,7 @@ h6 {
   white-space: normal;
   text-transform: uppercase;
   color: var(--color);
+  font-weight: 600;
 }
 
 h1 {
@@ -55,8 +58,8 @@ h2 {
   margin-bottom: 1.75rem;
 }
 h4 {
-  font-size: 1.1rem;
-  margin-bottom: 1.75rem;
+  font-size: 0.75rem;
+  margin-bottom: 2.5rem;
 }
 
 img,
@@ -102,7 +105,7 @@ table {
 }
 
 table:not(:last-child) {
-  margin-bottom: 9rem;
+  margin-bottom: 6rem;
 }
 
 thead {
