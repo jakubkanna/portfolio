@@ -5,7 +5,7 @@ import RehypeVideo from "rehype-video";
 import rehypeRaw from "rehype-raw";
 import Section from "../../Section/Section";
 import matter from "gray-matter";
-import MoveIn from "../../MoveIn/MoveIn";
+import MoveIn from "../../animated/MoveIn/MoveIn";
 
 const Icons = ({ behance, github }: IconsProps) => {
   const size = 14;
@@ -104,6 +104,7 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
       subtitle=""
       containerYProgress={containerYProgress}
       threshold={threshold}
+      label={""}
     >
       {Object.entries(files).map(
         (

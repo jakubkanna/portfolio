@@ -8,6 +8,7 @@ body {
   height: var(--body-height);
   line-height: 1.2;
   color: var(--color);
+  background-color: var(--bg-color);
 }
 :root {
   --body-height: 1600dvh;
@@ -85,32 +86,27 @@ table * {
   padding-left: 0;
   padding-right: 5rem;
 }
+
 th {
   text-align: start;
 }
+
 td {
   text-align: end;
+}
+tr:hover {
+  font-style: italic;
 }
 table {
   width: 100%;
 }
+
 table:not(:last-child) {
   margin-bottom: 9rem;
 }
 
 thead {
   font-size: 12px;
-}
-
-.container {
-  height: auto;
-  width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin-right: auto;
-  margin-left: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 p {
@@ -124,6 +120,17 @@ a {
 #menuButton {
   --progress-bar-color: none;
   --progress-bar-height: 0px;
+}
+
+.container {
+  height: auto;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (min-width: 576px) {

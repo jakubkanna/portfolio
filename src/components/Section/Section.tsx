@@ -1,7 +1,7 @@
 import "./Section.css";
 import { motion, useMotionValueEvent } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import Fade from "../Fade/Fade";
+import Fade from "../animated/Fade/Fade";
 
 export default function Section({
   children,
@@ -11,6 +11,7 @@ export default function Section({
   threshold,
   containerYProgress,
   style,
+  className,
 }: SectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -35,7 +36,7 @@ export default function Section({
     <motion.section
       ref={sectionRef}
       id={id + "Section"}
-      className="section"
+      className={"section " + className}
       style={style}
     >
       {title && <span className="title">{title}</span>}

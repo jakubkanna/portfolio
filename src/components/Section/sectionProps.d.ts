@@ -7,4 +7,5 @@ interface SectionProps {
   threshold?: { index: number; from: number; to: number };
   style?: React.CSSProperties;
   className?: string;
+  label: string;
 }

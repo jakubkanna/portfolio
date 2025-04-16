@@ -1,0 +1,5 @@
+@keyframes blink {
+  50% {
+    border-color: transparent; /* Hide the border at the halfway point */
+  }
+}

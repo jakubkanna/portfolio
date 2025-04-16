@@ -3,6 +3,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Sections from "../sections/Sections";
 import Menu from "../Menu/Menu";
+import { applyDarkMode } from "../../utils/applyDarkMode";
 
 function App() {
   useEffect(() => {
@@ -12,6 +13,21 @@ function App() {
   const [menuHidden, setMenuHidden] = useState(true);
 
   const toggleMenu = () => setMenuHidden((prev) => !prev);
+
+  useEffect(() => {
+    const darkModeSetting = localStorage.getItem("dark_mode");
+    applyDarkMode(darkModeSetting === "true");
+
+    // Optional: Listen to changes in localStorage (if multiple tabs)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "dark_mode") {
+        applyDarkMode(e.newValue === "true");
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <main>

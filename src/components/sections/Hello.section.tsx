@@ -1,21 +1,22 @@
-import cv from "/docs/cv/cv.md?raw";
-import Markdown from "react-markdown";
 import Section from "../Section/Section";
-import remarkGfm from "remark-gfm";
+import Typewriter from "../animated/Typewriter/Typewriter";
 
-export default function CVSection({
+export default function HelloSection({
   containerYProgress,
   threshold,
 }: SectionProps) {
   return (
     <Section
-      id="CV"
-      title="CV"
+      id="Hello"
+      title=""
       containerYProgress={containerYProgress}
       threshold={threshold}
+      label="Hello"
     >
       <div className="container">
-        <Markdown remarkPlugins={[remarkGfm]}>{cv}</Markdown>
+        <h1>
+          <Typewriter />
+        </h1>
       </div>
     </Section>
   );

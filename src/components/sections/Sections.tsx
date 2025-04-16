@@ -1,9 +1,8 @@
 import { useMotionValueEvent, useScroll } from "framer-motion";
-import CVSection from "./CV.section";
-import LogoSection from "./Logo.section";
 import { useMemo, useState } from "react";
 import ProjectsSection from "./Projects/Projects.section";
-import MoreSection from "./More.section";
+import SingleSection from "./Single/Single.section";
+import HelloSection from "./Hello.section";
 
 export default function Sections() {
   const { scrollYProgress } = useScroll({});
@@ -34,35 +33,31 @@ export default function Sections() {
     }
   });
 
-  // useEffect(() => {
-  //   // Lock scrolling for 1 second
-  //   const originalOverflow = document.body.style.overflow;
-  //   document.body.style.overflow = "hidden";
-
-  //   const timeout = setTimeout(() => {
-  //     document.body.style.overflow = originalOverflow;
-  //     console.log("Scroll unlocked");
-  //   }, 1000);
-
-  //   return () => clearTimeout(timeout); // Clean up
-  // }, [currentIndex]);
-
   const sections = [
-    <LogoSection key="logo" containerYProgress={scrollYProgress} />,
-    <CVSection
+    <HelloSection
+      key="Hello"
+      containerYProgress={scrollYProgress}
+      threshold={sectionThresholds[0]}
+      label="Hello"
+    />,
+    <SingleSection
       key="cv"
       containerYProgress={scrollYProgress}
       threshold={sectionThresholds[1]}
+      label="CV"
     />,
     <ProjectsSection
       key="projects"
       containerYProgress={scrollYProgress}
       threshold={sectionThresholds[2]}
+      label="projects"
     />,
-    <MoreSection
+    <SingleSection
       key="more"
       containerYProgress={scrollYProgress}
       threshold={sectionThresholds[3]}
+      label="more"
+      title="And more..."
     />,
   ];
 
