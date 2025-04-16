@@ -34,6 +34,27 @@ export default function Typewriter() {
     setIndex((prev) => prev + 1);
   };
 
+  // init
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === "#settings") {
+        setIndex(messages.length - 2);
+      }
+    };
+
+    // Initial check in case hash is already set on load
+    handleHashChange();
+
+    // Add event listener
+    window.addEventListener("hashchange", handleHashChange);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, [messages.length]);
+
   // interval
   useEffect(() => {
     const current = messages[index];

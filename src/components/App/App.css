@@ -10,17 +10,22 @@ body {
   color: var(--color);
   background-color: var(--bg-color);
 }
+
 :root {
+  --color-light: rgb(223, 223, 223);
+  --color-dark: rgb(10, 10, 10);
+
   --body-height: 1600dvh;
-  --bg-color: rgb(243, 243, 243);
-  --color: rgb(10, 10, 10);
+
+  --bg-color: var(--color-light);
+  --color: var(--color-dark);
   --btn-border-color: black;
 }
 
 [data-theme="dark"] {
-  --bg-color: rgb(10, 10, 10);
-  --color: white;
-  --btn-border-color: white;
+  --bg-color: var(--color-dark);
+  --color: var(--color-light);
+  --btn-border-color: var(--color-light);
 }
 
 section {
