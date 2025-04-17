@@ -77,15 +77,6 @@ video {
   overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  img,
-  video {
-    aspect-ratio: 9 / 16;
-
-    padding: 12px;
-  }
-}
-
 table * {
   padding-left: 0;
   padding-right: 5rem;
@@ -134,8 +125,7 @@ a {
 .container {
   height: auto;
   width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
+
   margin-right: auto;
   margin-left: auto;
   display: flex;
@@ -167,6 +157,18 @@ small {
 @media (min-width: 768px) {
   .container {
     max-width: 720px;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 400%;
+  }
+  img,
+  video {
+    aspect-ratio: 9 / 16;
+
+    padding: 12px;
   }
 }
 

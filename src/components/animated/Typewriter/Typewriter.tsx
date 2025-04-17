@@ -15,11 +15,11 @@ export default function Typewriter() {
         text: "My name is Jakub.",
       },
       {
-        text: "Here are some shortcuts:",
+        text: "Helpful shortcuts:",
         prompt_id: "menu",
       },
       {
-        text: "Would you like to use dark colors?",
+        text: "Would you like to set dark colors?",
         prompt_id: "dark_mode",
       },
       { text: "Please continue by scrolling down." },

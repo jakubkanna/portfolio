@@ -117,8 +117,11 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
                 <div className="project-info">
                   <span className="title">{title}</span>
                   <div className="flex-center">
-                    <span className="date">{date.getFullYear()}</span>
                     <span className="subtitle">{subtitle}</span>
+                    <span className="date">
+                      {", "}
+                      {date.getFullYear()}
+                    </span>
                     <Icons github={github} behance={behance} />
                   </div>
                 </div>
