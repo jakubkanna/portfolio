@@ -1,19 +1,20 @@
 .project {
   padding-bottom: 2rem;
-  min-height: 100%;
   box-sizing: border-box;
   width: 100%;
 }
 
+.projects-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  height: 100%;
+}
 .project-info {
   display: flex;
   justify-content: space-between;
 }
-.flex-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 .icons {
   display: flex;
   width: 100%;

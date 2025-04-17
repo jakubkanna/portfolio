@@ -3,8 +3,11 @@ import Markdown from "react-markdown";
 import Section from "../Section/Section";
 import rehypeRaw from "rehype-raw";
 import RehypeVideo from "rehype-video";
+import isMobile from "is-mobile";
+import remarkGfm from "remark-gfm";
+import Button from "../Button/Button";
 
-export default function MoreSection({
+export default function CVSection({
   containerYProgress,
   threshold,
 }: SectionProps) {
@@ -12,7 +15,7 @@ export default function MoreSection({
 
   useEffect(() => {
     // Dynamically import the more.md file
-    const markdownFiles = import.meta.glob("/docs/more/*.md", { as: "raw" });
+    const markdownFiles = import.meta.glob("/docs/cv/*.md", { as: "raw" });
 
     const loadFile = async () => {
       const filePath = Object.keys(markdownFiles)[0];
@@ -25,22 +28,26 @@ export default function MoreSection({
     loadFile();
   }, []);
 
-  useEffect(
-    () => console.log(containerYProgress, threshold),
-    [containerYProgress, threshold]
-  );
-
   return (
     <Section
-      id="More"
-      title=""
+      id="CV"
+      title="CV"
       containerYProgress={containerYProgress}
       threshold={threshold}
-      label=""
+      label="cv"
     >
-      <Markdown rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}>
-        {content}
-      </Markdown>
+      <div className="container">
+        {isMobile() ? (
+          <Button>Send the CV directly to your inbox</Button>
+        ) : (
+          <Markdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
+          >
+            {content}
+          </Markdown>
+        )}
+      </div>
     </Section>
   );
 }

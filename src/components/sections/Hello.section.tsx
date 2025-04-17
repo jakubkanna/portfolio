@@ -14,9 +14,7 @@ export default function HelloSection({
       label="Hello"
     >
       <div className="container">
-        <h1>
-          <Typewriter />
-        </h1>
+        <Typewriter />
       </div>
     </Section>
   );

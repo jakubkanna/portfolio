@@ -16,9 +16,7 @@ export default function MoveIn({ children }: { children: ReactNode }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const controls = useAnimation();
-  const style: React.CSSProperties = {
-    overflow: "hidden",
-  };
+
   useEffect(() => {
     if (inView) {
       controls.start("visible");
@@ -26,7 +24,12 @@ export default function MoveIn({ children }: { children: ReactNode }) {
   }, [inView, controls]);
 
   return (
-    <motion.div ref={ref} initial="hidden" animate={controls} style={style}>
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      className="movein"
+    >
       {Array.isArray(children) ? (
         children.map((child, i) => (
           <motion.div key={i} variants={childVariants}>

@@ -9,6 +9,7 @@ import {
   projectsTreshold,
   moreTreshold,
 } from "./thresholds";
+import CVSection from "./CV.section";
 
 export default function Sections() {
   const { scrollYProgress } = useScroll({});
@@ -38,7 +39,7 @@ export default function Sections() {
       threshold={sectionThresholds[0]}
       label="Hello"
     />,
-    <SingleSection
+    <CVSection
       key="cv"
       containerYProgress={scrollYProgress}
       threshold={sectionThresholds[1]}

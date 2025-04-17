@@ -12,7 +12,7 @@ body {
 }
 
 :root {
-  --color-light: rgb(223, 223, 223);
+  --color-light: rgb(238, 238, 238);
   --color-dark: rgb(10, 10, 10);
 
   --body-height: 1600dvh;
@@ -26,10 +26,6 @@ body {
   --bg-color: var(--color-dark);
   --color: var(--color-light);
   --btn-border-color: var(--color-light);
-}
-
-section {
-  background-color: var(--bg-color);
 }
 
 #root,
@@ -75,7 +71,6 @@ video {
   position: static;
   border-radius: 2rem;
   padding: 2rem;
-  /* border: 1px solid rgb(63, 63, 63); */
   aspect-ratio: 16 / 9;
   object-fit: cover;
   overflow: hidden;
@@ -130,6 +125,11 @@ a {
   --progress-bar-height: 0px;
 }
 
+.movein {
+  overflow: hidden;
+  position: relative;
+}
+
 .container {
   height: auto;
   width: 100%;
@@ -139,6 +139,10 @@ a {
   margin-left: auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
 }
 
 @media (min-width: 576px) {

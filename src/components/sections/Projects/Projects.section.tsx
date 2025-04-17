@@ -106,32 +106,34 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
       threshold={threshold}
       label={""}
     >
-      {Object.entries(files).map(
-        (
-          [filename, { title, subtitle, date, content, github, behance }],
-          i
-        ) => (
-          <div id={"P" + i} className="project" key={filename}>
-            <MoveIn>
-              <div className="project-info">
-                <span className="title">{title}</span>
-                <div className="flex-center">
-                  <span className="date">{date.getFullYear()}</span>
-                  <span className="subtitle">{subtitle}</span>
-                  <Icons github={github} behance={behance} />
+      <div className="projects-container">
+        {Object.entries(files).map(
+          (
+            [filename, { title, subtitle, date, content, github, behance }],
+            i
+          ) => (
+            <div id={"P" + i} className="project" key={filename}>
+              <MoveIn>
+                <div className="project-info">
+                  <span className="title">{title}</span>
+                  <div className="flex-center">
+                    <span className="date">{date.getFullYear()}</span>
+                    <span className="subtitle">{subtitle}</span>
+                    <Icons github={github} behance={behance} />
+                  </div>
                 </div>
-              </div>
-            </MoveIn>{" "}
-            <MoveIn>
-              <Markdown
-                rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
-              >
-                {content}
-              </Markdown>{" "}
-            </MoveIn>
-          </div>
-        )
-      )}
+              </MoveIn>{" "}
+              <MoveIn>
+                <Markdown
+                  rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
+                >
+                  {content}
+                </Markdown>{" "}
+              </MoveIn>
+            </div>
+          )
+        )}
+      </div>
     </Section>
   );
 };

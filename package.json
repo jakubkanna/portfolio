@@ -13,6 +13,7 @@
   "dependencies": {
     "gray-matter": "^4.0.3",
     "install": "^0.13.0",
+    "is-mobile": "^5.0.0",
     "motion": "^12.6.3",
     "npm": "^11.2.0",
     "react": "^19.0.0",
