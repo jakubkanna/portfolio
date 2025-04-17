@@ -1,5 +1,8 @@
+import isMobile from "is-mobile";
 import Section from "../Section/Section";
 import Typewriter from "../animated/Typewriter/Typewriter";
+import MenuButtons from "../Menu/MenuButtons";
+import MoveIn from "../animated/MoveIn/MoveIn";
 
 export default function HelloSection({
   containerYProgress,
@@ -14,7 +17,13 @@ export default function HelloSection({
       label="Hello"
     >
       <div className="container">
-        <Typewriter />
+        {isMobile() ? (
+          <MoveIn>
+            <MenuButtons />
+          </MoveIn>
+        ) : (
+          <Typewriter />
+        )}
       </div>
     </Section>
   );

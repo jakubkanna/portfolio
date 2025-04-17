@@ -15,7 +15,7 @@ body {
   --color-light: rgb(238, 238, 238);
   --color-dark: rgb(10, 10, 10);
 
-  --body-height: 1600dvh;
+  --body-height: 1600vh;
 
   --bg-color: var(--color-light);
   --color: var(--color-dark);
@@ -67,7 +67,7 @@ h4 {
 img,
 video {
   width: 100%;
-  max-height: 90dvh;
+  max-height: 90vh;
   background-color: black;
   position: static;
   border-radius: 2rem;
@@ -167,7 +167,7 @@ small {
   img,
   video {
     aspect-ratio: 9 / 16;
-
+    height: 100%;
     padding: 12px;
   }
 }

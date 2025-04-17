@@ -6,6 +6,7 @@ import RehypeVideo from "rehype-video";
 import isMobile from "is-mobile";
 import remarkGfm from "remark-gfm";
 import Button from "../Button/Button";
+import MoveIn from "../animated/MoveIn/MoveIn";
 
 export default function CVSection({
   containerYProgress,
@@ -45,18 +46,15 @@ export default function CVSection({
         {isMobile() ? (
           <>
             {!isVisible ? (
-              <>
-                <Button onClick={triggerForm}>
-                  Send the CV directly to your email
-                </Button>
-              </>
+              <MoveIn>
+                <Button onClick={triggerForm}>Download CV</Button>
+              </MoveIn>
             ) : (
               <div id="mc_embed_signup">
                 <form
                   action="https://jakubkanna.us20.list-manage.com/subscribe/post?u=837187f00032092e6c9a48147&amp;id=7ab2644c97&amp;f_id=009a5eeef0"
                   method="post"
                   target="_blank"
-                  noValidate
                 >
                   <div>
                     <input

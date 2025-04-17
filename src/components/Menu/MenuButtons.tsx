@@ -1,9 +1,11 @@
+import isMobile from "is-mobile";
 import Button from "../Button/Button";
 import {
   cvThreshold,
   moreTreshold,
   projectsTreshold,
 } from "../sections/thresholds";
+import { toggleDarkMode } from "../../utils/toggleDarkMode";
 
 export default function MenuButtons() {
   const handleScroll = (threshold: SectionProps["threshold"]) => {
@@ -17,6 +19,7 @@ export default function MenuButtons() {
   };
 
   const handleSettings = () => {
+    if (isMobile()) toggleDarkMode();
     handleScroll({ index: 0, from: 0, to: 0.1 });
     window.open("/#settings", "_self");
   };

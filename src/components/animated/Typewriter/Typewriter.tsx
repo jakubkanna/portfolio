@@ -2,8 +2,8 @@ import "./typewriter.css";
 import { useEffect, useMemo, useState } from "react";
 import AnimatedText from "./AnimatedText";
 import Button from "../../Button/Button";
-import { applyDarkMode } from "../../../utils/applyDarkMode";
 import MenuButtons from "../../Menu/MenuButtons";
+import { toggleDarkMode } from "../../../utils/toggleDarkMode";
 
 export default function Typewriter() {
   const messages: Messages = useMemo(
@@ -79,9 +79,8 @@ export default function Typewriter() {
       return () => clearTimeout(timer);
     });
 
-    const handleDarkModeResponse = (response: boolean) => {
-      localStorage.setItem("dark_mode", JSON.stringify(response));
-      applyDarkMode(response);
+    const handleDarkModeResponse = () => {
+      toggleDarkMode();
       next();
       window.location.hash = "";
     };
@@ -91,8 +90,15 @@ export default function Typewriter() {
       if (message.prompt_id == "dark_mode") {
         return (
           <>
-            <Button onClick={() => handleDarkModeResponse(true)}>Yes</Button>
-            <Button onClick={() => handleDarkModeResponse(false)}>No</Button>
+            <Button onClick={handleDarkModeResponse}>Switch</Button>{" "}
+            <Button
+              onClick={() => {
+                setIndex(messages.length - 1);
+                window.location.hash = "";
+              }}
+            >
+              Skip
+            </Button>
           </>
         );
       } else if (message.prompt_id == "menu") {

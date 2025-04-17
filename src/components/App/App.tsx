@@ -3,7 +3,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Sections from "../sections/Sections";
 import Menu from "../Menu/Menu";
-import { applyDarkMode } from "../../utils/applyDarkMode";
+import { applyDarkMode } from "../../utils/toggleDarkMode";
 
 function App() {
   useEffect(() => {

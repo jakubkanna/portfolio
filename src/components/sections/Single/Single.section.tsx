@@ -3,6 +3,7 @@ import Section from "../../Section/Section";
 import { useEffect, useState } from "react";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import MoveIn from "../../animated/MoveIn/MoveIn";
 
 export default function SingleSection({
   containerYProgress,
@@ -39,15 +40,15 @@ export default function SingleSection({
       label={label}
       className={className}
     >
-      <div className="container">
-        {content && (
-          <>
+      <MoveIn>
+        <div className="container">
+          {content && (
             <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
               {content}
             </Markdown>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      </MoveIn>
     </Section>
   );
 }

@@ -3,45 +3,48 @@ section {
   z-index: 0;
   top: 0;
   left: 0;
-  height: 100dvh;
+  height: 100vh;
   width: 100%;
   padding: 1rem;
   color: var(--color);
   background-color: var(--bg-color);
   content: "";
 }
-section::after {
-  padding: Min(20em, 47vmin);
-  position: absolute; /*fixed is bugged on mobile*/
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
 
-  background: repeating-linear-gradient(hsl(0, 0%, 52.5%), #fff 6.25%),
-    linear-gradient(#000 33.3%, grey 0, #fff 66.7%)
-      /* background height is 3x the element's height */ 0/ 100% 300%; /* 6 */
+@media (min-width: 768px) {
+  section::after {
+    padding: Min(20em, 47vmin);
+    position: absolute; /*fixed is bugged on mobile*/
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
 
-  background-blend-mode: multiply;
+    background: repeating-linear-gradient(hsl(0, 0%, 52.5%), #fff 6.25%),
+      linear-gradient(#000 33.3%, grey 0, #fff 66.7%)
+        /* background height is 3x the element's height */ 0/ 100% 300%; /* 6 */
 
-  mix-blend-mode: darken;
+    background-blend-mode: multiply;
 
-  filter: contrast(999);
+    mix-blend-mode: darken;
 
-  animation: p 1s linear forwards;
-  pointer-events: none;
-  content: "";
-}
+    filter: contrast(999);
 
-@keyframes p {
-  0%,
-  25% {
-    background-position: 0 0;
+    animation: p 1s linear forwards;
+    pointer-events: none;
+    content: "";
   }
-  75%,
-  100% {
-    background-position: 0 100%;
+
+  @keyframes p {
+    0%,
+    25% {
+      background-position: 0 0;
+    }
+    75%,
+    100% {
+      background-position: 0 100%;
+    }
   }
 }
 
