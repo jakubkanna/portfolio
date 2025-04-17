@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "author": "jakubkanna",
+  "homepage": "https://jakubkanna.github.io/portfolio/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
