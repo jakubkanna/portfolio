@@ -58,17 +58,17 @@ section::after {
   font-size: 10px;
 }
 
-.sections-wrapper {
-  position: relative;
-  overflow-y: auto;
-  height: 100dvh;
-}
-
 .section-content {
   padding-bottom: 4rem;
   height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+}
+
+#mc_embed_signup form {
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
