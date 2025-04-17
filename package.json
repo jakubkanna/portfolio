@@ -13,17 +13,14 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "install": "^0.13.0",
     "is-mobile": "^5.0.0",
-    "motion": "^12.6.3",
-    "npm": "^11.2.0",
+    "motion": "^12.7.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",
     "rehype-video": "^2.3.0",
-    "remark-gfm": "^4.0.1",
-    "vite-plugin-node-polyfills": "^0.23.0"
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -37,6 +34,7 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0",
+    "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-singlefile": "^2.2.0"
   }
 }

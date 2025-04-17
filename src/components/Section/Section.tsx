@@ -1,5 +1,5 @@
 import "./Section.css";
-import { motion, useMotionValueEvent } from "framer-motion";
+import { motion, useMotionValueEvent } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 export default function Section({

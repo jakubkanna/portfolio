@@ -1,4 +1,4 @@
-import { useMotionValueEvent, useScroll } from "framer-motion";
+import { useMotionValueEvent, useScroll } from "motion/react";
 import { useMemo, useState } from "react";
 import ProjectsSection from "./Projects/Projects.section";
 import SingleSection from "./Single/Single.section";
