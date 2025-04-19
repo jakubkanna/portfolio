@@ -73,7 +73,6 @@ video {
   border-radius: 2rem;
   padding: 2rem;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
   overflow: hidden;
 }
 
