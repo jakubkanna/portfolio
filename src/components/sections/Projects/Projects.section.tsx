@@ -6,6 +6,7 @@ import rehypeRaw from "rehype-raw";
 import Section from "../../Section/Section";
 import matter from "gray-matter";
 import MoveIn from "../../animated/MoveIn/MoveIn";
+import AsciiLoader from "../../animated/Loader/Loader";
 
 const Icons = ({ behance, github, url }: IconsProps) => {
   const size = 14;
@@ -80,8 +81,9 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
     >
   >({});
 
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
-    // Dynamically import all .md files in the docs folder
     const markdownFiles = import.meta.glob("/docs/projects/*.md", {
       as: "raw",
     });
@@ -102,7 +104,7 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
 
       for (const path in markdownFiles) {
         const raw = await markdownFiles[path]();
-        const { data, content } = matter(raw); // strip data from md
+        const { data, content } = matter(raw);
         const {
           title = "Untitled",
           subtitle = "",
@@ -114,7 +116,7 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
         loadedFiles[path] = {
           title,
           subtitle,
-          date,
+          date: new Date(date),
           content,
           github,
           behance,
@@ -123,6 +125,7 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
       }
 
       setFiles(loadedFiles);
+      setReady(true); // Mark as ready once all files are loaded
     };
 
     loadFiles();
@@ -159,17 +162,18 @@ const ProjectsSection = ({ containerYProgress, threshold }: SectionProps) => {
                     <Icons github={github} behance={behance} url={url} />
                   </div>
                 </div>
-              </MoveIn>{" "}
+              </MoveIn>
               <MoveIn>
                 <Markdown
                   rehypePlugins={[[RehypeVideo, { details: false }], rehypeRaw]}
                 >
                   {content}
-                </Markdown>{" "}
+                </Markdown>
               </MoveIn>
             </div>
           )
         )}
+        {!ready && <AsciiLoader />} {/* Only show loader while loading */}
       </div>
     </Section>
   );
