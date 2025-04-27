@@ -9,17 +9,26 @@ export default function Typewriter() {
   const messages: Messages = useMemo(
     () => [
       {
-        text: "Hello World!",
+        text: "Hi, my name is Jakub.",
       },
       {
-        text: "My name is Jakub.",
-      },
-      {
-        text: "Helpful shortcuts:",
+        text: "Welcome to my full-stack portfolio. 🌸",
         prompt_id: "menu",
       },
       {
-        text: "Would you like to set dark colors?",
+        text: "Let's start with how I understand the term of 'full-stack'.",
+      },
+      {
+        text: "In this case 'Fullstack' doesn't mean that I am able to work with frontend and backend only.",
+      },
+      {
+        text: "It's a mindset. 🧠",
+      },
+      {
+        text: "Frontend, backend, 3D, graphic design, sound, bikes 💻🛠️🎨🎧🚴 are just tools I can choose from...",
+      },
+      {
+        text: "To get the job done.",
         prompt_id: "dark_mode",
       },
       { text: "Please continue by scrolling down." },
@@ -29,11 +38,15 @@ export default function Typewriter() {
 
   const [index, setIndex] = useState(0);
 
-  // next message
+  //
   const next = () => {
     setIndex((prev) => prev + 1);
+    window.location.hash = "";
   };
-
+  const previous = () => {
+    setIndex((prev) => prev - 1);
+    window.location.hash = "";
+  };
   // init
   useEffect(() => {
     const handleHashChange = () => {
@@ -81,7 +94,6 @@ export default function Typewriter() {
 
     const handleDarkModeResponse = () => {
       toggleDarkMode();
-      next();
       window.location.hash = "";
     };
 
@@ -90,30 +102,16 @@ export default function Typewriter() {
       if (message.prompt_id == "dark_mode") {
         return (
           <>
-            <Button onClick={handleDarkModeResponse}>Switch</Button>{" "}
-            <Button
-              onClick={() => {
-                setIndex(messages.length - 1);
-                window.location.hash = "";
-              }}
-            >
-              Skip
-            </Button>
+            <Button onClick={handleDarkModeResponse}>Switch💥</Button>
           </>
         );
       } else if (message.prompt_id == "menu") {
         return (
-          <div>
-            <MenuButtons />
-
-            <Button
-              onClick={() => {
-                setIndex(messages.length - 1);
-              }}
-            >
-              Skip
-            </Button>
-          </div>
+          <>
+            <div>
+              <MenuButtons />
+            </div>
+          </>
         );
       }
     };
@@ -122,6 +120,42 @@ export default function Typewriter() {
       <>
         <AnimatedText message={message.text} />
         <Buttons />
+        <div>
+          {index !== 0 && (
+            <Button onClick={previous}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                id="arrow-left"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                />
+              </svg>
+            </Button>
+          )}
+          {index !== messages.length - 1 && (
+            <Button onClick={next}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                id="arrow-right"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+                />
+              </svg>
+            </Button>
+          )}
+        </div>
       </>
     );
   };
