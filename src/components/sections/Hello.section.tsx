@@ -17,13 +17,15 @@ export default function HelloSection({
       label="Hello"
     >
       <div className="container">
-        {isMobile() ? (
-          <MoveIn>
-            <MenuButtons />
-          </MoveIn>
-        ) : (
-          <Typewriter />
-        )}
+        <div className="content">
+          {isMobile() ? (
+            <MoveIn>
+              <MenuButtons />
+            </MoveIn>
+          ) : (
+            <Typewriter />
+          )}
+        </div>
       </div>
     </Section>
   );

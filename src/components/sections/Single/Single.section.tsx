@@ -42,11 +42,13 @@ export default function SingleSection({
     >
       <MoveIn>
         <div className="container">
-          {content && (
-            <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-              {content}
-            </Markdown>
-          )}
+          <div className="content">
+            {content && (
+              <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {content}
+              </Markdown>
+            )}
+          </div>
         </div>
       </MoveIn>
     </Section>
