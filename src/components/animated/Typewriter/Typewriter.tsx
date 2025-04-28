@@ -12,14 +12,14 @@ export default function Typewriter() {
         text: "Hi, my name is Jakub.",
       },
       {
-        text: "Welcome to my full-stack portfolio. 🌸",
+        text: "Welcome to my portfolio. 🌸",
         prompt_id: "menu",
       },
       {
-        text: "Let's start with how I understand the term of 'full-stack'.",
+        text: "Let's start with the term of 'full-stack'.",
       },
       {
-        text: "In this case 'Fullstack' doesn't mean that I am able to work with frontend and backend only.",
+        text: "In this case it doesn't mean that I am able to work with frontend and backend only.",
       },
       {
         text: "It's a mindset. 🧠",

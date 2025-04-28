@@ -1,1 +1,1 @@
-<video muted controls playsinline src="https://github.com/intel-iot-devkit/sample-videos/raw/master/car-detection.mp4" >
+<video muted controls playsinline loop src="https://github.com/jakubkanna/portfolio/raw/refs/heads/main/public/more/more.mp4" >
