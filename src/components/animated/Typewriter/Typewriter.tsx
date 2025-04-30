@@ -12,7 +12,7 @@ export default function Typewriter() {
         text: "Hi, my name is Jakub.",
       },
       {
-        text: "Welcome to my portfolio. 🌸",
+        text: "This is my 'full-stack' project overview. 🌸",
         prompt_id: "menu",
       },
       {

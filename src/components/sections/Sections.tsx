@@ -4,7 +4,7 @@ import ProjectsSection from "./Projects/Projects.section";
 import SingleSection from "./Single/Single.section";
 import HelloSection from "./Hello.section";
 import {
-  intro,
+  introThreshold,
   cvThreshold,
   projectsTreshold,
   moreTreshold,
@@ -18,7 +18,7 @@ export default function Sections() {
   // Section ranges based on scroll progress (0 to 1)
   // Example: 0.0–0.1 => Logo, 0.1–0.3 => CV, 0.3–0.8 => Projects, 0.8–1.0 => Contact
   const sectionThresholds = useMemo(() => {
-    return [intro, cvThreshold, projectsTreshold, moreTreshold];
+    return [introThreshold, cvThreshold, projectsTreshold, moreTreshold];
   }, []);
 
   // sections switching logic
