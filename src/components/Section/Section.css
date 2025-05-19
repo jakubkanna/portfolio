@@ -75,3 +75,10 @@ section {
   align-items: center;
   justify-content: center;
 }
+
+#arrow {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}

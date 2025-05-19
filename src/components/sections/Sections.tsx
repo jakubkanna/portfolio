@@ -57,6 +57,7 @@ export default function Sections() {
       threshold={sectionThresholds[3]}
       label="more"
       title="And more..."
+      arrow={false}
     />,
   ];
 

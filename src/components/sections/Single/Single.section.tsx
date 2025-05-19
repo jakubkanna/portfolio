@@ -11,6 +11,7 @@ export default function SingleSection({
   label,
   className,
   title,
+  arrow,
 }: SectionProps) {
   const [content, setContent] = useState<string | null>(null);
   const markdownFiles = import.meta.glob("/docs/*/*.md", { as: "raw" });
@@ -39,6 +40,7 @@ export default function SingleSection({
       threshold={threshold}
       label={label}
       className={className}
+      arrow={arrow}
     >
       <MoveIn>
         <div className="container">

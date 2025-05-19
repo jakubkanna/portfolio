@@ -8,4 +8,5 @@ interface SectionProps {
   style?: React.CSSProperties;
   className?: string;
   label: string;
+  arrow?: boolean;
 }
