@@ -65,7 +65,8 @@ h4 {
 }
 
 img,
-video {
+video,
+.video {
   width: 100%;
   max-height: 90vh;
   background-color: black;
@@ -143,6 +144,11 @@ a {
   width: 100%;
 }
 
+.single,
+.container {
+  justify-content: center;
+}
+
 input {
   border-radius: 2rem;
   border: 1px solid black;
@@ -172,7 +178,8 @@ small {
     font-size: 400%;
   }
   img,
-  video {
+  video,
+  .video {
     aspect-ratio: 9 / 16;
     height: 100%;
     padding: 12px;

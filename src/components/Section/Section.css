@@ -9,6 +9,8 @@ section {
   color: var(--color);
   background-color: var(--bg-color);
   content: "";
+  display: flex;
+  flex-direction: column;
 }
 
 @media (min-width: 768px) {
@@ -62,7 +64,6 @@ section {
 }
 
 .section-content {
-  padding-bottom: 4rem;
   height: 100%;
   overflow: hidden;
   display: flex;
@@ -81,4 +82,12 @@ section {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+}
+.social {
+  width: auto;
+  height: 2.25rem;
+  aspect-ratio: auto;
+  border-radius: 6px;
+  background: none;
+  display: block;
 }
