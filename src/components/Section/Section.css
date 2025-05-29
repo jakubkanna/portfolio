@@ -84,6 +84,7 @@ section {
   transform: translateX(-50%);
 }
 .social {
+  border: none !important;
   width: auto;
   height: 2.25rem;
   aspect-ratio: auto;
