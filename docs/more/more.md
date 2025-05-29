@@ -8,3 +8,7 @@
     <img src="./web_banner.png" class="btn social" alt="Website Banner" />
   </a>
 </div>
+
+<p></p>
+<p></p>
+<p></p>
