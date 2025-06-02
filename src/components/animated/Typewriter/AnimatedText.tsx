@@ -8,41 +8,49 @@ const cursorStyle: React.CSSProperties = {
 const AnimatedText = ({ message = "" }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [targetText, setTargetText] = useState(message); // Current goal
+  const [targetText, setTargetText] = useState(message || "");
 
+  // Update state if message prop changes
   useEffect(() => {
-    // If the message prop changes, trigger deletion first
     if (message !== targetText) {
       setIsDeleting(true);
-      setTargetText(message);
+      setTargetText(message || "");
     }
   }, [message, targetText]);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
 
-    const tick = () => {
-      const fullText = targetText;
+    const getNextChunk = (str: string, pos: number) => {
+      if (pos >= str.length) return "";
+      if (str[pos] !== "<") return str[pos]; // Normal char
 
-      setDisplayedText((prev) => {
+      // Full tag chunk
+      const end = str.indexOf(">", pos);
+      if (end === -1) return ""; // malformed tag
+      return str.slice(pos, end + 1);
+    };
+
+    const tick = () => {
+      const fullText = targetText || "";
+
+      setDisplayedText((prev = "") => {
         if (isDeleting) {
           const next = prev.slice(0, -1);
-          if (next === "") {
-            setIsDeleting(false); // Once deleted, start typing
-          }
+          if (next === "") setIsDeleting(false);
           return next;
         } else {
-          const next = fullText.substring(0, prev.length + 1);
-          return next;
+          const nextChunk = getNextChunk(fullText, prev.length);
+          return fullText.substring(0, prev.length + nextChunk.length);
         }
       });
 
-      const doneTyping = !isDeleting && displayedText === fullText;
+      const doneTyping = !isDeleting && displayedText === targetText;
       const doneDeleting = isDeleting && displayedText === "";
 
-      let delay = 200 - Math.random() * 100;
-      if (isDeleting) delay /= 2;
-      if (doneTyping) delay = 1000;
+      let delay = 40;
+      if (isDeleting) delay = 20;
+      if (doneTyping) delay = 1200;
       if (doneDeleting) delay = 200;
 
       timeout = setTimeout(tick, delay);
@@ -55,9 +63,11 @@ const AnimatedText = ({ message = "" }) => {
 
   return (
     <h1 className="typewrite">
-      <span className="wrap" style={cursorStyle}>
-        {displayedText}
-      </span>
+      <span
+        className="wrap"
+        style={cursorStyle}
+        dangerouslySetInnerHTML={{ __html: displayedText }}
+      />
     </h1>
   );
 };
