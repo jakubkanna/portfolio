@@ -9,4 +9,5 @@ interface SectionProps {
   className?: string;
   label: string;
   arrow?: boolean;
+  content?: ReactNode;
 }

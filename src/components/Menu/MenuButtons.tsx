@@ -1,38 +1,28 @@
-import isMobile from "is-mobile";
 import Button from "../Button/Button";
-import {
-  cvThreshold,
-  moreTreshold,
-  projectsTreshold,
-} from "../sections/thresholds";
-import { toggleDarkMode } from "../../utils/toggleDarkMode";
+// import { toggleDarkMode } from "../../utils/toggleDarkMode";
+import CVButton from "../Button/CVButton";
 
 export default function MenuButtons() {
-  const handleScroll = (threshold: SectionProps["threshold"]) => {
-    if (!threshold) return;
-    const y = threshold.from * document.body.scrollHeight;
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
+  // const handleScroll = (threshold: SectionProps["threshold"]) => {
+  //   if (!threshold) return;
+  //   const y = threshold.from * document.body.scrollHeight;
+  //   window.scrollTo({ top: y, behavior: "smooth" });
+  // };
 
   const handleContact = () => {
     window.open("https://www.jakubkanna.com/contact", "_blank");
   };
 
-  const handleSettings = () => {
-    if (isMobile()) toggleDarkMode();
-    handleScroll({ index: 0, from: 0, to: 0.1 });
-    window.open("/#settings", "_self");
-  };
+  // const handleSettings = () => {
+  //   toggleDarkMode();
+  // };
 
   return (
     <>
-      {/* sections */}
-      <Button onClick={() => handleScroll(cvThreshold)}>CV</Button>
-      <Button onClick={() => handleScroll(projectsTreshold)}>Projects</Button>
-      <Button onClick={() => handleScroll(moreTreshold)}>More</Button>
       {/* additional */}
+      <CVButton />
       <Button onClick={() => handleContact()}>Contact</Button>{" "}
-      <Button onClick={() => handleSettings()}>
+      {/* <Button onClick={() => handleSettings()}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -42,7 +32,7 @@ export default function MenuButtons() {
         >
           <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16" />
         </svg>
-      </Button>
+      </Button> */}
     </>
   );
 }

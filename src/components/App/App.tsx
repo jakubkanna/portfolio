@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Sections from "../sections/Sections";
 import Menu from "../Menu/Menu";
 import { applyDarkMode } from "../../utils/toggleDarkMode";
+import ThreeButton from "../Button/ThreeButton";
 
 function App() {
   useEffect(() => {
@@ -15,7 +16,9 @@ function App() {
   const toggleMenu = () => setMenuHidden((prev) => !prev);
 
   useEffect(() => {
+    // Apply dark mode based on localStorage setting
     const darkModeSetting = localStorage.getItem("dark_mode");
+
     applyDarkMode(darkModeSetting === "true");
 
     // Optional: Listen to changes in localStorage (if multiple tabs)
@@ -32,30 +35,7 @@ function App() {
   return (
     <main>
       <Sections />
-      <div
-        style={{
-          position: "fixed",
-          bottom: "0",
-          right: "0",
-          cursor: "pointer",
-        }}
-        dangerouslySetInnerHTML={{
-          __html: `
-        <model-viewer
-          id="menuButton"
-          src="./jk-logo.glb"
-          tone-mapping="neutral"
-          shadow-intensity="0"
-          auto-rotate
-          interaction-prompt="none"
-          camera-orbit="90deg"
-          style="height:90px; width:120px; padding-right:20px;"
-        ></model-viewer>
-          `,
-        }}
-        onClick={toggleMenu}
-      ></div>
-
+      <ThreeButton toggle={toggleMenu} />
       <Menu hidden={menuHidden} toggle={toggleMenu} />
     </main>
   );

@@ -13,3 +13,7 @@ export const applyDarkMode = (isDark: boolean) => {
     isDark ? "dark" : "light"
   );
 };
+export const setDarkMode = () => {
+  document.documentElement.setAttribute("data-theme", "dark");
+  localStorage.setItem("dark_mode", JSON.stringify(true));
+};

@@ -1,24 +1,57 @@
 import { useMotionValueEvent, useScroll } from "motion/react";
-import { useMemo, useState } from "react";
-import ProjectsSection from "./Projects/Projects.section";
-import SingleSection from "./Single/Single.section";
+import { useEffect, useMemo, useState } from "react";
 import HelloSection from "./Hello.section";
-import {
-  introThreshold,
-  cvThreshold,
-  projectsTreshold,
-  moreTreshold,
-} from "./thresholds";
-import CVSection from "./CV.section";
+import { sequenceThreshold, typewriterThreshold } from "./thresholds";
+import ScrollSequence from "../animated/ScrollSequence/ScrollSequence";
+import AnimatedText from "../animated/Typewriter/AnimatedText";
 
 export default function Sections() {
   const { scrollYProgress } = useScroll({});
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  //
+  const sections = [
+    <HelloSection
+      id="Sequence"
+      key="Sequence"
+      containerYProgress={scrollYProgress}
+      threshold={sequenceThreshold}
+      label="Sequence"
+      content={
+        <ScrollSequence
+          frameCount={410}
+          containerYProgress={scrollYProgress}
+          threshold={sequenceThreshold}
+        />
+      }
+    />,
+    <HelloSection
+      id="Typewriter"
+      key="Typewriter"
+      containerYProgress={scrollYProgress}
+      threshold={typewriterThreshold}
+      label="Typewriter"
+      content={
+        <>
+          <AnimatedText
+            message={`Check out my latest projects at <a href="https://instagram.com/jk.stack" target="_blank"> @jk.stack</a>🌸`}
+          />
+        </>
+      }
+      arrow={false}
+    />,
+  ];
+
+  //set the container height for scrolling
+  useEffect(() => {
+    const value = sections.length * 300 + "vh";
+    document.documentElement.style.setProperty("--body-height", value);
+  }, [sections.length]);
+
   // Section ranges based on scroll progress (0 to 1)
   // Example: 0.0–0.1 => Logo, 0.1–0.3 => CV, 0.3–0.8 => Projects, 0.8–1.0 => Contact
   const sectionThresholds = useMemo(() => {
-    return [introThreshold, cvThreshold, projectsTreshold, moreTreshold];
+    return [typewriterThreshold, sequenceThreshold];
   }, []);
 
   // sections switching logic
@@ -31,35 +64,6 @@ export default function Sections() {
       setCurrentIndex(active.index);
     }
   });
-
-  const sections = [
-    <HelloSection
-      key="Hello"
-      containerYProgress={scrollYProgress}
-      threshold={sectionThresholds[0]}
-      label="Hello"
-    />,
-    <CVSection
-      key="cv"
-      containerYProgress={scrollYProgress}
-      threshold={sectionThresholds[1]}
-      label="CV"
-    />,
-    <ProjectsSection
-      key="projects"
-      containerYProgress={scrollYProgress}
-      threshold={sectionThresholds[2]}
-      label="projects"
-    />,
-    <SingleSection
-      key="more"
-      containerYProgress={scrollYProgress}
-      threshold={sectionThresholds[3]}
-      label="more"
-      title="And more..."
-      arrow={false}
-    />,
-  ];
 
   return sections[currentIndex];
 }

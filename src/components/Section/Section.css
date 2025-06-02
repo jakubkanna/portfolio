@@ -74,9 +74,11 @@ section {
 #mc_embed_signup form {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
 }
-
+#mc_embed_signup {
+  margin: 1rem;
+}
 #arrow {
   position: fixed;
   bottom: 0;

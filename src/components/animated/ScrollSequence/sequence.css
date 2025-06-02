@@ -1,0 +1,21 @@
+#ScrollSequence {
+  height: 100%;
+  background-color: var(--color-dark);
+}
+#Canvas {
+  max-width: 100dvw;
+  max-height: 100dvh;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  #CanvasWrapper {
+    width: 100vw;
+    height: calc(100vw * 1.25);
+    overflow: hidden;
+  }
+
+  #Canvas {
+    width: 100%;
+    height: 100%;
+  }
+}

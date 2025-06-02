@@ -1,20 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 
 const cursorStyle: React.CSSProperties = {
   borderRight: "0.08em solid black",
   animation: "blink 1s step-end infinite",
 };
 
-const AnimatedText = ({ message = "" }) => {
+interface AnimatedTextProps {
+  message?: string;
+  jsx?: ReactNode;
+}
+
+const AnimatedText = ({ message = "", jsx = <></> }: AnimatedTextProps) => {
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [targetText, setTargetText] = useState(message || "");
+  const [targetText, setTargetText] = useState(message);
+  const [isDone, setIsDone] = useState(false);
 
-  // Update state if message prop changes
   useEffect(() => {
     if (message !== targetText) {
       setIsDeleting(true);
-      setTargetText(message || "");
+      setTargetText(message);
     }
   }, [message, targetText]);
 
@@ -23,26 +28,33 @@ const AnimatedText = ({ message = "" }) => {
 
     const getNextChunk = (str: string, pos: number) => {
       if (pos >= str.length) return "";
-      if (str[pos] !== "<") return str[pos]; // Normal char
-
-      // Full tag chunk
+      if (str[pos] !== "<") return str[pos];
       const end = str.indexOf(">", pos);
-      if (end === -1) return ""; // malformed tag
+      if (end === -1) return "";
       return str.slice(pos, end + 1);
     };
 
     const tick = () => {
-      const fullText = targetText || "";
+      const fullText = targetText;
 
       setDisplayedText((prev = "") => {
+        let next = prev;
+
         if (isDeleting) {
-          const next = prev.slice(0, -1);
+          next = prev.slice(0, -1);
           if (next === "") setIsDeleting(false);
-          return next;
         } else {
           const nextChunk = getNextChunk(fullText, prev.length);
-          return fullText.substring(0, prev.length + nextChunk.length);
+          next = fullText.substring(0, prev.length + nextChunk.length);
         }
+
+        // Set done state
+        const typingComplete = !isDeleting && next === targetText;
+        if (typingComplete) {
+          setIsDone(true);
+        }
+
+        return next;
       });
 
       const doneTyping = !isDeleting && displayedText === targetText;
@@ -62,12 +74,13 @@ const AnimatedText = ({ message = "" }) => {
   }, [displayedText, isDeleting, targetText]);
 
   return (
-    <h1 className="typewrite">
+    <h1 className="typewriter">
       <span
         className="wrap"
         style={cursorStyle}
         dangerouslySetInnerHTML={{ __html: displayedText }}
       />
+      {isDone && jsx}
     </h1>
   );
 };

@@ -1,31 +1,24 @@
-import isMobile from "is-mobile";
 import Section from "../Section/Section";
-import Typewriter from "../animated/Typewriter/Typewriter";
-import MenuButtons from "../Menu/MenuButtons";
-import MoveIn from "../animated/MoveIn/MoveIn";
 
 export default function HelloSection({
   containerYProgress,
   threshold,
+  content,
+  id,
+  label,
+  arrow,
 }: SectionProps) {
   return (
     <Section
-      id="Hello"
+      id={id}
+      label={label}
       title=""
       containerYProgress={containerYProgress}
       threshold={threshold}
-      label="Hello"
+      arrow={arrow}
     >
       <div className="container">
-        <div className="content">
-          {isMobile() ? (
-            <MoveIn>
-              <MenuButtons />
-            </MoveIn>
-          ) : (
-            <Typewriter />
-          )}
-        </div>
+        <div className="content">{content}</div>
       </div>
     </Section>
   );

@@ -13,9 +13,9 @@ body {
 
 :root {
   --color-light: rgb(238, 238, 238);
-  --color-dark: rgb(10, 10, 10);
+  --color-dark: rgb(0, 0, 0);
 
-  --body-height: 1600vh;
+  --body-height: 0vh;
 
   --bg-color: var(--color-light);
   --color: var(--color-dark);
@@ -151,7 +151,7 @@ a {
 
 input {
   border-radius: 2rem;
-  border: 1px solid black;
+  border: 1px solid grey;
   background-color: transparent;
   padding: 1rem;
 }
