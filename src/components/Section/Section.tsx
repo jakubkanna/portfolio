@@ -21,6 +21,10 @@ export default function Section({
   const to = (threshold && threshold.to - buffer) || 0;
   const [progress, setProgress] = useState(0);
 
+  const onArrow = () => {
+    containerYProgress.set(to + 0.1);
+  };
+
   useMotionValueEvent(containerYProgress, "change", (latest: number) => {
     setProgress(latest);
   });
@@ -47,7 +51,7 @@ export default function Section({
         {children}
       </div>
       {arrow && (
-        <div id="arrow">
+        <div id="arrow" onClick={onArrow}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="28"

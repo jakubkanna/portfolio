@@ -85,6 +85,7 @@ section {
   transform: translateX(-50%);
   animation: blink_opacity 2s ease-in-out infinite;
   opacity: 1;
+  cursor: pointer;
 }
 @keyframes blink_opacity {
   0%,

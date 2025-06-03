@@ -208,6 +208,6 @@ body {
   -ms-overflow-style: none; /* IE 10+ */
 }
 
-body::-webkit-scrollbar {
-  display: none;
+*::-webkit-scrollbar {
+  width: 0px;
 }
