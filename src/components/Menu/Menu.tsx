@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import "./Menu.css";
 import MenuButtons from "./MenuButtons";
 
-export default function Menu({ hidden = true, toggle }: MenuProps) {
+export default function Menu({ hidden, toggle }: MenuProps) {
   return (
     <AnimatePresence>
       {!hidden && (

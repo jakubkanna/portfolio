@@ -1,97 +1,114 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import "./sequence.css";
 import { MotionValue } from "motion";
+import supportsWebP from "supports-webp";
+import Progress from "../../Progress/Progress";
+import { useMotionValueEvent } from "motion/react";
 
 interface ScrollSequenceProps {
-  frameCount: number;
   containerYProgress: MotionValue;
   threshold: SectionProps["threshold"];
 }
 
 export default function ScrollSequence({
-  frameCount = 410,
   containerYProgress,
   threshold,
 }: ScrollSequenceProps) {
+  const frameCount = 410;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const imgRef = useRef<HTMLImageElement | null>(null); // persist single image
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const [format, setFormat] = useState<"webp" | "jpg" | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const onClick = () => {
     window.location.href = "mailto:hello.jakubkanna@gmail.com";
   };
 
+  // Detect WebP support once
   useEffect(() => {
+    async function checkWebPSupport() {
+      const isSupported = await supportsWebP;
+      if (isSupported) {
+        setFormat("webp");
+      } else {
+        setFormat("jpg");
+      }
+    }
+    checkWebPSupport();
+  }, []);
+
+  // Get frame source path
+  const getFrameSrc = useCallback(
+    (index: number) =>
+      `/sequence/${index.toString().padStart(4, "0")}.${format}`,
+    [format]
+  );
+
+  // Initial image and preload
+  useEffect(() => {
+    if (!format) return; // wait for format detection
+
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
 
     if (!canvas || !context)
       return console.error("Canvas or context not found");
 
-    const currentFrame = (index: number) =>
-      `/sequence/${index.toString().padStart(4, "0")}.jpg`;
-
-    // Create and load first image
     const img = new Image();
-    img.src = currentFrame(0);
-    img.onload = () => {
-      context.drawImage(img, 0, 0);
-    };
+    img.src = getFrameSrc(0);
+    img.onload = () => context.drawImage(img, 0, 0);
     imgRef.current = img;
 
-    // Preload images
-    const preloadImages = () => {
-      for (let i = 0; i < frameCount; i++) {
-        const image = new Image();
-        image.src = currentFrame(i);
-      }
-    };
+    // Preload
+    for (let i = 0; i < frameCount; i += 4) {
+      // skip every 4th
+      const preloadImg = new Image();
+      preloadImg.src = getFrameSrc(i);
+    }
+  }, [frameCount, format, getFrameSrc]);
 
-    preloadImages();
-  }, [frameCount]);
+  // Frame update on scroll
+  useMotionValueEvent(containerYProgress, "change", (rawProgress) => {
+    if (!threshold) return;
 
-  useEffect(() => {
-    let animationFrameId: number;
+    const { from, to } = threshold;
+    const clamped = Math.min(Math.max(rawProgress, from), to);
+    const progress = (clamped - from) / (to - from);
 
-    const update = () => {
-      const canvas = canvasRef.current;
-      const context = canvas?.getContext("2d");
-      const img = imgRef.current;
+    setScrollProgress(progress);
 
-      if (!canvas || !context || !img || !threshold) return;
+    let frameIndex = Math.round(progress * (frameCount - 1));
+    frameIndex = frameIndex - (frameIndex % 4); //skip every 4th
 
-      const { from, to } = threshold;
-      const rawProgress = containerYProgress.get();
-      const clampedProgress = Math.min(Math.max(rawProgress, from), to);
-      const normalizedProgress = (clampedProgress - from) / (to - from);
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    const img = imgRef.current;
 
-      const frameIndex = Math.round(normalizedProgress * (frameCount - 1));
+    if (!canvas || !context || !img) return;
 
-      const newSrc = `/sequence/${frameIndex.toString().padStart(4, "0")}.jpg`;
-      if (img.src !== newSrc) {
-        img.src = newSrc;
-        img.onload = () => {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          context.clearRect(0, 0, canvas.width, canvas.height);
-          const x = (canvas.width - img.width) / 2;
-          const y = (canvas.height - img.height) / 2;
-          context.drawImage(img, x, y);
-        };
-      }
+    const newSrc = getFrameSrc(frameIndex);
+    const currentSrc = new URL(img.src, window.location.href).pathname;
 
-      animationFrameId = requestAnimationFrame(update);
-    };
-
-    update();
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [containerYProgress, frameCount, threshold]);
+    if (currentSrc !== newSrc) {
+      img.src = newSrc;
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(img, 0, 0);
+      };
+    }
+  });
 
   return (
-    <canvas
-      className="sequenceCanvas"
-      id="Canvas"
-      ref={canvasRef}
-      onClick={onClick}
-    />
+    <>
+      <Progress progress={scrollProgress} />
+      <canvas
+        className="sequenceCanvas"
+        id="Canvas"
+        ref={canvasRef}
+        onClick={onClick}
+      />
+    </>
   );
 }

@@ -15,7 +15,7 @@ body {
   --color-light: rgb(238, 238, 238);
   --color-dark: rgb(0, 0, 0);
 
-  --body-height: 0vh;
+  --body-height: 101vh;
 
   --bg-color: var(--color-light);
   --color: var(--color-dark);
@@ -175,7 +175,7 @@ small {
 
 @media (max-width: 768px) {
   h1 {
-    font-size: 400%;
+    font-size: 300%;
   }
   img,
   video,
@@ -202,4 +202,12 @@ small {
   .container {
     max-width: 1320px;
   }
+}
+body {
+  scrollbar-width: 0; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }

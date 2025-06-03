@@ -3,19 +3,22 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Sections from "../sections/Sections";
 import Menu from "../Menu/Menu";
-import { applyDarkMode } from "../../utils/toggleDarkMode";
-import ThreeButton from "../Button/ThreeButton";
+import { applyDarkMode, setDarkMode } from "../../utils/toggleDarkMode";
+import ThreeButton from "../Buttons/ThreeButton";
+import isMobile from "is-mobile";
 
 function App() {
   useEffect(() => {
     document.title = `JAKUB KANNA — artist, full-stack developer, graphic designer`;
   }, []);
 
-  const [menuHidden, setMenuHidden] = useState(true);
+  const [menuHidden, setMenuHidden] = useState(isMobile());
 
   const toggleMenu = () => setMenuHidden((prev) => !prev);
 
   useEffect(() => {
+    // force
+    setDarkMode();
     // Apply dark mode based on localStorage setting
     const darkModeSetting = localStorage.getItem("dark_mode");
 

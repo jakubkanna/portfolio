@@ -1,6 +1,6 @@
-import Button from "../Button/Button";
+import Button from "../Buttons/Button";
 // import { toggleDarkMode } from "../../utils/toggleDarkMode";
-import CVButton from "../Button/CVButton";
+import CVButton from "../Buttons/CVButton";
 
 export default function MenuButtons() {
   // const handleScroll = (threshold: SectionProps["threshold"]) => {

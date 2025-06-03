@@ -2,9 +2,9 @@ import { motion, useAnimation, useInView } from "motion/react";
 import { ReactNode, useEffect, useRef } from "react";
 
 const childVariants = {
-  hidden: { y: "-100%" },
+  hidden: { x: "-100%" },
   visible: {
-    y: 0,
+    x: 0,
     transition: {
       duration: 0.5,
       ease: "easeOut",
