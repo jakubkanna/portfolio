@@ -4,6 +4,7 @@ import { MotionValue } from "motion";
 import supportsWebP from "supports-webp";
 import Progress from "../../Progress/Progress";
 import { useMotionValueEvent } from "motion/react";
+import Loader from "../Loader/Loader";
 
 interface ScrollSequenceProps {
   containerYProgress: MotionValue;
@@ -14,12 +15,12 @@ export default function ScrollSequence({
   containerYProgress,
   threshold,
 }: ScrollSequenceProps) {
-  const frameCount = 410;
+  const frameCount = 396;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const [format, setFormat] = useState<"webp" | "jpg" | null>(null);
+  const [format, setFormat] = useState<"webp" | "jpg">();
   const [scrollProgress, setScrollProgress] = useState(0);
-
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false);
   // Detect WebP support once
   useEffect(() => {
     async function checkWebPSupport() {
@@ -42,27 +43,46 @@ export default function ScrollSequence({
 
   // Initial image and preload
   useEffect(() => {
-    if (!format) return; // wait for the format detection
-
+    if (!format) return;
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
 
-    if (!canvas || !context)
-      return console.error("Canvas or context not found");
-
+    // Load and draw the very first frame
     const img = new Image();
     img.src = getFrameSrc(0);
-    img.onload = () => context.drawImage(img, 0, 0);
-    imgRef.current = img;
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      context.drawImage(img, 0, 0);
+      imgRef.current = img;
+    };
 
-    // Preload
-    for (let i = 0; i < frameCount; i += 4) {
-      // skip every 4th
-      const preloadImg = new Image();
-      preloadImg.src = getFrameSrc(i);
-    }
-  }, [frameCount, format, getFrameSrc]);
+    // Preload the rest in the background
+    const loadImage = (index: number): Promise<void> => {
+      return new Promise((resolve) => {
+        if (index === 0) return resolve(); // Already loaded
+        const preloadImg = new Image();
+        preloadImg.src = getFrameSrc(index);
+        preloadImg.onload = () => resolve();
+      });
+    };
 
+    const loadAllImages = async () => {
+      document.body.style.overflow = "hidden";
+      const loadPromises = [];
+      for (let i = 0; i < frameCount; i += 4) {
+        loadPromises.push(loadImage(i));
+      }
+      await Promise.all(loadPromises);
+      document.body.style.overflow = "";
+      setIsLoadingComplete(true);
+    };
+
+    loadAllImages();
+  }, [format, getFrameSrc]);
+
+  useEffect(() => console.log(isLoadingComplete), [isLoadingComplete]);
   // Frame update on scroll
   useMotionValueEvent(containerYProgress, "change", (rawProgress) => {
     if (!threshold) return;
@@ -99,8 +119,12 @@ export default function ScrollSequence({
 
   return (
     <>
-      <Progress progress={scrollProgress} />
-      <canvas className="sequenceCanvas" id="Canvas" ref={canvasRef} />
+      {!isLoadingComplete && <Loader />}
+
+      <>
+        <Progress progress={scrollProgress} />
+        <canvas className="sequenceCanvas" id="Canvas" ref={canvasRef} />
+      </>
     </>
   );
 }
