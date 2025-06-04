@@ -54,7 +54,7 @@ export default function Sections() {
   // sections switching logic
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     const active = sectionThresholds.find((section) => {
-      return latest >= section.from && latest < section.to;
+      return latest >= section.from && latest < section.to; //is within the range
     });
 
     if (active && active.index !== currentIndex) {

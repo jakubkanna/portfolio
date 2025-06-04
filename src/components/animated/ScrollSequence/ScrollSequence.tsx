@@ -20,10 +20,6 @@ export default function ScrollSequence({
   const [format, setFormat] = useState<"webp" | "jpg" | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  const onClick = () => {
-    window.location.href = "mailto:hello.jakubkanna@gmail.com";
-  };
-
   // Detect WebP support once
   useEffect(() => {
     async function checkWebPSupport() {
@@ -46,7 +42,7 @@ export default function ScrollSequence({
 
   // Initial image and preload
   useEffect(() => {
-    if (!format) return; // wait for format detection
+    if (!format) return; // wait for the format detection
 
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
@@ -75,9 +71,9 @@ export default function ScrollSequence({
     const clamped = Math.min(Math.max(rawProgress, from), to);
     const progress = (clamped - from) / (to - from);
 
-    setScrollProgress(progress);
+    setScrollProgress(progress); //set state for progress bar
 
-    let frameIndex = Math.round(progress * (frameCount - 1));
+    let frameIndex = Math.round(progress * (frameCount - 1)); // 0.125 * (410 -1), -1 because we start from 0
     frameIndex = frameIndex - (frameIndex % 4); //skip every 4th
 
     const canvas = canvasRef.current;
@@ -90,11 +86,12 @@ export default function ScrollSequence({
     const currentSrc = new URL(img.src, window.location.href).pathname;
 
     if (currentSrc !== newSrc) {
+      //check if the source has changed, in case it's e.g. 0000
       img.src = newSrc;
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
         context.drawImage(img, 0, 0);
       };
     }
@@ -103,12 +100,7 @@ export default function ScrollSequence({
   return (
     <>
       <Progress progress={scrollProgress} />
-      <canvas
-        className="sequenceCanvas"
-        id="Canvas"
-        ref={canvasRef}
-        onClick={onClick}
-      />
+      <canvas className="sequenceCanvas" id="Canvas" ref={canvasRef} />
     </>
   );
 }

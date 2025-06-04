@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import "./Menu.css";
-import MenuButtons from "./MenuButtons";
+import MenuButtons from "../Buttons/MenuButtons";
 
 export default function Menu({ hidden, toggle }: MenuProps) {
   return (

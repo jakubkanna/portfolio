@@ -14,13 +14,6 @@ export default defineConfig({
         manualChunks: {
           react: ["react", "react-dom"],
           motion: ["motion"],
-          "gray-matter": ["gray-matter"],
-          "react-markdown": [
-            "react-markdown",
-            "rehype-raw",
-            "rehype-video",
-            "remark-gfm",
-          ],
         },
       },
     },

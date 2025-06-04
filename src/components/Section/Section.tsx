@@ -1,13 +1,13 @@
 import "./Section.css";
 import { motion, useMotionValueEvent } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import MoveIn from "../animated/MoveIn/MoveIn";
+// import MoveIn from "../animated/MoveIn/MoveIn";
 
 export default function Section({
   children,
   id,
-  title,
-  subtitle,
+  // title,
+  // subtitle,
   threshold,
   containerYProgress,
   style,
@@ -40,13 +40,13 @@ export default function Section({
   return (
     <motion.section
       id={id + "Section"}
-      className={"section " + className}
+      className={"section " + className ? className : ""}
       style={style}
     >
-      <MoveIn>
+      {/* <MoveIn>
         {title && <span className="title">{title}</span>}
         {subtitle && <span className="subtitle">{subtitle}</span>}
-      </MoveIn>
+      </MoveIn> */}
       <div className="section-content" ref={sectionRef}>
         {children}
       </div>

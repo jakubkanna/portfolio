@@ -5,7 +5,6 @@
 #Canvas {
   max-width: 100dvw;
   max-height: 100dvh;
-  cursor: pointer;
 }
 @media (max-width: 768px) {
   #CanvasWrapper {

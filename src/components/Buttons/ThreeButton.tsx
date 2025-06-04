@@ -25,7 +25,7 @@ export default function ThreeButton({ toggle = () => {} }) {
   const [showTooltip, setShowTooltip] = useState(true);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setShowTooltip(false), 4000);
+    const timeout = setTimeout(() => setShowTooltip(false), 2500);
     return () => clearTimeout(timeout);
   }, []);
 

@@ -9,7 +9,7 @@ import isMobile from "is-mobile";
 
 function App() {
   useEffect(() => {
-    document.title = `JAKUB KANNA — artist, full-stack developer, graphic designer`;
+    document.title = `JAKUB KANNA — Graphic Designer, Full-stack Developer, Artist`;
   }, []);
 
   const [menuHidden, setMenuHidden] = useState(isMobile());
@@ -17,11 +17,13 @@ function App() {
   const toggleMenu = () => setMenuHidden((prev) => !prev);
 
   useEffect(() => {
-    // force
-    setDarkMode();
     // Apply dark mode based on localStorage setting
     const darkModeSetting = localStorage.getItem("dark_mode");
 
+    // default to dark mode
+    if (!darkModeSetting) setDarkMode();
+
+    //
     applyDarkMode(darkModeSetting === "true");
 
     // Optional: Listen to changes in localStorage (if multiple tabs)
