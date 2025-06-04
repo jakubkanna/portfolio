@@ -11,17 +11,23 @@ interface ScrollSequenceProps {
   threshold: SectionProps["threshold"];
 }
 
+// Store preloaded images in memory to avoid reloading
+const imageCache: { [src: string]: HTMLImageElement } = {};
+
 export default function ScrollSequence({
   containerYProgress,
   threshold,
 }: ScrollSequenceProps) {
   const frameCount = 396;
+  const step = 4; // Skip every 4th frame for performance
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
+
   const [format, setFormat] = useState<"webp" | "jpg">();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
-  // Detect WebP support once
+
+  // Detect WebP support
   useEffect(() => {
     async function checkWebPSupport() {
       const isSupported = await supportsWebP;
@@ -61,17 +67,22 @@ export default function ScrollSequence({
     // Preload the rest in the background
     const loadImage = (index: number): Promise<void> => {
       return new Promise((resolve) => {
-        if (index === 0) return resolve(); // Already loaded
+        const src = getFrameSrc(index);
+        if (imageCache[src]) return resolve(); // Already cached
+
         const preloadImg = new Image();
-        preloadImg.src = getFrameSrc(index);
-        preloadImg.onload = () => resolve();
+        preloadImg.src = src;
+        preloadImg.onload = () => {
+          imageCache[src] = preloadImg; // Save to cache
+          resolve();
+        };
       });
     };
 
     const loadAllImages = async () => {
       document.body.style.overflow = "hidden";
       const loadPromises = [];
-      for (let i = 0; i < frameCount; i += 4) {
+      for (let i = 0; i < frameCount; i += step) {
         loadPromises.push(loadImage(i));
       }
       await Promise.all(loadPromises);
@@ -82,7 +93,6 @@ export default function ScrollSequence({
     loadAllImages();
   }, [format, getFrameSrc]);
 
-  useEffect(() => console.log(isLoadingComplete), [isLoadingComplete]);
   // Frame update on scroll
   useMotionValueEvent(containerYProgress, "change", (rawProgress) => {
     if (!threshold) return;
@@ -94,26 +104,16 @@ export default function ScrollSequence({
     setScrollProgress(progress); //set state for progress bar
 
     let frameIndex = Math.round(progress * (frameCount - 1)); // 0.125 * (410 -1), -1 because we start from 0
-    frameIndex = frameIndex - (frameIndex % 4); //skip every 4th
+    frameIndex = frameIndex - (frameIndex % step);
 
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    const img = imgRef.current;
+    const img = imageCache[getFrameSrc(frameIndex)] || imgRef.current;
 
-    if (!canvas || !context || !img) return;
-
-    const newSrc = getFrameSrc(frameIndex);
-    const currentSrc = new URL(img.src, window.location.href).pathname;
-
-    if (currentSrc !== newSrc) {
-      //check if the source has changed, in case it's e.g. 0000
-      img.src = newSrc;
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
-        context.drawImage(img, 0, 0);
-      };
+    if (canvas && context && img) {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      context.drawImage(img, 0, 0);
     }
   });
 
