@@ -18,8 +18,8 @@ export default function ScrollSequence({
   containerYProgress,
   threshold,
 }: ScrollSequenceProps) {
-  const frameCount = 396;
-  const step = 4; // Skip every 4th frame for performance
+  const frameCount = 55;
+  const step = 1; // Skip every <nb> frame for performance
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
 
