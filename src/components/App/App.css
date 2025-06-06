@@ -211,3 +211,12 @@ body {
 *::-webkit-scrollbar {
   width: 0px;
 }
+
+.mono {
+  font-family: monospace;
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 2rem;
+  font-size: 10px;
+}

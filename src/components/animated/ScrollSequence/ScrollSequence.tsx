@@ -3,8 +3,9 @@ import "./sequence.css";
 import { MotionValue } from "motion";
 import supportsWebP from "supports-webp";
 import Progress from "../../Progress/Progress";
-import { useMotionValueEvent } from "motion/react";
+import { progress, useMotionValueEvent } from "motion/react";
 import Loader from "../Loader/Loader";
+import isMobile from "is-mobile";
 
 interface ScrollSequenceProps {
   containerYProgress: MotionValue;
@@ -124,6 +125,12 @@ export default function ScrollSequence({
       <>
         <Progress progress={scrollProgress} />
         <canvas className="sequenceCanvas" id="Canvas" ref={canvasRef} />
+
+        {!isMobile() && (
+          <span className="mono" style={{ opacity: 1 - scrollProgress }}>
+            Designing and developing unique digital experiences since 2018.
+          </span>
+        )}
       </>
     </>
   );
