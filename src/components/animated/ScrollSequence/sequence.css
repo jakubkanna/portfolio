@@ -1,21 +1,31 @@
 #ScrollSequence {
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--color-dark);
+  overflow: hidden;
+  position: relative;
 }
-#Canvas {
-  max-width: 100dvw;
-  max-height: 100dvh;
-}
-@media (max-width: 768px) {
-  #CanvasWrapper {
-    width: 100vw;
-    height: calc(100vw * 1.25);
-    overflow: hidden;
-  }
 
+#Canvas {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  object-fit: cover;
+}
+
+#CanvasWrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
   #Canvas {
-    width: 100%;
-    height: 100%;
-    transform: scale(5);
+    width: 100vw;
+    height: 100vh;
+    transform: none;
   }
 }

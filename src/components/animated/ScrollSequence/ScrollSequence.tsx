@@ -3,7 +3,7 @@ import "./sequence.css";
 import { MotionValue } from "motion";
 import supportsWebP from "supports-webp";
 import Progress from "../../Progress/Progress";
-import { progress, useMotionValueEvent } from "motion/react";
+import { useMotionValueEvent } from "motion/react";
 import Loader from "../Loader/Loader";
 import isMobile from "is-mobile";
 
