@@ -3,14 +3,15 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import Sections from "../sections/Sections";
 import Menu from "../Menu/Menu";
-import { setDarkMode } from "../../utils/toggleDarkMode";
+// import { setDarkMode } from "../../utils/toggleDarkMode";
 import ThreeButton from "../Buttons/ThreeButton";
 import isMobile from "is-mobile";
+import { applyDarkMode } from "../../utils/toggleDarkMode";
 
 function App() {
   useEffect(() => {
     document.title = `JAKUB KANNA — Graphic Designer, Full-stack Developer, Artist`;
-    setDarkMode();
+    applyDarkMode(true);
   }, []);
 
   const [menuHidden, setMenuHidden] = useState(isMobile());
