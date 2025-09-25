@@ -32,7 +32,7 @@ export default function Sections() {
       label="Typewriter"
       content={
         <AnimatedText
-          message={`View latest projects at <a href="https://instagram.com/jk.stack" target="_blank"> @jk.stack</a>🌍`}
+          message={`View latest projects at <a href="https://instagram.com/studio.jkn" target="_blank"> @studio.jkn</a>🌍`}
         />
       }
       arrow={false}
