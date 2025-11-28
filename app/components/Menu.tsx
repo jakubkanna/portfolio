@@ -7,6 +7,7 @@ export default function Menu() {
   const router = useRouter();
 
   const items = [
+    { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Portfolio", href: "/portfolio" },
     { label: "Contact us", href: "/contact" },

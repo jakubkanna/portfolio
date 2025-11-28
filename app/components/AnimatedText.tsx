@@ -69,10 +69,13 @@ const renderWithLimit = (
     let shown = hasShown;
     let budget = remaining;
 
-    for (const child of node) {
+    for (let idx = 0; idx < node.length; idx += 1) {
+      const child = node[idx];
       const res = renderWithLimit(child, budget, shown);
       if (res.nodes !== null && res.nodes !== false && res.nodes !== "") {
-        parts.push(res.nodes);
+        parts.push(
+          <React.Fragment key={`part-${idx}`}>{res.nodes}</React.Fragment>
+        );
       }
       used += res.used;
       shown = res.hasShown;

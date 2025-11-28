@@ -25,6 +25,12 @@ export default function ModelViewerButton({
   href = "/",
   tooltip = "logo",
 }: ModelViewerButtonProps) {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
+
   const content = (
     <div className="inline-flex items-center justify-center">
       <ModelViewer
@@ -40,6 +46,7 @@ export default function ModelViewerButton({
           width: "135px",
           display: "block",
         }}
+        suppressHydrationWarning
       />
     </div>
   );
