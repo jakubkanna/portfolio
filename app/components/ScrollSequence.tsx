@@ -86,7 +86,7 @@ export default function ScrollSequence({
 
   useMotionValueEvent(scrollProgress, "change", (latest) => {
     const clamped = Math.min(Math.max(latest, 0), 1);
-    setProgress(clamped);
+    setProgress(clamped); // linear mapping from scroll to frames
 
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
@@ -124,6 +124,7 @@ export default function ScrollSequence({
           className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 font-mono text-xs text-foreground/70"
           style={{ opacity: 1 - progress }}
         >
+          STUDIO JKN - <br />
           Designing and developing unique digital experiences since 2018.
         </span>
       )}

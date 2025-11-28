@@ -18,8 +18,6 @@ export default function AboutPage() {
           }
         />
       </section>
-
-      <ModelViewerButton href="/" tooltip="Back to sequence" />
     </main>
   );
 }

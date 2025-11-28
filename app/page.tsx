@@ -16,15 +16,11 @@ export default function HomePage() {
   return (
     <main
       ref={containerRef}
-      className="relative min-h-[220vh] bg-black text-foreground"
+      className="relative min-h-[320vh] bg-black text-foreground"
     >
-      <div className="sticky top-0 h-screen">
+      <div className="fixed top-0 h-screen">
         <ScrollSequence scrollProgress={scrollYProgress} />
       </div>
-
-      <div className="h-[40vh]" />
-
-      <ModelViewerButton href="/about" tooltip="Jump to about page" />
     </main>
   );
 }

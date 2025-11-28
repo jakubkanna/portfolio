@@ -17,63 +17,35 @@ type ModelViewerAttributes = React.HTMLAttributes<HTMLElement> & {
 const ModelViewer = (props: ModelViewerAttributes) =>
   React.createElement("model-viewer", props as Record<string, unknown>);
 
-type ModelViewerButtonProps = {
-  href?: string;
-  tooltip?: string;
-};
+type ModelViewerButtonProps = {};
 
-export default function ModelViewerButton({
-  href,
-  tooltip = "3D logo",
-}: ModelViewerButtonProps) {
-  const [showTooltip, setShowTooltip] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setShowTooltip(false), 2200);
-    return () => clearTimeout(timeout);
-  }, []);
-
+export default function ModelViewerButton({}: ModelViewerButtonProps) {
   const content = (
-    <div className="relative flex flex-col items-end">
-      {showTooltip && (
-        <div className="mb-2 rounded bg-white px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-black shadow-sm">
-          {tooltip}
-        </div>
-      )}
-      <div
-        className="cursor-pointer "
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-      >
-        <ModelViewer
-          id="model-button"
-          src="/jk-logo.glb"
-          tone-mapping="neutral"
-          shadow-intensity="0"
-          auto-rotate
-          interaction-prompt="none"
-          camera-orbit="90deg"
-          style={{ height: "90px", width: "120px" }}
-        />
-      </div>
+    <div className="inline-flex items-center justify-center">
+      <ModelViewer
+        id="model-button"
+        src="/jkn-logo.glb"
+        tone-mapping="neutral"
+        shadow-intensity="0"
+        auto-rotate
+        interaction-prompt="none"
+        camera-orbit="90deg"
+        style={{
+          height: "140px",
+          width: "135px",
+          display: "block",
+        }}
+      />
     </div>
   );
 
-  if (href) {
-    return (
-      <Link
-        href={href}
-        className="fixed bottom-6 right-6 z-20"
-        aria-label={tooltip}
-      >
-        {content}
-      </Link>
-    );
-  }
-
   return (
-    <div className="fixed bottom-6 right-6 z-20" aria-label={tooltip}>
+    <Link
+      href={"/"}
+      className="fixed bottom-6 right-6 z-20 inline-flex"
+      aria-label="logo"
+    >
       {content}
-    </div>
+    </Link>
   );
 }
