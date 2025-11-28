@@ -1,7 +1,7 @@
 "use client";
 
 type ButtonProps = {
-  label: string;
+  label: React.ReactNode;
   variant?: "outline" | "background" | "link";
   action?: () => void;
   className?: string;

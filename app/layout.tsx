@@ -4,7 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import Logo from "./components/Logo";
 import Menu from "./components/Menu";
-import Link from "next/link";
+import PageName from "./components/PageName";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,16 +38,12 @@ export default function RootLayout({
         />
       </head>
       <header>
-        <Link
-          href={"/"}
-          className="fixed top-6 left-6 z-20 inline-flex no-underline"
-        >
-          <span>STUDIO JKN</span>
-        </Link>
+        <Logo />
       </header>
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black text-foreground antialiased`}
       >
+        <PageName />
         {children}
       </body>
       <footer>
