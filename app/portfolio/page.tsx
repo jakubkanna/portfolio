@@ -64,7 +64,8 @@ function PortfolioCard({
   poster,
   video,
   locked = false,
-}: Card & { locked?: boolean }) {
+  index,
+}: Card & { locked?: boolean; index: number }) {
   const [loaded, setLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -94,11 +95,17 @@ function PortfolioCard({
       target="_blank"
       rel="noreferrer"
       className="group relative block overflow-hidden rounded-2xl bg-blue-900 transition-shadow"
-      initial={{ scale: 1, zIndex: 0 }}
+      initial={{ scale: 0, zIndex: 0 }}
+      animate={{ scale: 1 }}
       whileHover={
         locked ? { scale: 1, zIndex: 0 } : { scale: 1.08, zIndex: 10 }
       }
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        delay: index * 0.05,
+      }}
       style={locked ? { pointerEvents: "none" } : undefined}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -157,8 +164,13 @@ export default function PortfolioPage() {
               key={`row-${rowIdx}`}
               className="relative grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
-              {row.map((card) => (
-                <PortfolioCard key={card.title} {...card} locked={isLast} />
+              {row.map((card, idx) => (
+                <PortfolioCard
+                  key={card.title}
+                  {...card}
+                  locked={isLast}
+                  index={rowIdx * 3 + idx}
+                />
               ))}
 
               {isLast && (
