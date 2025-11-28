@@ -105,8 +105,10 @@ export default function ScrollSequence({
 
   useEffect(() => {
     if (!hasNavigated && progress >= 0.999) {
-      setHasNavigated(true);
-      router.push("/about");
+      requestAnimationFrame(() => {
+        setHasNavigated(true);
+        router.push("/about");
+      });
     }
   }, [hasNavigated, progress, router]);
 
@@ -121,7 +123,7 @@ export default function ScrollSequence({
       />
       {!isMobile() && (
         <span
-          className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 font-mono text-xs text-foreground/70"
+          className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 font-mono text-sm text-foreground/70"
           style={{ opacity: 1 - progress }}
         >
           STUDIO JKN - <br />

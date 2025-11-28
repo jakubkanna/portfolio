@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 type ModelViewerAttributes = React.HTMLAttributes<HTMLElement> & {
   src?: string;
@@ -17,9 +16,15 @@ type ModelViewerAttributes = React.HTMLAttributes<HTMLElement> & {
 const ModelViewer = (props: ModelViewerAttributes) =>
   React.createElement("model-viewer", props as Record<string, unknown>);
 
-type ModelViewerButtonProps = {};
+type ModelViewerButtonProps = {
+  href?: string;
+  tooltip?: string;
+};
 
-export default function ModelViewerButton({}: ModelViewerButtonProps) {
+export default function ModelViewerButton({
+  href = "/",
+  tooltip = "logo",
+}: ModelViewerButtonProps) {
   const content = (
     <div className="inline-flex items-center justify-center">
       <ModelViewer
@@ -40,11 +45,7 @@ export default function ModelViewerButton({}: ModelViewerButtonProps) {
   );
 
   return (
-    <Link
-      href={"/"}
-      className="fixed bottom-6 right-6 z-20 inline-flex"
-      aria-label="logo"
-    >
+    <Link href={href} className="fixed bottom-6 right-6 z-20 inline-flex" aria-label={tooltip}>
       {content}
     </Link>
   );

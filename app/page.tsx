@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useRef } from "react";
 import { useScroll } from "motion/react";
 import ScrollSequence from "./components/ScrollSequence";
-import ModelViewerButton from "./components/ModelViewerButton";
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement | null>(null);

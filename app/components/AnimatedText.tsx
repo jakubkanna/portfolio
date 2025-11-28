@@ -1,93 +1,170 @@
 "use client";
 
-import { CSSProperties, ReactNode, useEffect, useState } from "react";
+import React, {
+  CSSProperties,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 type AnimatedTextProps = {
-  message?: string;
+  message?: string | ReactNode | Array<string | ReactNode>;
   after?: ReactNode;
+  speedMs?: number;
 };
 
 const cursorStyle: CSSProperties = {
-  borderRight: "0.08em solid #e6e6e6",
+  display: "inline-block",
+  width: "2px",
+  height: "1em",
+  backgroundColor: "#e6e6e6",
   animation: "blink 1s step-end infinite",
+  verticalAlign: "baseline",
+};
+
+const extractText = (node: ReactNode): string => {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join("");
+  if (React.isValidElement(node)) {
+    const children = (node as React.ReactElement<{ children?: ReactNode }>)
+      .props?.children as ReactNode;
+    return extractText(children);
+  }
+  return "";
+};
+
+type RenderResult = {
+  nodes: ReactNode;
+  used: number;
+  hasShown: boolean;
+};
+
+const renderWithLimit = (
+  node: ReactNode,
+  remaining: number,
+  hasShown: boolean
+): RenderResult => {
+  if (remaining <= 0 && !hasShown) {
+    return { nodes: null, used: 0, hasShown };
+  }
+
+  if (node == null || typeof node === "boolean") {
+    return { nodes: null, used: 0, hasShown };
+  }
+
+  if (typeof node === "string" || typeof node === "number") {
+    const str = String(node);
+    const take = Math.max(0, Math.min(str.length, remaining));
+    const slice = str.slice(0, take);
+    const nextShown = hasShown || take > 0;
+    return { nodes: slice, used: take, hasShown: nextShown };
+  }
+
+  if (Array.isArray(node)) {
+    const parts: ReactNode[] = [];
+    let used = 0;
+    let shown = hasShown;
+    let budget = remaining;
+
+    for (const child of node) {
+      const res = renderWithLimit(child, budget, shown);
+      if (res.nodes !== null && res.nodes !== false && res.nodes !== "") {
+        parts.push(res.nodes);
+      }
+      used += res.used;
+      shown = res.hasShown;
+      budget -= res.used;
+      if (budget <= 0 && shown) break;
+    }
+
+    return { nodes: parts, used, hasShown: shown };
+  }
+
+  if (React.isValidElement(node)) {
+    const element = node as React.ReactElement<{ children?: ReactNode }>;
+    const children = element.props?.children as ReactNode;
+    if (children === undefined || children === null) {
+      return {
+        nodes: hasShown ? node : null,
+        used: 0,
+        hasShown,
+      };
+    }
+    const res = renderWithLimit(children, remaining, hasShown);
+    const shouldRender = res.hasShown || res.used > 0;
+    return {
+      nodes: shouldRender
+        ? React.cloneElement(
+            element,
+            element.props as Record<string, unknown>,
+            res.nodes
+          )
+        : null,
+      used: res.used,
+      hasShown: res.hasShown,
+    };
+  }
+
+  return { nodes: null, used: 0, hasShown };
 };
 
 export default function AnimatedText({
   message = "",
   after = null,
+  speedMs = 55,
 }: AnimatedTextProps) {
-  const [displayedText, setDisplayedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [targetText, setTargetText] = useState(message);
-  const [isDone, setIsDone] = useState(false);
+  const segments = useMemo(
+    () => (Array.isArray(message) ? message : [message]),
+    [message]
+  );
+
+  const targetLength = useMemo(
+    () => segments.map((seg) => extractText(seg)).join("").length,
+    [segments]
+  );
+
+  const [typed, setTyped] = useState(0);
 
   useEffect(() => {
-    if (message === targetText) return;
-
-    const id = requestAnimationFrame(() => {
-      setIsDeleting(true);
-      setIsDone(false);
-      setTargetText(message);
-    });
-
+    const id = requestAnimationFrame(() => setTyped(0));
     return () => cancelAnimationFrame(id);
-  }, [message, targetText]);
+  }, [targetLength]);
 
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
+    if (typed >= targetLength) return;
+    const id = setTimeout(
+      () => setTyped((prev) => Math.min(prev + 1, targetLength)),
+      speedMs
+    );
+    return () => clearTimeout(id);
+  }, [typed, targetLength, speedMs]);
 
-    const getNextChunk = (str: string, pos: number) => {
-      if (pos >= str.length) return "";
-      if (str[pos] !== "<") return str[pos];
-      const end = str.indexOf(">", pos);
-      if (end === -1) return "";
-      return str.slice(pos, end + 1);
-    };
+  const isDone = typed >= targetLength;
 
-    const tick = () => {
-      const fullText = targetText;
+  const partial = useMemo(
+    () => renderWithLimit(segments, typed, false).nodes,
+    [segments, typed]
+  );
 
-      setDisplayedText((prev = "") => {
-        let next = prev;
-
-        if (isDeleting) {
-          next = prev.slice(0, -1);
-          if (next === "") setIsDeleting(false);
-        } else {
-          const nextChunk = getNextChunk(fullText, prev.length);
-          next = fullText.substring(0, prev.length + nextChunk.length);
-        }
-
-        const typingComplete = !isDeleting && next === targetText;
-        if (typingComplete) setIsDone(true);
-
-        return next;
-      });
-
-      const doneTyping = !isDeleting && displayedText === targetText;
-      const doneDeleting = isDeleting && displayedText === "";
-
-      let delay = 40;
-      if (isDeleting) delay = 20;
-      if (doneTyping) delay = 1200;
-      if (doneDeleting) delay = 200;
-
-      timeout = setTimeout(tick, delay);
-    };
-
-    timeout = setTimeout(tick, 100);
-    return () => clearTimeout(timeout);
-  }, [displayedText, isDeleting, targetText]);
+  const full = useMemo(
+    () => renderWithLimit(segments, targetLength, true).nodes,
+    [segments, targetLength]
+  );
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <h1 className="mx-auto max-w-3xl text-balance text-4xl font-semibold uppercase leading-tight sm:text-6xl">
-        <span
-          className="inline-block"
-          style={cursorStyle}
-          dangerouslySetInnerHTML={{ __html: displayedText }}
-        />
-      </h1>
+      <span className="mx-auto max-w-3xl text-balance font-semibold uppercase leading-tight  whitespace-pre-wrap">
+        {!isDone ? (
+          <>
+            {partial}
+            <span aria-hidden style={cursorStyle} />
+          </>
+        ) : (
+          full
+        )}
+      </span>
       {isDone && after}
     </div>
   );
