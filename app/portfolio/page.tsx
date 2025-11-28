@@ -72,9 +72,13 @@ function PortfolioCard({
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
+    // Set loaded synchronously if image is already cached
     if (imgRef.current?.complete) {
       setLoaded(true);
+    } else {
+      setLoaded(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poster]);
 
   useEffect(() => {
