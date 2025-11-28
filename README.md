@@ -1,7 +1,18 @@
-# JAKUB KANNA FULL-STACK PORTFOLIO
+# Jakub Kanna Portfolio — Next.js (app router + Tailwind)
 
-A modern, mobile-friendly personal portfolio built with React, TypeScript, and Vite, featuring Markdown rendering, video embedding, and lightweight single-page experience.
+Fresh create-next-app scaffold with two pages:
+- `/` scroll-driven image sequence (frames in `public/sequence`)
+- `/about` animated typewriter text
+- shared 3D model viewer button (`public/jk-logo.glb`)
 
-# Inquires
+## Getting started
+```bash
+npm install
+npm run dev
+# open http://localhost:3000 (about page at /about)
+```
 
-info@jakubkanna.com
+## Commands
+- `npm run dev` — start dev server
+- `npm run lint` — lint
+- `npm run build` / `npm start` — production build and serve
