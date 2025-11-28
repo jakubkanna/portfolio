@@ -37,18 +37,20 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
-      <header>
-        <Logo />
-      </header>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black text-foreground antialiased`}
       >
+        {" "}
+        <header>
+          <Logo />
+        </header>
         <PageName />
         {children}
+        <footer>
+          <Menu />
+        </footer>
       </body>
-      <footer>
-        <Menu />
-      </footer>
     </html>
   );
 }
