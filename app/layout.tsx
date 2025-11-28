@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import ModelViewerButton from "./components/ModelViewerButton";
+import Logo from "./components/Logo";
 import Menu from "./components/Menu";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,15 +37,22 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
+      <header>
+        <Link
+          href={"/"}
+          className="fixed top-6 left-6 z-20 inline-flex no-underline"
+        >
+          <span>STUDIO JKN</span>
+        </Link>
+      </header>
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black text-foreground antialiased`}
       >
         {children}
-        <footer>
-          <Menu />
-          <ModelViewerButton />
-        </footer>
       </body>
+      <footer>
+        <Menu />
+      </footer>
     </html>
   );
 }

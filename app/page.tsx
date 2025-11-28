@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { useScroll } from "motion/react";
 import ScrollSequence from "./components/ScrollSequence";
-import Menu from "./components/Menu";
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -20,7 +19,6 @@ export default function HomePage() {
       <div className="fixed top-0 h-screen">
         <ScrollSequence scrollProgress={scrollYProgress} />
       </div>
-      <Menu />
     </main>
   );
 }

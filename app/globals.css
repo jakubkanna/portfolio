@@ -28,6 +28,9 @@ body {
 
 a {
   color: inherit;
+}
+
+a:not(.no-underline) {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;

@@ -1,11 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Button from "../components/Button";
-
 export default function ContactPage() {
-  const router = useRouter();
-
   return (
     <main className="relative flex min-h-screen flex-col bg-black text-foreground">
       <section className="flex flex-1 flex-col items-center justify-center px-6 text-center">
@@ -22,13 +17,6 @@ export default function ContactPage() {
               instagram DM
             </a>
           </p>
-          <div className="mt-6">
-            <Button
-              label="Back"
-              variant="outline"
-              action={() => router.back()}
-            />
-          </div>
         </div>
       </section>
     </main>

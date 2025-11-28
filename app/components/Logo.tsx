@@ -10,6 +10,7 @@ type ModelViewerAttributes = React.HTMLAttributes<HTMLElement> & {
   "auto-rotate"?: boolean | string;
   "interaction-prompt"?: string;
   "camera-orbit"?: string;
+  bounds?: string;
   style?: React.CSSProperties;
 };
 
@@ -21,7 +22,7 @@ type ModelViewerButtonProps = {
   tooltip?: string;
 };
 
-export default function ModelViewerButton({
+export default function Logo({
   href = "/",
   tooltip = "logo",
 }: ModelViewerButtonProps) {
@@ -32,19 +33,18 @@ export default function ModelViewerButton({
   if (!mounted) return null;
 
   const content = (
-    <div className="inline-flex items-center justify-center">
+    <div className="inline-flex items-center justify-center overflow-hidden rounded-full">
       <ModelViewer
         id="model-button"
         src="/jkn-logo.glb"
         tone-mapping="neutral"
         shadow-intensity="0"
-        auto-rotate
         interaction-prompt="none"
         camera-orbit="90deg"
+        bounds="tight"
+        className="block h-28 w-28"
         style={{
-          height: "140px",
-          width: "135px",
-          display: "block",
+          background: "transparent",
         }}
         suppressHydrationWarning
       />
@@ -52,7 +52,11 @@ export default function ModelViewerButton({
   );
 
   return (
-    <Link href={href} className="fixed bottom-6 right-6 z-20 inline-flex" aria-label={tooltip}>
+    <Link
+      href={href}
+      className="fixed top-6 left-6 z-20 inline-flex"
+      aria-label={tooltip}
+    >
       {content}
     </Link>
   );

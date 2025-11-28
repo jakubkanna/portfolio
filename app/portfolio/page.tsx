@@ -75,11 +75,13 @@ function PortfolioCard({
       rel="noreferrer"
       className="group relative block overflow-hidden rounded-2xl bg-zinc-800 transition-shadow"
       initial={{ scale: 1, zIndex: 0 }}
-      whileHover={locked ? { scale: 1, zIndex: 0 } : { scale: 1.08, zIndex: 10 }}
+      whileHover={
+        locked ? { scale: 1, zIndex: 0 } : { scale: 1.08, zIndex: 10 }
+      }
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
       style={locked ? { pointerEvents: "none" } : undefined}
     >
-      <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl bg-zinc-700">
+      <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-zinc-700">
         {!loaded && (
           <div className="absolute inset-0 animate-pulse bg-zinc-700" />
         )}
@@ -92,9 +94,9 @@ function PortfolioCard({
           onLoad={() => setLoaded(true)}
           style={{ opacity: loaded ? 1 : 0 }}
         />
-        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/60 px-3 py-2 text-sm uppercase tracking-wide text-foreground">
+        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-3 py-2 text-sm uppercase tracking-wide text-foreground">
           <span className="truncate">{title}</span>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black/80 text-foreground opacity-90 transition group-hover:opacity-100">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full transition group-hover:opacity-100">
             <Arrow />
           </div>
         </div>
@@ -120,11 +122,7 @@ export default function PortfolioPage() {
               className="relative grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
               {row.map((card) => (
-                <PortfolioCard
-                  key={card.title}
-                  {...card}
-                  locked={isLast}
-                />
+                <PortfolioCard key={card.title} {...card} locked={isLast} />
               ))}
 
               {isLast && (
