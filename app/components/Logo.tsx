@@ -14,7 +14,12 @@ type ModelViewerAttributes = React.HTMLAttributes<HTMLElement> & {
   style?: React.CSSProperties;
 };
 
-const ModelViewer = React.forwardRef<HTMLElement, ModelViewerAttributes>(
+type ModelViewerElement = HTMLElement & {
+  jumpCameraToGoal?: () => void;
+  modelIsVisible?: boolean;
+};
+
+const ModelViewer = React.forwardRef<ModelViewerElement, ModelViewerAttributes>(
   (props, ref) =>
     React.createElement("model-viewer", {
       ...props,
@@ -35,7 +40,7 @@ export default function Logo({
 }: ModelViewerButtonProps) {
   const [mounted, setMounted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const viewerRef = React.useRef<HTMLElement | null>(null);
+  const viewerRef = React.useRef<ModelViewerElement | null>(null);
   const frameRef = React.useRef<number | null>(null);
   const intervalRef = React.useRef<number | null>(null);
 
