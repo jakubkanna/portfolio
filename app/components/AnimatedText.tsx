@@ -12,6 +12,7 @@ type AnimatedTextProps = {
   message?: string | ReactNode | Array<string | ReactNode>;
   after?: ReactNode;
   speedMs?: number;
+  sessionKey?: string;
 };
 
 const cursorStyle: CSSProperties = {
@@ -114,6 +115,7 @@ export default function AnimatedText({
   message = "",
   after = null,
   speedMs = 55,
+  sessionKey,
 }: AnimatedTextProps) {
   const segments = useMemo(
     () => (Array.isArray(message) ? message : [message]),
@@ -125,12 +127,20 @@ export default function AnimatedText({
     [segments]
   );
 
+  const storageKey = useMemo(() => {
+    const base = segments.map((seg) => extractText(seg)).join("|");
+    return sessionKey ?? `animated-text:${base}`;
+  }, [segments, sessionKey]);
+
   const [typed, setTyped] = useState(0);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setTyped(0));
+    if (typeof window === "undefined") return;
+    const seen = sessionStorage.getItem(storageKey);
+    const target = seen ? targetLength : 0;
+    const id = requestAnimationFrame(() => setTyped(target));
     return () => cancelAnimationFrame(id);
-  }, [targetLength]);
+  }, [storageKey, targetLength]);
 
   useEffect(() => {
     if (typed >= targetLength) return;
@@ -142,6 +152,11 @@ export default function AnimatedText({
   }, [typed, targetLength, speedMs]);
 
   const isDone = typed >= targetLength;
+
+  useEffect(() => {
+    if (!isDone || typeof window === "undefined") return;
+    sessionStorage.setItem(storageKey, "seen");
+  }, [isDone, storageKey]);
 
   const partial = useMemo(
     () => renderWithLimit(segments, typed, false).nodes,

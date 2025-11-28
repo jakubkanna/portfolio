@@ -20,14 +20,14 @@ export default function AboutPage() {
             </>,
             <>
               Check out our{" "}
-              <Link href="/contact" className="underline underline-offset-4">
-                work
+              <Link href="/portfolio" className="underline underline-offset-4">
+                portfolio
               </Link>{" "}
               or{" "}
               <Link href="/contact" className="underline underline-offset-4">
                 contact us
               </Link>{" "}
-              to bring your idea to life.
+              to bring your idea to life. 🌸
             </>,
           ]}
         />

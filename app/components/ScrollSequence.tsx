@@ -124,9 +124,9 @@ export default function ScrollSequence({
       {!isMobile() && (
         <span
           className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 font-mono text-sm text-foreground/70"
-          style={{ opacity: 1 - progress }}
+          style={{ opacity: 1 - progress, padding: "1rem" }}
         >
-          STUDIO JKN - <br />
+          - STUDIO JKN - <br />
           Designing and developing unique digital experiences since 2018.
         </span>
       )}
