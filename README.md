@@ -1,4 +1,4 @@
-# Jakub Kanna Portfolio — Next.js (App Router + Tailwind)
+# STUDIO JKN WEBSITE — Next.js + Tailwind
 
 Portfolio site with scroll-driven visuals, 3D logo, animated copy, and a video-hover gallery.
 
