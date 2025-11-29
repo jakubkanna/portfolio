@@ -44,7 +44,6 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
-      {`<!-- DESIGNED AND DEVELOPED BY JAKUB KANNA -->`}
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black text-foreground antialiased`}
       >
