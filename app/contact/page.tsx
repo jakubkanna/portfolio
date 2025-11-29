@@ -2,8 +2,11 @@
 
 import AnimatedText from "../components/AnimatedText";
 import { motion } from "motion/react";
+import { useI18n } from "../hooks/useI18n";
 
 export default function ContactPage() {
+  const { t } = useI18n();
+
   return (
     <motion.main
       className="relative flex min-h-screen flex-col bg-[#f8f8f8] text-[#0a0a0a]"
@@ -16,13 +19,13 @@ export default function ContactPage() {
           <AnimatedText
             message={
               <>
-                Email{" "}
+                {t.contact.emailLabel}{" "}
                 <a href="mailto:hello.jakubkanna@gmail.com" target="_blank">
                   hello.jakubkanna@gmail.com
                 </a>{" "}
-                or drop a message via{" "}
-                <a href={"https://instagram.com/studio.jkn "} target="_blank">
-                  instagram DM
+                {t.contact.or}{" "}
+                <a href="https://instagram.com/studio.jkn" target="_blank">
+                  {t.contact.instagram}
                 </a>
               </>
             }

@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useI18n } from "../hooks/useI18n";
 
 function formatLabel(path: string) {
   const firstSegment = path.split("/").filter(Boolean)[0] ?? "";
@@ -11,10 +12,13 @@ function formatLabel(path: string) {
 
 export default function PageName() {
   const pathname = usePathname();
+  const { t } = useI18n();
   if (pathname === "/") return null;
 
   const label = formatLabel(pathname);
-  if (!label) return null;
+  const firstSegment = pathname.split("/").filter(Boolean)[0] ?? "";
+  const translated = (t.pageName as Record<string, string>)[firstSegment] ?? label;
+  if (!translated) return null;
 
   const isLightPage = pathname === "/about" || pathname === "/contact";
   const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
@@ -23,7 +27,7 @@ export default function PageName() {
     <div
       className={`pointer-events-none fixed top-6 right-6 z-20 select-none text-sm uppercase tracking-wide ${textClass}`}
     >
-      {label}
+      {translated}
     </div>
   );
 }

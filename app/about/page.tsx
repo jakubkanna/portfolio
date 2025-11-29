@@ -4,8 +4,11 @@ import React from "react";
 import Link from "next/link";
 import AnimatedText from "../components/AnimatedText";
 import { motion } from "motion/react";
+import { useI18n } from "../hooks/useI18n";
 
 export default function AboutPage() {
+  const { t } = useI18n();
+
   return (
     <motion.main
       className="relative flex min-h-screen flex-col bg-[#f8f8f8] text-[#0a0a0a]"
@@ -17,25 +20,23 @@ export default function AboutPage() {
         <AnimatedText
           message={[
             <React.Fragment key="line-1">
-              Founded by artist Jakub Kanna, our studio merges technology with
-              imagination.
+              {t.about.line1}
               <br />
             </React.Fragment>,
             <React.Fragment key="line-2">
-              We create work that embraces conceptual freedom and responds to
-              the evolving language of contemporary design.
+              {t.about.line2}
               <br />
             </React.Fragment>,
             <React.Fragment key="line-3">
-              Take a look at our{" "}
+              {t.about.line3Prefix}{" "}
               <Link href="/portfolio" className="underline underline-offset-4">
-                portfolio
+                {t.about.portfolioLink}
               </Link>{" "}
-              or{" "}
+              {t.about.line3Or}{" "}
               <Link href="/contact" className="underline underline-offset-4">
-                get in touch
+                {t.about.contactLink}
               </Link>{" "}
-              to bring your idea to life. 🌸
+              {t.about.line3Suffix}
             </React.Fragment>,
           ]}
         />

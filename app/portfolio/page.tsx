@@ -1,22 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 import Button from "../components/Button";
 import { useIsMobile } from "../hooks/useIsMobile";
+import { useI18n } from "../hooks/useI18n";
 
 type Card = {
   title: string;
   href: string;
   poster: string;
   video?: string;
+  titleKey?: "comingSoon" | "portfolioOld";
 };
 
 const cards: Card[] = [
   {
-    title: "Coming Soon",
+    title: "",
     href: "/#",
     poster: "/portfolio/dimitra.jpg",
+    titleKey: "comingSoon",
   },
   {
     title: "Rita Borralho Silva",
@@ -36,9 +39,10 @@ const cards: Card[] = [
     poster: "/portfolio/jknew.jpg",
   },
   {
-    title: "Portfolio old",
+    title: "",
     href: "/",
     poster: "/portfolio/jkold.jpg",
+    titleKey: "portfolioOld",
   },
   {
     title: "Project Six",
@@ -155,9 +159,21 @@ function PortfolioCard({
 
 export default function PortfolioPage() {
   const isMobile = useIsMobile();
+  const { t } = useI18n();
   const gradientStart = isMobile ? "15%" : "50%";
 
-  const visibleCards = isMobile ? cards.slice(0, Math.max(cards.length - 2, 0)) : cards;
+  const localizedCards = useMemo(
+    () =>
+      cards.map((card) => ({
+        ...card,
+        title: card.titleKey ? t.portfolio.cardTitles[card.titleKey] : card.title,
+      })),
+    [t]
+  );
+
+  const visibleCards = isMobile
+    ? localizedCards.slice(0, Math.max(localizedCards.length - 2, 0))
+    : localizedCards;
 
   const rows: Card[][] = [];
   for (let i = 0; i < visibleCards.length; i += 3) {
@@ -195,7 +211,7 @@ export default function PortfolioPage() {
                     <Button
                       label={
                         <span className="inline-flex items-center gap-2">
-                          View more <Arrow />
+                          {t.portfolio.viewMore} <Arrow />
                         </span>
                       }
                       variant="background"

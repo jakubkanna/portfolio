@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Start",
+    "about": "O nas",
+    "portfolio": "Portfolio",
+    "contact": "Kontakt"
+  },
+  "pageName": {
+    "home": "Start",
+    "about": "O nas",
+    "portfolio": "Portfolio",
+    "contact": "Kontakt"
+  },
+  "about": {
+    "line1": "Studio założone przez artystę Jakuba Kannę łączy technologię z wyobraźnią.",
+    "line2": "Tworzymy prace, które łączą swobodę konceptualną z ewoluującym językiem współczesnego designu.",
+    "line3Prefix": "Zobacz nasze",
+    "portfolioLink": "portfolio",
+    "line3Or": "albo",
+    "contactLink": "skontaktuj się",
+    "line3Suffix": "aby ożywić swój pomysł. 🌸"
+  },
+  "contact": {
+    "emailLabel": "Napisz na",
+    "or": "lub zostaw wiadomość na",
+    "instagram": "Instagramie"
+  },
+  "portfolio": {
+    "viewMore": "Zobacz więcej",
+    "cardTitles": {
+      "comingSoon": "Wkrótce",
+      "portfolioOld": "Portfolio (stare)"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "contact": "Contact"
+  },
+  "pageName": {
+    "home": "Home",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "contact": "Contact"
+  },
+  "about": {
+    "line1": "Founded by artist Jakub Kanna, our studio merges technology with imagination.",
+    "line2": "We create work that embraces conceptual freedom and responds to the evolving language of contemporary design.",
+    "line3Prefix": "Take a look at our",
+    "portfolioLink": "portfolio",
+    "line3Or": "or",
+    "contactLink": "get in touch",
+    "line3Suffix": "to bring your idea to life. 🌸"
+  },
+  "contact": {
+    "emailLabel": "Email",
+    "or": "or drop a message via",
+    "instagram": "instagram DM"
+  },
+  "portfolio": {
+    "viewMore": "View more",
+    "cardTitles": {
+      "comingSoon": "Coming Soon",
+      "portfolioOld": "Portfolio old"
+    }
+  }
+}

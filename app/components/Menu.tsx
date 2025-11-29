@@ -2,17 +2,18 @@
 
 import Button from "./Button";
 import { usePathname, useRouter } from "next/navigation";
+import { useI18n } from "../hooks/useI18n";
 
 type NavItem = {
-  label: string;
+  key: "home" | "about" | "portfolio" | "contact";
   href: string;
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Contact us", href: "/contact" },
+  { key: "home", href: "/" },
+  { key: "about", href: "/about" },
+  { key: "portfolio", href: "/portfolio" },
+  { key: "contact", href: "/contact" },
 ];
 
 function ChevronDownIcon() {
@@ -50,7 +51,7 @@ function MenuBar({
   onNavigate,
   isPortfolio,
 }: {
-  items: NavItem[];
+  items: Array<NavItem & { label: string }>;
   onNavigate: (href: string) => void;
   isPortfolio: boolean;
 }) {
@@ -77,6 +78,7 @@ function MenuBar({
 export default function Menu() {
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useI18n();
 
   if (pathname === "/") {
     return <LandingCta onClick={() => router.push("/about")} />;
@@ -85,11 +87,15 @@ export default function Menu() {
   const isPortfolio = pathname.startsWith("/portfolio");
   const isLightPage = pathname === "/about" || pathname === "/contact";
   const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
+  const itemsWithLabels = NAV_ITEMS.map((item) => ({
+    ...item,
+    label: t.nav[item.key],
+  }));
 
   return (
     <div className={textClass}>
       <MenuBar
-        items={NAV_ITEMS}
+        items={itemsWithLabels}
         isPortfolio={isPortfolio}
         onNavigate={(href) => router.push(href)}
       />
