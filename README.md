@@ -1,15 +1,24 @@
-# Jakub Kanna Portfolio — Next.js (app router + Tailwind)
+# Jakub Kanna Portfolio — Next.js (App Router + Tailwind)
 
-Fresh create-next-app scaffold with two pages:
-- `/` scroll-driven image sequence (frames in `public/sequence`)
-- `/about` animated typewriter text
-- shared 3D model viewer button (`public/jk-logo.glb`)
+Portfolio site with scroll-driven visuals, 3D logo, animated copy, and a video-hover gallery.
+
+## Pages
+- `/` Landing with scroll-driven sequence, fixed logo/menu.
+- `/about` Animated typewriter intro about the studio.
+- `/portfolio` Grid of works; cards play video on hover when available.
+- `/contact` Animated contact CTA.
+
+## Notable features
+- `<model-viewer>` logo with periodic X-axis spin.
+- Shared `Button`, `AnimatedText`, `Menu`, `PageName` components.
+- `useIsMobile` hook for responsive tweaks (e.g., gradient offsets, mobile card visibility).
+- Portfolio assets live in `public/portfolio/` (JPEGs, MP4s).
 
 ## Getting started
 ```bash
 npm install
 npm run dev
-# open http://localhost:3000 (about page at /about)
+# open http://localhost:3000
 ```
 
 ## Commands
