@@ -117,7 +117,7 @@ const renderWithLimit = (
 export default function AnimatedText({
   message = "",
   after = null,
-  speedMs = 55,
+  speedMs = 25,
   sessionKey,
 }: AnimatedTextProps) {
   const segments = useMemo(
