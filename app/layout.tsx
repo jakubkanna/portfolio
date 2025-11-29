@@ -6,6 +6,8 @@ import Logo from "./components/Logo";
 import Menu from "./components/Menu";
 import PageName from "./components/PageName";
 
+const siteUrl = "https://studio.jakubkanna.com";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,9 +19,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jakub Kanna — Portfolio",
+  metadataBase: new URL(siteUrl),
+  title: "STUDIO JKN 🌸",
   description:
-    "Scroll-driven image sequence and animated text portfolio built with Next.js.",
+    "Creative studio founded by Jakub Kanna. Specializing in art and technology. Since 2018.",
+  alternates: {
+    canonical: siteUrl,
+  },
 };
 
 export default function RootLayout({
@@ -30,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/uv-map-jk.png" />
         <Script
           src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
           type="module"
