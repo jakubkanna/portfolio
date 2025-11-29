@@ -65,7 +65,7 @@ function MenuBar({
 
   return (
     <nav className={containerClass} aria-label="Primary">
-      <small>© STUDIO JKN {YEAR}</small>
+      <small className="text-xs px-4">© STUDIO JKN {YEAR}</small>
       {items.map((item) => (
         <Button
           key={item.label}
