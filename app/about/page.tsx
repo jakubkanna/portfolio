@@ -3,10 +3,16 @@
 import React from "react";
 import Link from "next/link";
 import AnimatedText from "../components/AnimatedText";
+import { motion } from "motion/react";
 
 export default function AboutPage() {
   return (
-    <main className="relative flex min-h-screen flex-col bg-black text-foreground">
+    <motion.main
+      className="relative flex min-h-screen flex-col bg-[#f8f8f8] text-[#0a0a0a]"
+      initial={{ backgroundColor: "#000000", color: "#e6e6e6" }}
+      animate={{ backgroundColor: "#f8f8f8", color: "#0a0a0a" }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+    >
       <section className="flex flex-1 flex-col items-center justify-center px-6 text-center">
         <AnimatedText
           message={[
@@ -34,6 +40,6 @@ export default function AboutPage() {
           ]}
         />
       </section>
-    </main>
+    </motion.main>
   );
 }

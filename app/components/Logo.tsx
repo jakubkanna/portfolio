@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type ModelViewerAttributes = React.HTMLAttributes<HTMLElement> & {
   src?: string;
@@ -38,6 +39,7 @@ export default function Logo({
   href = "/",
   tooltip = "logo",
 }: ModelViewerButtonProps) {
+  const pathname = usePathname();
   const [mounted, setMounted] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const viewerRef = React.useRef<ModelViewerElement | null>(null);
@@ -124,8 +126,13 @@ export default function Logo({
 
   if (!mounted) return null;
 
+  const isLightPage = pathname === "/about" || pathname === "/contact";
+  const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
+
   const content = (
-    <div className="inline-flex items-center justify-center overflow-hidden rounded-full">
+    <div
+      className={`inline-flex items-center justify-center overflow-hidden rounded-full ${textClass}`}
+    >
       {loading && (
         <span className="text-sm font-medium tracking-wide">STUDIO JKN</span>
       )}

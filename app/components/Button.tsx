@@ -20,7 +20,7 @@ export default function Button({
     variant === "background"
       ? "bg-foreground text-black uppercase hover:bg-foreground/90"
       : variant === "link"
-      ? "rounded-none border-none bg-transparent px-0 py-0 text-foreground underline hover:text-white "
+      ? "rounded-none border-none bg-transparent px-0 py-0 text-current underline hover:opacity-80"
       : "border border-foreground text-foreground uppercase hover:bg-white/10";
 
   return (

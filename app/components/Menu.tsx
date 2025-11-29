@@ -55,7 +55,7 @@ function MenuBar({
   isPortfolio: boolean;
 }) {
   const baseContainerClass =
-    "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3 md:pb-0";
+    "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3";
   const containerClass = isPortfolio
     ? `${baseContainerClass} relative pt-12`
     : `${baseContainerClass} fixed bottom-0 left-0`;
@@ -83,12 +83,16 @@ export default function Menu() {
   }
 
   const isPortfolio = pathname.startsWith("/portfolio");
+  const isLightPage = pathname === "/about" || pathname === "/contact";
+  const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
 
   return (
-    <MenuBar
-      items={NAV_ITEMS}
-      isPortfolio={isPortfolio}
-      onNavigate={(href) => router.push(href)}
-    />
+    <div className={textClass}>
+      <MenuBar
+        items={NAV_ITEMS}
+        isPortfolio={isPortfolio}
+        onNavigate={(href) => router.push(href)}
+      />
+    </div>
   );
 }
