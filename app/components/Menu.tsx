@@ -55,6 +55,8 @@ function MenuBar({
   onNavigate: (href: string) => void;
   isPortfolio: boolean;
 }) {
+  const YEAR = new Date().getFullYear(); // ← add this line
+
   const baseContainerClass =
     "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3";
   const containerClass = isPortfolio
@@ -63,6 +65,7 @@ function MenuBar({
 
   return (
     <nav className={containerClass} aria-label="Primary">
+      <small>© STUDIO JKN {YEAR}</small>
       {items.map((item) => (
         <Button
           key={item.label}
@@ -74,6 +77,7 @@ function MenuBar({
     </nav>
   );
 }
+
 
 export default function Menu() {
   const router = useRouter();
