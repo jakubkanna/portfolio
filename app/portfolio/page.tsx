@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import Button from "../components/Button";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 type Card = {
   title: string;
@@ -153,9 +154,14 @@ function PortfolioCard({
 }
 
 export default function PortfolioPage() {
+  const isMobile = useIsMobile();
+  const gradientStart = isMobile ? "15%" : "50%";
+
+  const visibleCards = isMobile ? cards.slice(0, Math.max(cards.length - 2, 0)) : cards;
+
   const rows: Card[][] = [];
-  for (let i = 0; i < cards.length; i += 3) {
-    rows.push(cards.slice(i, i + 3));
+  for (let i = 0; i < visibleCards.length; i += 3) {
+    rows.push(visibleCards.slice(i, i + 3));
   }
 
   return (
@@ -182,8 +188,7 @@ export default function PortfolioPage() {
                   <div
                     className="pointer-events-none absolute inset-0"
                     style={{
-                      background:
-                        "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,1) 100%)",
+                      background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) ${gradientStart}, rgba(0,0,0,1) 100%)`,
                     }}
                   />
                   <div className="absolute inset-0 z-10 flex items-center justify-center no-underline">

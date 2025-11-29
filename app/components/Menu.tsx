@@ -55,7 +55,7 @@ function MenuBar({
   isPortfolio: boolean;
 }) {
   const baseContainerClass =
-    "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer";
+    "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer ";
   const containerClass = isPortfolio
     ? `${baseContainerClass} relative pt-12`
     : `${baseContainerClass} fixed bottom-0 left-0`;

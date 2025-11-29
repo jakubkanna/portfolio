@@ -173,7 +173,7 @@ export default function AnimatedText({
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <span className="mx-auto max-w-3xl text-balance font-semibold uppercase leading-tight  whitespace-pre-wrap">
+      <span className="mx-auto max-w-3xl text-balance break-words font-semibold uppercase leading-tight whitespace-pre-wrap">
         {!isDone ? (
           <>
             {partial}

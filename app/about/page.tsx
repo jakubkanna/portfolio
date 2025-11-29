@@ -11,22 +11,23 @@ export default function AboutPage() {
         <AnimatedText
           message={[
             <React.Fragment key="line-1">
-              We are a studio founded by artist Jakub Kanna.
+              Founded by artist Jakub Kanna, our studio merges technology with
+              imagination.
               <br />
             </React.Fragment>,
             <React.Fragment key="line-2">
-              We specialize in using technology to deliver work defined by
-              conceptual freedom and contemporary design needs.
+              We create work that embraces conceptual freedom and responds to
+              the evolving language of contemporary design.
               <br />
             </React.Fragment>,
             <React.Fragment key="line-3">
-              Check out our{" "}
+              Take a look at our{" "}
               <Link href="/portfolio" className="underline underline-offset-4">
                 portfolio
               </Link>{" "}
               or{" "}
               <Link href="/contact" className="underline underline-offset-4">
-                contact us
+                get in touch
               </Link>{" "}
               to bring your idea to life. 🌸
             </React.Fragment>,
