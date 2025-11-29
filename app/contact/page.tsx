@@ -10,8 +10,8 @@ export default function ContactPage() {
   return (
     <motion.main
       className="relative flex min-h-screen flex-col bg-[#f8f8f8] text-[#0a0a0a]"
-      initial={{ backgroundColor: "#000000", color: "#e6e6e6" }}
-      animate={{ backgroundColor: "#f8f8f8", color: "#0a0a0a" }}
+      initial={{ backgroundColor: "#f8f8f8", color: "#0a0a0a", opacity: 0 }}
+      animate={{ backgroundColor: "#f8f8f8", color: "#0a0a0a", opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
     >
       <section className="flex flex-1 flex-col items-center justify-center px-6 pb-16 pt-28 text-center sm:pt-32">
