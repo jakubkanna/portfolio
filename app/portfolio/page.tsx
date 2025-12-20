@@ -16,10 +16,10 @@ type Card = {
 
 const cards: Card[] = [
   {
-    title: "",
-    href: "/#",
-    poster: "/portfolio/dimitra.jpg",
-    titleKey: "comingSoon",
+    title: "Dimitra Sofroniou",
+    href: "https://dimitrasofroniou.com/",
+    poster: "/portfolio/dimitra.png",
+    video: "/portfolio/dimitra.mp4",
   },
   {
     title: "Rita Borralho Silva",
@@ -166,7 +166,9 @@ export default function PortfolioPage() {
     () =>
       cards.map((card) => ({
         ...card,
-        title: card.titleKey ? t.portfolio.cardTitles[card.titleKey] : card.title,
+        title: card.titleKey
+          ? t.portfolio.cardTitles[card.titleKey]
+          : card.title,
       })),
     [t]
   );
