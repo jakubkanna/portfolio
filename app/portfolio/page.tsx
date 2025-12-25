@@ -79,11 +79,11 @@ function PortfolioCard({
   useEffect(() => {
     // Set loaded synchronously if image is already cached
     if (imgRef.current?.complete) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoaded(true);
     } else {
       setLoaded(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poster]);
 
   useEffect(() => {
@@ -166,11 +166,9 @@ export default function PortfolioPage() {
     () =>
       cards.map((card) => ({
         ...card,
-        title: card.titleKey
-          ? t.portfolio.cardTitles[card.titleKey]
-          : card.title,
+        title: card.title,
       })),
-    [t]
+    []
   );
 
   const visibleCards = isMobile

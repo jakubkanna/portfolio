@@ -16,20 +16,19 @@
     "line2": "Tworzymy prace, które łączą swobodę konceptualną z ewoluującym językiem współczesnego designu.",
     "line3Prefix": "Zobacz nasze",
     "portfolioLink": "portfolio",
-    "line3Or": "albo",
-    "contactLink": "skontaktuj się",
-    "line3Suffix": "aby ożywić swój pomysł. 🌸"
+    "line3Or": "lub",
+    "contactLink": "skontaktuj się z nami",
+    "line3Suffix": "i podziel się swoim pomysłem. 🌸"
   },
   "contact": {
     "emailLabel": "Napisz na",
-    "or": "lub zostaw wiadomość na",
+    "or": "lub wyślij dm na",
     "instagram": "Instagramie"
   },
   "portfolio": {
     "viewMore": "Zobacz więcej",
     "cardTitles": {
-      "comingSoon": "Wkrótce",
-      "portfolioOld": "Portfolio (stare)"
+      "comingSoon": "Wkrótce"
     }
   }
 }
