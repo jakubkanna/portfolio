@@ -8,6 +8,7 @@ import isMobile from "is-mobile";
 import ProgressBar from "./ProgressBar";
 import Loader from "./Loader";
 import { useRouter } from "next/navigation";
+import { useI18n } from "../hooks/useI18n";
 
 type ScrollSequenceProps = {
   scrollProgress: MotionValue<number>;
@@ -23,6 +24,7 @@ export default function ScrollSequence({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const router = useRouter();
+  const { t } = useI18n();
   const [format, setFormat] = useState<"webp" | "jpg">();
   const [progress, setProgress] = useState(0);
   const [isReady, setIsReady] = useState(false);
@@ -126,7 +128,7 @@ export default function ScrollSequence({
           className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 font-mono text-sm text-foreground/70"
           style={{ opacity: 1 - progress, padding: "1rem", maxWidth: "400px" }}
         >
-          Designing and developing unique digital experiences since 2018.
+          {t.hero}
         </span>
       )}
     </div>

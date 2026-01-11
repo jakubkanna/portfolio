@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { headers } from "next/headers";
 import "./globals.css";
 import Logo from "./components/Logo";
 import Menu from "./components/Menu";
 import PageName from "./components/PageName";
+import en from "./locales/en.json";
+import pl from "./locales/pl.json";
 
 const siteUrl = "https://studio.jakubkanna.com";
 
@@ -18,15 +21,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: "STUDIO JKN 🌸",
-  description:
-    "Creative studio founded by Jakub Kanna. Specializing in art and technology. Since 2018.",
-  alternates: {
-    canonical: siteUrl,
-  },
-};
+const translations = { en, pl } as const;
+type Locale = keyof typeof translations;
+
+function resolveLocale(acceptLanguage: string | null): Locale {
+  if (!acceptLanguage) return "en";
+  const candidates = acceptLanguage.split(",");
+  for (const entry of candidates) {
+    const normalized = entry.trim().split("-")[0]?.toLowerCase();
+    if (normalized === "pl") return "pl";
+    if (normalized === "en") return "en";
+  }
+  return "en";
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const acceptLanguage = (await headers()).get("accept-language");
+  const locale = resolveLocale(acceptLanguage);
+  const t = translations[locale] ?? translations.en;
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: t.tagline,
+    description: t.metaDescription,
+    alternates: {
+      canonical: siteUrl,
+    },
+  };
+}
 
 export default function RootLayout({
   children,
