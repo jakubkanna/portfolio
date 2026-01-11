@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
-import { headers } from "next/headers";
 import "./globals.css";
 import Logo from "./components/Logo";
 import Menu from "./components/Menu";
@@ -24,21 +23,10 @@ const geistMono = Geist_Mono({
 const translations = { en, pl } as const;
 type Locale = keyof typeof translations;
 
-function resolveLocale(acceptLanguage: string | null): Locale {
-  if (!acceptLanguage) return "en";
-  const candidates = acceptLanguage.split(",");
-  for (const entry of candidates) {
-    const normalized = entry.trim().split("-")[0]?.toLowerCase();
-    if (normalized === "pl") return "pl";
-    if (normalized === "en") return "en";
-  }
-  return "en";
-}
+const DEFAULT_LOCALE: Locale = "en";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const acceptLanguage = (await headers()).get("accept-language");
-  const locale = resolveLocale(acceptLanguage);
-  const t = translations[locale] ?? translations.en;
+export function generateMetadata(): Metadata {
+  const t = translations[DEFAULT_LOCALE] ?? translations.en;
 
   return {
     metadataBase: new URL(siteUrl),
