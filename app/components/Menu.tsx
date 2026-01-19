@@ -58,7 +58,7 @@ function MenuBar({
   const YEAR = new Date().getFullYear(); // ← add this line
 
   const baseContainerClass =
-    "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3";
+    "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3 sm:p-3";
   const containerClass = isPortfolio
     ? `${baseContainerClass} relative pt-12`
     : `${baseContainerClass} fixed bottom-0 left-0`;
