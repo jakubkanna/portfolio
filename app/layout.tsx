@@ -35,6 +35,14 @@ export function generateMetadata(): Metadata {
     alternates: {
       canonical: siteUrl,
     },
+    icons: {
+      icon: [
+        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      ],
+      apple: "/apple-touch-icon.png",
+    },
+    manifest: "/site.webmanifest",
   };
 }
 
@@ -46,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/uv-map-jk.png" />
+        <link rel="icon" href="/favicon-32x32.png" />
         <Script
           src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
           type="module"

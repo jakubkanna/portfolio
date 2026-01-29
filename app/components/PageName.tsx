@@ -17,7 +17,8 @@ export default function PageName() {
 
   const label = formatLabel(pathname);
   const firstSegment = pathname.split("/").filter(Boolean)[0] ?? "";
-  const translated = (t.pageName as Record<string, string>)[firstSegment] ?? label;
+  const translated =
+    (t.pageName as Record<string, string>)[firstSegment] ?? label;
   if (!translated) return null;
 
   const isLightPage = pathname === "/about" || pathname === "/contact";
@@ -25,9 +26,9 @@ export default function PageName() {
 
   return (
     <div
-      className={`pointer-events-none fixed top-6 right-6 z-20 select-none text-sm uppercase tracking-wide ${textClass}`}
+      className={`pointer-events-none fixed top-6 right-6 z-20 select-none text-xs uppercase tracking-wide ${textClass}`}
     >
-      {translated}
+      {`> ` + translated}
     </div>
   );
 }

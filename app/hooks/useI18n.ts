@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import en from "../locales/en.json";
 import pl from "../locales/pl.json";
 
@@ -33,7 +33,11 @@ function getInitialLocale(): Locale {
 }
 
 export function useI18n() {
-  const [locale] = useState<Locale>(() => getInitialLocale());
+  const [locale, setLocale] = useState<Locale>(DEFAULT_LOCALE);
+
+  useEffect(() => {
+    setLocale(getInitialLocale());
+  }, []);
 
   const t = useMemo<Translation>(
     () => translations[locale] ?? translations[DEFAULT_LOCALE],

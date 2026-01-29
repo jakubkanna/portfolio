@@ -61,11 +61,11 @@ function MenuBar({
     "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3 sm:p-3";
   const containerClass = isPortfolio
     ? `${baseContainerClass} relative pt-12`
-    : `${baseContainerClass} fixed bottom-0 left-0`;
+    : `${baseContainerClass} fixed bottom-0 left-0 p-3`;
 
   return (
     <nav className={containerClass} aria-label="Primary">
-      <small className="text-xs px-4">© STUDIO JKN {YEAR}</small>
+      <small className="text-xs px-4 text-center">© STUDIO JKN {YEAR}</small>
       {items.map((item) => (
         <Button
           key={item.label}
@@ -77,7 +77,6 @@ function MenuBar({
     </nav>
   );
 }
-
 
 export default function Menu() {
   const router = useRouter();
