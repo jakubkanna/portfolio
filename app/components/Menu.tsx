@@ -68,23 +68,36 @@ function MenuBar({
   const YEAR = new Date().getFullYear(); // ← add this line
 
   const baseContainerClass =
-    "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3 sm:p-3";
+    "z-30 flex w-full flex-col items-center justify-center transition cursor-pointer gap-2 pb-3 sm:w-auto sm:flex-row sm:gap-0 sm:p-3";
   const containerClass = isPortfolio
     ? `${baseContainerClass} relative pt-4`
     : `${baseContainerClass} relative p-3`;
 
   return (
     <nav className={containerClass} aria-label="Primary">
-      <small className="text-xs text-center">© STUDIO JKN {YEAR}</small>
-      {items.map((item) => (
-        <Button
-          key={item.label}
-          label={item.label}
-          variant="link"
-          className="text-[#8b8b8b]"
-          action={() => onNavigate(item.href)}
-        />
-      ))}
+      <div className="hidden text-xs sm:block mr-12 opacity-25 font-mono">
+        STUDIO JKN
+      </div>
+      <div className="flex w-full max-w-[90vw] flex-wrap items-center justify-center gap-2 rounded-full bg-[rgb(18,18,18)]/85 p-1 sm:w-auto sm:max-w-none">
+        {items.map((item) => (
+          <Button
+            key={item.label}
+            label={item.label}
+            variant="link"
+            className={`rounded-full md:text-lg p-5 text-white hover:bg-black hover:text-white ${
+              item.key === "home" ? "hidden sm:inline-flex" : ""
+            }`.trim()}
+            action={() => onNavigate(item.href)}
+          />
+        ))}
+      </div>
+      <div className="hidden text-xs text-center sm:block ml-12 opacity-25 font-mono">
+        © {YEAR}
+      </div>
+      <div className="mt-2 flex w-full flex-col items-center gap-1 sm:hidden opacity-25 font-mono text-xs">
+        <div>STUDIO JKN</div>
+        <div className="text-center">© {YEAR}</div>
+      </div>
     </nav>
   );
 }
@@ -112,12 +125,46 @@ export default function Menu() {
   }));
 
   const handleEstimate = () => {
-    const tally = (window as TallyWindow).Tally;
-    if (!tally?.openPopup) return;
     const formId = locale === "pl" ? FORM_ID_PL : FORM_ID_EN;
-    tally.openPopup(formId, {
-      doNotShowAfterSubmit: true,
-    });
+    const open = () => {
+      const tally = (window as TallyWindow).Tally;
+      if (!tally?.openPopup) return;
+      tally.openPopup(formId, {
+        doNotShowAfterSubmit: true,
+      });
+    };
+
+    if ((window as TallyWindow).Tally?.openPopup) {
+      open();
+      return;
+    }
+
+    const waitForTally = () => {
+      let attempts = 0;
+      const tick = () => {
+        attempts += 1;
+        if ((window as TallyWindow).Tally?.openPopup) {
+          open();
+          return;
+        }
+        if (attempts < 60) {
+          window.requestAnimationFrame(tick);
+        }
+      };
+      tick();
+    };
+
+    if (!document.querySelector("script[data-tally-embed]")) {
+      const script = document.createElement("script");
+      script.src = "https://tally.so/widgets/embed.js";
+      script.async = true;
+      script.dataset.tallyEmbed = "true";
+      script.onload = () => waitForTally();
+      document.body.appendChild(script);
+      return;
+    }
+
+    waitForTally();
   };
 
   return (

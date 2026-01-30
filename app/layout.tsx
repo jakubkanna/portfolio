@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 const googleSans = Google_Sans({
   variable: "--font-google-sans",
   subsets: ["latin"],
+  adjustFontFallback: false,
 });
 
 const translations = { en, pl } as const;

@@ -21,14 +21,19 @@ export default function AboutPage() {
 
   return (
     <motion.main
-      className="relative flex min-h-screen flex-col bg-[#f8f8f8] text-[#0a0a0a]"
+      className="relative flex min-h-screen flex-col bg-[#f8f8f8] text-[#0a0a0a] overflow-hidden"
       initial={{ backgroundColor: "#f8f8f8", color: "#0a0a0a", opacity: 0 }}
       animate={{ backgroundColor: "#f8f8f8", color: "#0a0a0a", opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
     >
+      <div className="about-bg" aria-hidden="true" />
       <section className="flex flex-1 flex-col items-center justify-center px-6 text-center">
         <AnimatedText
-          className="max-w-4xl text-xl font-normal leading-snug text-[#111111] md:text-3xl "
+          className="max-w-4xl text-xl font-normal leading-snug text-[#111111] md:text-3xl"
+          textStyle={{
+            textShadow:
+              "0 0 2px rgba(255, 255, 255, 0.95), 0 0 6px rgba(255, 255, 255, 0.9), 0 0 14px rgba(255, 255, 255, 0.85), 0 0 24px rgba(255, 255, 255, 0.8)",
+          }}
           message={[
             <React.Fragment key="line-1">
               {t.about.line1}
@@ -58,6 +63,44 @@ export default function AboutPage() {
           ]}
         />
       </section>
+
+      <style jsx>{`
+        .about-bg {
+          position: absolute;
+          inset: -10%;
+          background-image: url("/jakubkanna.png");
+          background-size: 200px auto;
+          background-position: 72% 40%;
+          background-repeat: no-repeat;
+          opacity: 0;
+          animation:
+            fade-in 1.2s ease 0.6s forwards,
+            drift 18s ease-in-out 0.6s infinite;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        @keyframes fade-in {
+          to {
+            opacity: 0.18;
+          }
+        }
+
+        @keyframes drift {
+          0%,
+          100% {
+            transform: translate3d(0, 0, 0) scale(1.03);
+          }
+          50% {
+            transform: translate3d(-2%, 1.5%, 0) scale(1.05);
+          }
+        }
+
+        section {
+          position: relative;
+          z-index: 1;
+        }
+      `}</style>
     </motion.main>
   );
 }

@@ -22,7 +22,8 @@ export default function TallyPopup() {
     if (!tally?.openPopup) return;
     const formId = locale === "pl" ? FORM_ID_PL : FORM_ID_EN;
     tally.openPopup(formId, {
-      doNotShowAfterSubmit: true,
+      autoClose: true,
+      width: 425,
       onOpen: () => setIsVisible(false),
       onClose: () => setIsVisible(true),
     });

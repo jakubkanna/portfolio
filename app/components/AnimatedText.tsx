@@ -14,6 +14,7 @@ type AnimatedTextProps = {
   speedMs?: number;
   sessionKey?: string;
   className?: string;
+  textStyle?: CSSProperties;
 };
 
 const cursorStyle: CSSProperties = {
@@ -121,6 +122,7 @@ export default function AnimatedText({
   speedMs = 25,
   sessionKey,
   className = "",
+  textStyle,
 }: AnimatedTextProps) {
   const segments = useMemo(
     () => (Array.isArray(message) ? message : [message]),
@@ -177,6 +179,7 @@ export default function AnimatedText({
     <div className="flex flex-col items-center justify-center text-center">
       <span
         className={`mx-auto max-w-3xl font-normal text-balance break-words  leading-tight whitespace-pre-wrap ${className}`.trim()}
+        style={textStyle}
       >
         {!isDone ? (
           <>
