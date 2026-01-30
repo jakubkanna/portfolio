@@ -106,18 +106,17 @@ export default function Menu() {
   const pathname = usePathname();
   const { locale, t } = useI18n();
 
+  if (pathname === "/estimate") {
+    return null;
+  }
+
   if (pathname === "/") {
     return <LandingCta onClick={() => router.push("/about")} />;
   }
 
   const isPortfolio = pathname.startsWith("/portfolio");
-  const isEstimate = pathname === "/estimate";
   const isLightPage = pathname === "/about" || pathname === "/contact";
-  const textClass = isEstimate
-    ? "text-[#8b8b8b]"
-    : isLightPage
-      ? "text-[#0a0a0a]"
-      : "text-foreground";
+  const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
   const itemsWithLabels = NAV_ITEMS.map((item) => ({
     ...item,
     label: t.nav[item.key],
