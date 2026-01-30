@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useI18n } from "../hooks/useI18n";
 
@@ -15,20 +16,38 @@ export default function PageName() {
   const { t } = useI18n();
   if (pathname === "/") return null;
 
-  const label = formatLabel(pathname);
-  const firstSegment = pathname.split("/").filter(Boolean)[0] ?? "";
-  const translated =
-    (t.pageName as Record<string, string>)[firstSegment] ?? label;
-  if (!translated) return null;
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length === 0) return null;
 
-  const isLightPage = pathname === "/about" || pathname === "/contact";
-  const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
+  const breadcrumbs = segments.map((segment, index) => {
+    const href = "/" + segments.slice(0, index + 1).join("/");
+    const translated =
+      index === 0
+        ? ((t.pageName as Record<string, string>)[segment] ??
+          formatLabel(segment))
+        : formatLabel(segment);
+    return { href, label: translated };
+  });
 
   return (
-    <div
-      className={`pointer-events-none fixed top-6 right-6 z-20 select-none text-xs uppercase tracking-wide ${textClass}`}
-    >
-      {`> ` + translated}
+    <div className="fixed top-6 right-6 z-20 select-none text-xs uppercase tracking-wide text-[#9a9a9a]">
+      {breadcrumbs.map((crumb, index) => {
+        const isLast = index === breadcrumbs.length - 1;
+        return (
+          <span key={crumb.href}>
+            {!isLast ? (
+              <>
+                <Link href={crumb.href} className="hover:text-white">
+                  {crumb.label}
+                </Link>
+                <span className="px-1 text-[#7c7c7c]">/</span>
+              </>
+            ) : (
+              <span>{crumb.label}</span>
+            )}
+          </span>
+        );
+      })}
     </div>
   );
 }

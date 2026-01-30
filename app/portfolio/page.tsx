@@ -63,6 +63,12 @@ const Arrow = () => (
   </svg>
 );
 
+const ArrowRight = () => (
+  <span className="inline-flex rotate-45 items-center justify-center">
+    <Arrow />
+  </span>
+);
+
 function PortfolioCard({
   title,
   href,
@@ -207,22 +213,34 @@ export default function PortfolioPage() {
                       background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) ${gradientStart}, rgba(0,0,0,1) 100%)`,
                     }}
                   />
-                  <div className="absolute inset-0 z-10 flex items-center justify-center no-underline">
+                  <motion.div
+                    className="fixed left-1/2 z-20 hidden -translate-x-1/2 items-center justify-center gap-6 md:flex"
+                    style={{ bottom: "96px" }}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  >
                     <Button
                       label={
-                        <span className="inline-flex items-center gap-2">
-                          {t.portfolio.viewMore} <Arrow />
+                        <span className="inline-flex items-center gap-2 uppercase">
+                          Instagram <Arrow />
                         </span>
                       }
                       variant="background"
                       action={() =>
-                        window.open(
-                          "https://instagram.com/studio.jkn",
-                          "_blank"
-                        )
+                        window.open("https://instagram.com/studio.jkn", "_blank")
                       }
                     />
-                  </div>
+                    <Button
+                      label={
+                        <span className="inline-flex items-center gap-2 uppercase">
+                          Flipbook <ArrowRight />
+                        </span>
+                      }
+                      variant="background"
+                      action={() => window.open("/portfolio/flipbook", "_self")}
+                    />
+                  </motion.div>
                 </>
               )}
             </div>

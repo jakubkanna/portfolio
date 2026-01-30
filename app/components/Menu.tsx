@@ -60,8 +60,8 @@ function MenuBar({
   const baseContainerClass =
     "z-30 flex w-full items-center justify-center opacity-50 transition cursor-pointer pb-3 sm:p-3";
   const containerClass = isPortfolio
-    ? `${baseContainerClass} relative pt-12`
-    : `${baseContainerClass} fixed bottom-0 left-0 p-3`;
+    ? `${baseContainerClass} relative pt-4`
+    : `${baseContainerClass} relative p-3`;
 
   return (
     <nav className={containerClass} aria-label="Primary">

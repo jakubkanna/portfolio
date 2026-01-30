@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import AnimatedText from "../components/AnimatedText";
 import { motion } from "motion/react";
@@ -8,6 +8,16 @@ import { useI18n } from "../hooks/useI18n";
 
 export default function AboutPage() {
   const { t } = useI18n();
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty("--page-bg", "#f8f8f8");
+    root.style.setProperty("--page-fg", "#0a0a0a");
+    return () => {
+      root.style.removeProperty("--page-bg");
+      root.style.removeProperty("--page-fg");
+    };
+  }, []);
 
   return (
     <motion.main

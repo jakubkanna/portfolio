@@ -71,7 +71,7 @@ export default function RootLayout({
         </header>
         <PageName />
         {children}
-        <footer>
+        <footer className="fixed bottom-0 left-0 z-30 w-full bg-transparent">
           <Menu />
         </footer>
       </body>
