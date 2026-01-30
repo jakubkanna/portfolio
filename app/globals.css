@@ -10,7 +10,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-google-sans);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -19,7 +19,7 @@ body {
   color: var(--page-fg, var(--foreground));
   min-height: 100vh;
   font-family:
-    var(--font-geist-sans),
+    var(--font-sans),
     system-ui,
     -apple-system,
     sans-serif;
@@ -36,6 +36,7 @@ a {
 
 a:not(.no-underline) {
   text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 }
 

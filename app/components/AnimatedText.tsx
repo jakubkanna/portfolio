@@ -13,6 +13,7 @@ type AnimatedTextProps = {
   after?: ReactNode;
   speedMs?: number;
   sessionKey?: string;
+  className?: string;
 };
 
 const cursorStyle: CSSProperties = {
@@ -45,7 +46,7 @@ type RenderResult = {
 const renderWithLimit = (
   node: ReactNode,
   remaining: number,
-  hasShown: boolean
+  hasShown: boolean,
 ): RenderResult => {
   if (remaining <= 0 && !hasShown) {
     return { nodes: null, used: 0, hasShown };
@@ -74,7 +75,7 @@ const renderWithLimit = (
       const res = renderWithLimit(child, budget, shown);
       if (res.nodes !== null && res.nodes !== false && res.nodes !== "") {
         parts.push(
-          <React.Fragment key={`part-${idx}`}>{res.nodes}</React.Fragment>
+          <React.Fragment key={`part-${idx}`}>{res.nodes}</React.Fragment>,
         );
       }
       used += res.used;
@@ -103,7 +104,7 @@ const renderWithLimit = (
         ? React.cloneElement(
             element,
             element.props as Record<string, unknown>,
-            res.nodes
+            res.nodes,
           )
         : null,
       used: res.used,
@@ -119,15 +120,16 @@ export default function AnimatedText({
   after = null,
   speedMs = 25,
   sessionKey,
+  className = "",
 }: AnimatedTextProps) {
   const segments = useMemo(
     () => (Array.isArray(message) ? message : [message]),
-    [message]
+    [message],
   );
 
   const targetLength = useMemo(
     () => segments.map((seg) => extractText(seg)).join("").length,
-    [segments]
+    [segments],
   );
 
   const storageKey = useMemo(() => {
@@ -149,7 +151,7 @@ export default function AnimatedText({
     if (typed >= targetLength) return;
     const id = setTimeout(
       () => setTyped((prev) => Math.min(prev + 1, targetLength)),
-      speedMs
+      speedMs,
     );
     return () => clearTimeout(id);
   }, [typed, targetLength, speedMs]);
@@ -163,17 +165,19 @@ export default function AnimatedText({
 
   const partial = useMemo(
     () => renderWithLimit(segments, typed, false).nodes,
-    [segments, typed]
+    [segments, typed],
   );
 
   const full = useMemo(
     () => renderWithLimit(segments, targetLength, true).nodes,
-    [segments, targetLength]
+    [segments, targetLength],
   );
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <span className="mx-auto max-w-3xl text-balance break-words font-semibold uppercase leading-tight whitespace-pre-wrap">
+      <span
+        className={`mx-auto max-w-3xl text-balance break-words  leading-tight whitespace-pre-wrap ${className}`.trim()}
+      >
         {!isDone ? (
           <>
             {partial}

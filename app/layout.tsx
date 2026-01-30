@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Google_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Logo from "./components/Logo";
 import Menu from "./components/Menu";
 import PageName from "./components/PageName";
+import PoweredByBallpark from "./components/PoweredByBallpark";
 import en from "./locales/en.json";
 import pl from "./locales/pl.json";
 
 const siteUrl = "https://studio.jakubkanna.com";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const googleSans = Google_Sans({
+  variable: "--font-google-sans",
   subsets: ["latin"],
 });
 
@@ -63,7 +64,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-black text-foreground antialiased`}
+        className={`${googleSans.variable} ${geistMono.variable} bg-black text-foreground antialiased`}
       >
         {" "}
         <header>
@@ -71,6 +72,7 @@ export default function RootLayout({
         </header>
         <PageName />
         {children}
+        <PoweredByBallpark />
         <footer className="fixed bottom-0 left-0 z-30 w-full bg-transparent">
           <Menu />
         </footer>

@@ -9,6 +9,7 @@ import {
   type CSSProperties,
 } from "react";
 import Button from "../../components/Button";
+import Loader from "@/app/components/Loader";
 
 type PdfLib = {
   getDocument: (src: string) => { promise: Promise<PDFDocumentProxy> };
@@ -58,10 +59,8 @@ export default function PortfolioFlipbookPage() {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--page-bg", "#0000ff");
     root.style.setProperty("--page-fg", "#ffffff");
     return () => {
-      root.style.removeProperty("--page-bg");
       root.style.removeProperty("--page-fg");
     };
   }, []);
@@ -253,7 +252,7 @@ export default function PortfolioFlipbookPage() {
   }, [buildFlipbook, rebuildOnResize]);
 
   return (
-    <main className="min-h-screen bg-transparent px-6 py-20 text-foreground">
+    <main className="flipbook-page min-h-screen bg-transparent px-6 py-20 text-foreground">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
         {isTruncated && (
           <header className="space-y-3">
@@ -287,9 +286,7 @@ export default function PortfolioFlipbookPage() {
                   ref={bookRef}
                   className={`turn-book ${isLoading ? "opacity-0" : "opacity-100"}`}
                 />
-                {isLoading && (
-                  <div className="turn-loading">LOADING PAGES...</div>
-                )}
+                {isLoading && <Loader />}
               </div>
 
               {!isLoading && (
@@ -388,6 +385,37 @@ export default function PortfolioFlipbookPage() {
       </div>
 
       <style jsx>{`
+        .flipbook-page {
+          position: relative;
+          background-color: rgb(0, 0, 255);
+          background-image:
+            radial-gradient(
+              circle at center,
+              rgba(10, 10, 10, 0) 0%,
+              rgba(10, 10, 10, 0.28) 38%,
+              rgb(0, 0, 255) 100%
+            ),
+            linear-gradient(
+              to right,
+              rgba(255, 255, 255, 0.09) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              to bottom,
+              rgba(255, 255, 255, 0.09) 1px,
+              transparent 1px
+            );
+          background-repeat: no-repeat, repeat, repeat;
+          background-position:
+            center,
+            top left,
+            top left;
+          background-size:
+            100% 100%,
+            56px 56px,
+            56px 56px;
+        }
+
         .turn-shell {
           position: relative;
           width: 100%;
