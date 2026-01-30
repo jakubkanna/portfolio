@@ -288,7 +288,7 @@ export default function PortfolioFlipbookPage() {
                   className={`turn-book ${isLoading ? "opacity-0" : "opacity-100"}`}
                 />
                 {isLoading && (
-                  <div className="turn-loading">Loading pages…</div>
+                  <div className="turn-loading">LOADING PAGES...</div>
                 )}
               </div>
 
@@ -421,15 +421,19 @@ export default function PortfolioFlipbookPage() {
         }
 
         .turn-loading {
-          position: absolute;
-          inset: 0;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 12px;
           text-transform: uppercase;
           color: #ffffff;
-          backdrop-filter: blur(4px);
+          backdrop-filter: blur(6px);
+          z-index: 40;
+          pointer-events: none;
         }
 
         .turn-page {
