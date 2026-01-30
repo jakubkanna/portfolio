@@ -28,7 +28,7 @@ export default function AboutPage() {
     >
       <section className="flex flex-1 flex-col items-center justify-center px-6 text-center">
         <AnimatedText
-          className="max-w-4xl text-xl font-normal leading-snug text-[#111111]  "
+          className="max-w-4xl text-xl font-normal leading-snug text-[#111111] md:text-3xl "
           message={[
             <React.Fragment key="line-1">
               {t.about.line1}
@@ -42,14 +42,14 @@ export default function AboutPage() {
               {t.about.line3Prefix}{" "}
               <Link
                 href="/portfolio"
-                className="text-blue-600 underline underline-offset-4 hover:text-blue-700"
+                className="text-blue-600 underline underline-offset-4 hover:text-blue-700 "
               >
                 {t.about.portfolioLink}
               </Link>{" "}
               {t.about.line3Or}{" "}
               <Link
                 href="/contact"
-                className="text-blue-600 underline underline-offset-4 hover:text-blue-700"
+                className="text-blue-600 underline underline-offset-4 hover:text-blue-700 "
               >
                 {t.about.contactLink}
               </Link>{" "}

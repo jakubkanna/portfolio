@@ -5,7 +5,6 @@ import "./globals.css";
 import Logo from "./components/Logo";
 import Menu from "./components/Menu";
 import PageName from "./components/PageName";
-import PoweredByBallpark from "./components/PoweredByBallpark";
 import en from "./locales/en.json";
 import pl from "./locales/pl.json";
 
@@ -62,6 +61,10 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="beforeInteractive"
         />
+        <Script
+          src="https://tally.so/widgets/embed.js"
+          strategy="beforeInteractive"
+        />
       </head>
       <body
         className={`${googleSans.variable} ${geistMono.variable} bg-black text-foreground antialiased`}
@@ -72,7 +75,6 @@ export default function RootLayout({
         </header>
         <PageName />
         {children}
-        <PoweredByBallpark />
         <footer className="fixed bottom-0 left-0 z-30 w-full bg-transparent">
           <Menu />
         </footer>

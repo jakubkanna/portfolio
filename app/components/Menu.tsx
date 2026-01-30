@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useI18n } from "../hooks/useI18n";
 
 type NavItem = {
-  key: "home" | "about" | "portfolio" | "contact";
+  key: "home" | "about" | "portfolio" | "estimate" | "contact";
   href: string;
 };
 
@@ -13,8 +13,18 @@ const NAV_ITEMS: NavItem[] = [
   { key: "home", href: "/" },
   { key: "about", href: "/about" },
   { key: "portfolio", href: "/portfolio" },
+  { key: "estimate", href: "/estimate" },
   { key: "contact", href: "/contact" },
 ];
+
+const FORM_ID_EN = "EkWdAq";
+const FORM_ID_PL = "0QOByP";
+
+type TallyWindow = Window & {
+  Tally?: {
+    openPopup: (formId: string, options?: Record<string, unknown>) => void;
+  };
+};
 
 function ChevronDownIcon() {
   return (
@@ -65,12 +75,13 @@ function MenuBar({
 
   return (
     <nav className={containerClass} aria-label="Primary">
-      <small className="text-xs px-4 text-center">© STUDIO JKN {YEAR}</small>
+      <small className="text-xs text-center">© STUDIO JKN {YEAR}</small>
       {items.map((item) => (
         <Button
           key={item.label}
           label={item.label}
           variant="link"
+          className="text-[#8b8b8b]"
           action={() => onNavigate(item.href)}
         />
       ))}
@@ -81,26 +92,46 @@ function MenuBar({
 export default function Menu() {
   const router = useRouter();
   const pathname = usePathname();
-  const { t } = useI18n();
+  const { locale, t } = useI18n();
 
   if (pathname === "/") {
     return <LandingCta onClick={() => router.push("/about")} />;
   }
 
   const isPortfolio = pathname.startsWith("/portfolio");
+  const isEstimate = pathname === "/estimate";
   const isLightPage = pathname === "/about" || pathname === "/contact";
-  const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
+  const textClass = isEstimate
+    ? "text-[#8b8b8b]"
+    : isLightPage
+      ? "text-[#0a0a0a]"
+      : "text-foreground";
   const itemsWithLabels = NAV_ITEMS.map((item) => ({
     ...item,
     label: t.nav[item.key],
   }));
+
+  const handleEstimate = () => {
+    const tally = (window as TallyWindow).Tally;
+    if (!tally?.openPopup) return;
+    const formId = locale === "pl" ? FORM_ID_PL : FORM_ID_EN;
+    tally.openPopup(formId, {
+      doNotShowAfterSubmit: true,
+    });
+  };
 
   return (
     <div className={textClass}>
       <MenuBar
         items={itemsWithLabels}
         isPortfolio={isPortfolio}
-        onNavigate={(href) => router.push(href)}
+        onNavigate={(href) => {
+          if (href === "/estimate") {
+            handleEstimate();
+            return;
+          }
+          router.push(href);
+        }}
       />
     </div>
   );
