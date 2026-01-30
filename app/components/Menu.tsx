@@ -94,9 +94,8 @@ function MenuBar({
       <div className="hidden text-xs text-center sm:block ml-12 opacity-25 font-mono">
         © {YEAR}
       </div>
-      <div className="mt-2 flex w-full flex-col items-center gap-1 sm:hidden opacity-25 font-mono text-xs">
-        <div>STUDIO JKN</div>
-        <div className="text-center">© {YEAR}</div>
+      <div className="mt-2 flex w-full items-center justify-center gap-2 sm:hidden opacity-25 font-mono text-xs">
+        <div className="text-center">STUDIO JKN © {YEAR}</div>
       </div>
     </nav>
   );
