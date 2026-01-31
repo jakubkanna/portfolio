@@ -178,17 +178,22 @@ export default function AnimatedText({
   return (
     <div className="flex flex-col items-center justify-center text-center">
       <span
-        className={`mx-auto max-w-3xl font-normal text-balance break-words  leading-tight whitespace-pre-wrap ${className}`.trim()}
+        className={`relative mx-auto block max-w-3xl font-normal text-balance break-words leading-tight whitespace-pre-wrap ${className}`.trim()}
         style={textStyle}
       >
-        {!isDone ? (
-          <>
-            {partial}
-            <span aria-hidden style={cursorStyle} />
-          </>
-        ) : (
-          full
-        )}
+        <span aria-hidden className="block opacity-0">
+          {full}
+        </span>
+        <span className="absolute inset-0 block">
+          {!isDone ? (
+            <>
+              {partial}
+              <span aria-hidden style={cursorStyle} />
+            </>
+          ) : (
+            full
+          )}
+        </span>
       </span>
       {isDone && after}
     </div>
