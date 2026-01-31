@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "framer-motion": "^12.29.2",
     "is-mobile": "^5.0.0",
     "jquery": "^1.12.0",
     "motion": "^12.7.4",

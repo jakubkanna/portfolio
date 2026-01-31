@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "./Button";
+import { motion, useReducedMotion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import { useI18n } from "../hooks/useI18n";
 
@@ -66,6 +67,7 @@ function MenuBar({
   isPortfolio: boolean;
 }) {
   const YEAR = new Date().getFullYear(); // ← add this line
+  const shouldReduceMotion = useReducedMotion();
 
   const baseContainerClass =
     "z-30 flex w-full flex-col items-center justify-center transition cursor-pointer gap-2 pb-3 sm:w-auto sm:flex-row sm:gap-0 sm:p-3";
@@ -78,7 +80,23 @@ function MenuBar({
       <div className="hidden text-xs sm:block mr-12 opacity-25 font-mono">
         STUDIO JKN
       </div>
-      <div className="flex w-full max-w-[90vw] flex-wrap items-center justify-center gap-2 rounded-full bg-[rgb(18,18,18)]/85 p-1 sm:w-auto sm:max-w-none">
+      <motion.div
+        className="flex w-full max-w-[90vw] flex-wrap items-center justify-center gap-2 rounded-full bg-[rgb(18,18,18)]/85 p-1 sm:w-auto sm:max-w-none"
+        style={{ transformOrigin: "center" }}
+        initial={
+          shouldReduceMotion ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }
+        }
+        animate={
+          shouldReduceMotion
+            ? { scaleX: 1, opacity: 1 }
+            : { scaleX: [0, 1.06, 0.98, 1], opacity: [0, 1, 1, 1] }
+        }
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { duration: 0.38, ease: [0.22, 1.25, 0.36, 1] }
+        }
+      >
         {items.map((item) => (
           <Button
             key={item.label}
@@ -90,7 +108,7 @@ function MenuBar({
             action={() => onNavigate(item.href)}
           />
         ))}
-      </div>
+      </motion.div>
       <div className="hidden text-xs text-center sm:block ml-12 opacity-25 font-mono">
         © {YEAR}
       </div>
