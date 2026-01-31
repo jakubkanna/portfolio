@@ -46,10 +46,10 @@ export default function AboutPage() {
             <React.Fragment key="line-3">
               {t.about.line3Prefix}{" "}
               <Link
-                href="/portfolio"
+                href="/catalog"
                 className="text-blue-600 underline underline-offset-4 hover:text-blue-700 "
               >
-                {t.about.portfolioLink}
+                {t.about.catalogLink}
               </Link>{" "}
               {t.about.line3Or}{" "}
               <Link

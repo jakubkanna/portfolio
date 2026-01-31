@@ -163,7 +163,7 @@ function PortfolioCard({
   );
 }
 
-export default function PortfolioPage() {
+export default function CatalogPage() {
   const isMobile = useIsMobile();
   const { t } = useI18n();
   const gradientStart = isMobile ? "15%" : "50%";
@@ -238,7 +238,7 @@ export default function PortfolioPage() {
                         </span>
                       }
                       variant="background"
-                      action={() => window.open("/portfolio/flipbook", "_self")}
+                      action={() => window.open("/catalog/flipbook", "_self")}
                     />
                   </motion.div>
                 </>

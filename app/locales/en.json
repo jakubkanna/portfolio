@@ -2,14 +2,14 @@
   "nav": {
     "home": "Home",
     "about": "About",
-    "portfolio": "Portfolio",
+    "catalog": "Catalog",
     "estimate": "Estimate",
     "contact": "Contact"
   },
   "pageName": {
     "home": "Home",
     "about": "About",
-    "portfolio": "Portfolio",
+    "catalog": "Catalog",
     "estimate": "Estimate",
     "contact": "Contact"
   },
@@ -17,7 +17,7 @@
     "line1": "Founded by artist Jakub Kanna, the project studio merges technology with imagination.",
     "line2": "We create work that embraces conceptual freedom and responds to the evolving language of contemporary design.",
     "line3Prefix": "Take a look at our",
-    "portfolioLink": "portfolio",
+    "catalogLink": "catalog",
     "line3Or": "or",
     "contactLink": "get in touch",
     "line3Suffix": "to bring your idea to life. 🌸"
@@ -27,7 +27,7 @@
     "or": "or drop a message via",
     "instagram": "instagram DM"
   },
-  "portfolio": {
+  "catalog": {
     "viewMore": "View more",
     "cardTitles": {
       "comingSoon": "Coming Soon"

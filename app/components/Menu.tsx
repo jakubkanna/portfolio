@@ -6,14 +6,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useI18n } from "../hooks/useI18n";
 
 type NavItem = {
-  key: "home" | "about" | "portfolio" | "estimate" | "contact";
+  key: "home" | "about" | "catalog" | "estimate" | "contact";
   href: string;
 };
 
 const NAV_ITEMS: NavItem[] = [
   { key: "home", href: "/" },
   { key: "about", href: "/about" },
-  { key: "portfolio", href: "/portfolio" },
+  { key: "catalog", href: "/catalog" },
   { key: "estimate", href: "/estimate" },
   { key: "contact", href: "/contact" },
 ];
@@ -60,18 +60,18 @@ function LandingCta({ onClick }: { onClick: () => void }) {
 function MenuBar({
   items,
   onNavigate,
-  isPortfolio,
+  isCatalog,
 }: {
   items: Array<NavItem & { label: string }>;
   onNavigate: (href: string) => void;
-  isPortfolio: boolean;
+  isCatalog: boolean;
 }) {
   const YEAR = new Date().getFullYear(); // ← add this line
   const shouldReduceMotion = useReducedMotion();
 
   const baseContainerClass =
     "z-30 flex w-full flex-col items-center justify-center transition cursor-pointer gap-2 pb-3 sm:w-auto sm:flex-row sm:gap-0 sm:p-3";
-  const containerClass = isPortfolio
+  const containerClass = isCatalog
     ? `${baseContainerClass} relative pt-4`
     : `${baseContainerClass} relative p-3`;
 
@@ -132,7 +132,7 @@ export default function Menu() {
     return <LandingCta onClick={() => router.push("/about")} />;
   }
 
-  const isPortfolio = pathname.startsWith("/portfolio");
+  const isCatalog = pathname.startsWith("/catalog");
   const isLightPage = pathname === "/about" || pathname === "/contact";
   const textClass = isLightPage ? "text-[#0a0a0a]" : "text-foreground";
   const itemsWithLabels = NAV_ITEMS.map((item) => ({
@@ -187,7 +187,7 @@ export default function Menu() {
     <div className={textClass}>
       <MenuBar
         items={itemsWithLabels}
-        isPortfolio={isPortfolio}
+        isCatalog={isCatalog}
         onNavigate={(href) => {
           if (href === "/estimate") {
             handleEstimate();

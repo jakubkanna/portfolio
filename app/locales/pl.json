@@ -2,14 +2,14 @@
   "nav": {
     "home": "Start",
     "about": "O nas",
-    "portfolio": "Portfolio",
+    "catalog": "Katalog",
     "estimate": "Wycena",
     "contact": "Kontakt"
   },
   "pageName": {
     "home": "Start",
     "about": "O nas",
-    "portfolio": "Portfolio",
+    "catalog": "Katalog",
     "estimate": "Wycena",
     "contact": "Kontakt"
   },
@@ -17,7 +17,7 @@
     "line1": "Tworzymy aplikacje, które są spójne z ewoluującym językiem współczesnego designu i wymaganiami artystów.",
     "line2": "Projekt Studio zostało stworzony przez Jakuba Kannę by łączyć technologię z wyobraźnią.",
     "line3Prefix": "Zobacz nasze",
-    "portfolioLink": "portfolio",
+    "catalogLink": "katalog",
     "line3Or": "lub",
     "contactLink": "skontaktuj się z nami",
     "line3Suffix": "i podziel się swoim pomysłem. 🌸"
@@ -27,7 +27,7 @@
     "or": "lub wyślij dm na",
     "instagram": "Instagramie"
   },
-  "portfolio": {
+  "catalog": {
     "viewMore": "Zobacz więcej",
     "cardTitles": {
       "comingSoon": "Wkrótce"
