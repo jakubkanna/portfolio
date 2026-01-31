@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 
 const frames = ["|", "\\", "--", "/"];
 
-export default function Loader() {
+type LoaderProps = {
+  fixed?: boolean;
+};
+
+export default function Loader({ fixed = false }: LoaderProps) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -16,7 +20,11 @@ export default function Loader() {
   }, []);
 
   return (
-    <span className="text-4xl font-mono absolute inset-0 grid place-items-center">
+    <span
+      className={`text-4xl font-mono ${
+        fixed ? "fixed" : "absolute"
+      } inset-0 grid place-items-center`}
+    >
       {frames[index]}
     </span>
   );

@@ -286,7 +286,7 @@ export default function PortfolioFlipbookPage() {
                   ref={bookRef}
                   className={`turn-book ${isLoading ? "opacity-0" : "opacity-100"}`}
                 />
-                {isLoading && <Loader />}
+                {isLoading && <Loader fixed />}
               </div>
 
               {!isLoading && (
