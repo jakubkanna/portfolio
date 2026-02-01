@@ -16,6 +16,18 @@ type Card = {
 
 const cards: Card[] = [
   {
+    title: "Artbubble",
+    href: "https://artbubble.in",
+    poster: "/portfolio/artbubble.jpg",
+    video: "/portfolio/artbubble.mp4",
+  },
+  {
+    title: "Jakub Kanna",
+    href: "https://jakubkanna.com",
+    poster: "/portfolio/jakubkanna.jpg",
+    video: "/portfolio/jakubkanna.mp4",
+  },
+  {
     title: "Dimitra Sofroniou",
     href: "https://dimitrasofroniou.com/",
     poster: "/portfolio/dimitra.png",
@@ -35,7 +47,7 @@ const cards: Card[] = [
   },
   {
     title: "Jakub Kanna",
-    href: "/",
+    href: "https://archive.jakubkanna.com/works",
     poster: "/portfolio/jknew.jpg",
   },
   {
@@ -166,7 +178,7 @@ function PortfolioCard({
 export default function CatalogPage() {
   const isMobile = useIsMobile();
   const { t } = useI18n();
-  const gradientStart = isMobile ? "15%" : "50%";
+  const gradientStart = isMobile ? "15%" : "90%";
 
   const localizedCards = useMemo(
     () =>
@@ -174,7 +186,7 @@ export default function CatalogPage() {
         ...card,
         title: card.title,
       })),
-    []
+    [],
   );
 
   const visibleCards = isMobile
@@ -187,7 +199,12 @@ export default function CatalogPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black px-6 py-20 text-foreground">
+    <main
+      className="min-h-screen px-6 py-20 text-foreground"
+      style={{
+        background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) ${gradientStart}, rgba(0,0,0,1) 100%)`,
+      }}
+    >
       <div className="space-y-6">
         {rows.map((row, rowIdx) => {
           const isLast = rowIdx === rows.length - 1;
@@ -228,7 +245,10 @@ export default function CatalogPage() {
                       }
                       variant="background"
                       action={() =>
-                        window.open("https://instagram.com/studio.jkn", "_blank")
+                        window.open(
+                          "https://instagram.com/studio.jkn",
+                          "_blank",
+                        )
                       }
                     />
                     <Button

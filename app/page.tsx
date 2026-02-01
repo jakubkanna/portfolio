@@ -12,10 +12,7 @@ export default function HomePage() {
   });
 
   return (
-    <main
-      ref={containerRef}
-      className="relative min-h-[320vh] bg-black text-foreground"
-    >
+    <main ref={containerRef} className="relative min-h-[320vh] text-foreground">
       <div className="fixed top-0 h-screen">
         <ScrollSequence scrollProgress={scrollYProgress} />
       </div>
