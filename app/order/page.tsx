@@ -7,7 +7,9 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import MiniGlobe from "../components/MiniGlobe";
 import OptionCard from "../components/OptionCard";
 import { useI18n } from "../hooks/useI18n";
 
@@ -467,17 +469,20 @@ export default function SubscriptionPage() {
   return (
     <main className="relative min-h-screen bg-[#d9d9d9] px-6 pb-28 pt-24 text-[#0a0a0a] sm:px-12">
       <div className="mx-auto w-full max-w-6xl space-y-10">
-        <header className="space-y-4">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {isPolish
-              ? "Zamów stronę na zamówienie."
-              : "Launch custom website."}
-          </h1>
-          <p className="max-w-2xl text-base text-black/70">
-            {isPolish
-              ? "Zaprojektujemy, wdrożymy i uruchomimy stronę za Ciebie. Nie musisz nic robić — po prostu podziel się pomysłem! Fajnie, prawda?"
-              : "We are going to design, install and deploy custom website for you. You don't have to do anything just share your idea with us! Cool right?"}
-          </p>
+        <header className="flex items-center gap-6">
+          <MiniGlobe className="hidden md:flex" />
+          <div className="space-y-3">
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              {isPolish
+                ? "Zamów stronę na zamówienie."
+                : "Launch custom website."}
+            </h1>
+            <p className="text-base text-black/70">
+              {isPolish
+                ? "Zaprojektujemy, wdrożymy i uruchomimy stronę za Ciebie. Nie musisz nic robić — po prostu podziel się pomysłem! Fajnie, prawda?"
+                : "We are going to design, install and deploy custom website for you. You don't have to do anything just share your idea with us! Cool right?"}
+            </p>
+          </div>
         </header>
 
         <div className="flex w-full flex-col gap-10 lg:flex-row">
@@ -511,11 +516,21 @@ export default function SubscriptionPage() {
                 </div>
               ) : (
               <form className="mt-8 space-y-8" onSubmit={handleSubmit} noValidate>
-                  {step === 0 && (
-                    <div className="space-y-6">
-                      <div>
-                        <h2 className="text-lg font-semibold">
-                          {isPolish ? "Pakiety projektowe" : "Design packages"}
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.div
+                    key={step}
+                    layout
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="space-y-8"
+                  >
+                {step === 0 && (
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-lg font-semibold">
+                        {isPolish ? "Pakiety projektowe" : "Design packages"}
                         </h2>
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                           {designPlans.map((plan, planIndex) => (
@@ -811,8 +826,8 @@ export default function SubscriptionPage() {
                     </div>
                   )}
 
-                  {step === 3 && (
-                    <div className="grid gap-4 sm:grid-cols-2">
+                {step === 3 && (
+                  <div className="grid gap-4 sm:grid-cols-2">
                       <label className="flex flex-col gap-2 text-sm">
                         {isPolish ? "Email *" : "Email *"}
                         <input
@@ -1005,8 +1020,10 @@ export default function SubscriptionPage() {
                       </div>
                     </div>
                   )}
+                  </motion.div>
+                </AnimatePresence>
 
-                  <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setStep((prev) => Math.max(prev - 1, 0))}
