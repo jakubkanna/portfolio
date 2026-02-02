@@ -199,7 +199,7 @@ export default function SubscriptionPage() {
               price: "€1299",
               details: [
                 { text: "Up to 5 pages" },
-                { text: "Animations / 3D" },
+                { text: "Motion design / 3D" },
                 {
                   text: "2 breaking changes",
                   note: "Maximum number of changes. Major layout or concept shifts with full redesigns.",

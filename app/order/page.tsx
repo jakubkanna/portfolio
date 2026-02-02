@@ -218,7 +218,7 @@ export default function SubscriptionPage() {
               price: "€1299",
               details: [
                 { text: "Up to 5 pages" },
-                { text: "Animations / 3D" },
+                { text: "Motion design / 3D" },
                 {
                   text: "2 breaking changes",
                   note: "Maximum number of changes. Major layout or concept shifts with full redesigns.",
@@ -465,6 +465,7 @@ export default function SubscriptionPage() {
     formData.subscriptionPlan,
     formData.mobileApp,
   ]);
+  const isInstitutional = formData.designPlan === "institutional";
 
   return (
     <main className="relative min-h-screen bg-[#d9d9d9] px-6 pb-28 pt-24 text-[#0a0a0a] sm:px-12">
@@ -794,6 +795,7 @@ export default function SubscriptionPage() {
 
                         <OptionCard
                           title={isPolish ? "Inne" : "Other"}
+                          price={isPolish ? "Wycena indywidualna" : "Custom quote"}
                           isActive={formData.additionalOther}
                           onSelect={() =>
                             setFormData((prev) => ({
@@ -1187,32 +1189,36 @@ export default function SubscriptionPage() {
                       )) || (isPolish ? "Brak" : "None")}
                   </div>
                 </div>
-                <div>
-                  <div className="text-xs font-mono uppercase text-black/40">
-                    {isPolish ? "Cena" : "Price"}
-                  </div>
-                  <div className="inline-flex items-center gap-1">
-                    <span className="font-mono text-black/70">
-                      {isPolish ? "est." : "est."}{" "}
-                      {estOneTime > 0 ? `€${estOneTime}` : "—"}
-                      {estMonthly > 0 ? ` + €${estMonthly}/mo` : ""}
-                      {hasCustomQuote ? " + custom" : ""}
-                    </span>
-                    <span className="group relative inline-flex items-center">
-                      <span
-                        className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black"
-                        tabIndex={0}
-                      >
-                        ?
+                {!isInstitutional ? (
+                  <div>
+                    <div className="text-xs font-mono uppercase text-black/40">
+                      {isPolish ? "Cena" : "Price"}
+                    </div>
+                    <div className="inline-flex items-center gap-1">
+                      <span className="font-mono text-black/70">
+                        {isPolish ? "est." : "est."}{" "}
+                        {estOneTime > 0 ? `€${estOneTime}` : ""}
+                        {estMonthly > 0
+                          ? `${estOneTime > 0 ? " + " : ""}€${estMonthly}/mo`
+                          : ""}
+                        {estOneTime === 0 && estMonthly === 0 ? "—" : ""}
                       </span>
-                      <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-64 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
-                        {isPolish
-                          ? "Projekty są wyceniane indywidualnie i cena może się nieznacznie zmienić. Płatność za projekt następuje po pierwszym spotkaniu."
-                          : "Projects are priced individually and the price may change slightly. You will be asked to pay for the design after the first meeting."}
+                      <span className="group relative inline-flex items-center">
+                        <span
+                          className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black"
+                          tabIndex={0}
+                        >
+                          ?
+                        </span>
+                        <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-64 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
+                          {isPolish
+                            ? "Projekty są wyceniane indywidualnie i cena może się nieznacznie zmienić. Płatność za projekt następuje po pierwszym spotkaniu."
+                            : "Projects are priced individually and the price may change slightly. You will be asked to pay for the design after the first meeting."}
+                        </span>
                       </span>
-                    </span>
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </div>
             </div>
             <div className="rounded-3xl border border-black/20 bg-[#f0ff5e] p-6 text-sm text-black/70">
@@ -1258,7 +1264,7 @@ export default function SubscriptionPage() {
                         setShowValidation(true);
                         return;
                       }
-                      // TODO: trigger payment flow
+                      // TODO: trigger payment flow (or submit for institutional)
                     }}
                     aria-disabled={!canContinue || !formData.acceptTerms}
                     className={`w-full rounded-full px-8 py-3 text-base font-medium text-white transition ${
@@ -1267,7 +1273,13 @@ export default function SubscriptionPage() {
                         : "cursor-not-allowed bg-black/40"
                     }`}
                   >
-                    {isPolish ? "Płatność" : "Payment"}
+                    {isInstitutional
+                      ? isPolish
+                        ? "Wyślij"
+                        : "Submit"
+                      : isPolish
+                        ? "Płatność"
+                        : "Payment"}
                   </button>
                   <span className="text-sm text-black/70">
                     {isPolish
