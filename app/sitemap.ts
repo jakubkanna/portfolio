@@ -5,7 +5,7 @@ export const dynamic = "force-static";
 const siteUrl = "https://studio.jakubkanna.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["/", "/about", "/catalog", "/contact"];
+  const routes = ["/", "/about", "/catalog", "/order", "/contact", "/legal"];
   const now = new Date();
 
   return routes.map((route) => ({

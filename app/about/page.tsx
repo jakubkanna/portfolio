@@ -43,23 +43,23 @@ export default function AboutPage() {
               {t.about.line2}
               <br />
             </React.Fragment>,
-            <React.Fragment key="line-3">
-              {t.about.line3Prefix}{" "}
-              <Link
-                href="/catalog"
-                className="text-blue-600 underline underline-offset-4 hover:text-blue-700 "
-              >
-                {t.about.catalogLink}
-              </Link>{" "}
-              {t.about.line3Or}{" "}
-              <Link
-                href="/contact"
-                className="text-blue-600 underline underline-offset-4 hover:text-blue-700 "
-              >
-                {t.about.contactLink}
-              </Link>{" "}
-              {t.about.line3Suffix}
-            </React.Fragment>,
+            // <React.Fragment key="line-3">
+            //   {t.about.line3Prefix}{" "}
+            //   <Link
+            //     href="/catalog"
+            //     className="text-blue-600 underline underline-offset-4 hover:text-blue-700 "
+            //   >
+            //     {t.about.catalogLink}
+            //   </Link>{" "}
+            //   {t.about.line3Or}{" "}
+            //   <Link
+            //     href="/contact"
+            //     className="text-blue-600 underline underline-offset-4 hover:text-blue-700 "
+            //   >
+            //     {t.about.contactLink}
+            //   </Link>{" "}
+            //   {t.about.line3Suffix}
+            // </React.Fragment>,
           ]}
         />
       </section>

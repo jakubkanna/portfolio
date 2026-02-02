@@ -46,6 +46,11 @@ const cards: Card[] = [
     video: "/portfolio/insidejob.mp4",
   },
   {
+    title: "IZABELA SITARSKA",
+    href: "https://izabelasitarska.com",
+    poster: "/portfolio/is.jpg",
+  },
+  {
     title: "Jakub Kanna",
     href: "https://archive.jakubkanna.com/works",
     poster: "/portfolio/jknew.jpg",
@@ -55,11 +60,6 @@ const cards: Card[] = [
     href: "/",
     poster: "/portfolio/jkold.jpg",
     titleKey: "portfolioOld",
-  },
-  {
-    title: "Project Six",
-    href: "https://izabelasitarska.com",
-    poster: "/portfolio/is.jpg",
   },
 ];
 
@@ -231,7 +231,7 @@ export default function CatalogPage() {
                     }}
                   />
                   <motion.div
-                    className="fixed left-1/2 z-20 hidden -translate-x-1/2 items-center justify-center gap-6 md:flex"
+                    className="fixed left-1/2 z-20 flex -translate-x-1/2 items-center justify-center gap-6"
                     style={{ bottom: "96px" }}
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -258,6 +258,7 @@ export default function CatalogPage() {
                         </span>
                       }
                       variant="background"
+                      className="hidden sm:inline-flex"
                       action={() => window.open("/catalog/flipbook", "_self")}
                     />
                   </motion.div>

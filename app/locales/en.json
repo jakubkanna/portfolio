@@ -3,14 +3,15 @@
     "home": "Home",
     "about": "About",
     "catalog": "Catalog",
-    "estimate": "Estimate",
+    "subscription": "Get a Website",
     "contact": "Contact"
   },
   "pageName": {
     "home": "Home",
     "about": "About",
     "catalog": "Catalog",
-    "estimate": "Estimate",
+    "subscription": "Get a Website",
+    "order": "Get a Website",
     "contact": "Contact"
   },
   "about": {

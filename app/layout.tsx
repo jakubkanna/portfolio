@@ -62,10 +62,6 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="beforeInteractive"
         />
-        <Script
-          src="https://tally.so/widgets/embed.js"
-          strategy="beforeInteractive"
-        />
       </head>
       <body
         className={`${googleSans.variable} ${geistMono.variable} text-foreground antialiased`}

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useI18n } from "../hooks/useI18n";
 
 type NavItem = {
-  key: "home" | "about" | "catalog" | "estimate" | "contact";
+  key: "home" | "about" | "catalog" | "subscription" | "contact";
   href: string;
 };
 
@@ -14,18 +14,9 @@ const NAV_ITEMS: NavItem[] = [
   { key: "home", href: "/" },
   { key: "about", href: "/about" },
   { key: "catalog", href: "/catalog" },
-  { key: "estimate", href: "/estimate" },
+  { key: "subscription", href: "/order" },
   { key: "contact", href: "/contact" },
 ];
-
-const FORM_ID_EN = "EkWdAq";
-const FORM_ID_PL = "0QOByP";
-
-type TallyWindow = Window & {
-  Tally?: {
-    openPopup: (formId: string, options?: Record<string, unknown>) => void;
-  };
-};
 
 function ChevronDownIcon() {
   return (
@@ -70,21 +61,23 @@ function MenuBar({
   const shouldReduceMotion = useReducedMotion();
 
   const baseContainerClass =
-    "z-30 flex w-full flex-col items-center justify-center transition cursor-pointer gap-2 pb-3 sm:w-auto sm:flex-row sm:gap-0 sm:p-3";
+    "z-30 flex w-full flex-col items-center justify-center transition cursor-pointer gap-2 pb-3 sm:w-auto sm:flex-row sm:gap-0 sm:p-4";
   const containerClass = isCatalog
     ? `${baseContainerClass} relative pt-4`
     : `${baseContainerClass} relative p-3`;
 
   return (
     <nav className={containerClass} aria-label="Primary">
-      <div className="hidden text-xs sm:block mr-12 opacity-25 font-mono">
+      <div className="hidden text-xs sm:block mr-12 text-[#9a9a9a] font-mono">
         STUDIO JKN
       </div>
       <motion.div
         className="flex w-full max-w-[90vw] flex-wrap items-center justify-center gap-2 rounded-full bg-[rgb(18,18,18)]/85 p-1 sm:w-auto sm:max-w-none"
         style={{ transformOrigin: "center" }}
         initial={
-          shouldReduceMotion ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }
+          shouldReduceMotion
+            ? { scaleX: 1, opacity: 1 }
+            : { scaleX: 0, opacity: 0 }
         }
         animate={
           shouldReduceMotion
@@ -109,11 +102,11 @@ function MenuBar({
           />
         ))}
       </motion.div>
-      <div className="hidden text-xs text-center sm:block ml-12 opacity-25 font-mono">
+      <div className="hidden text-xs text-center sm:block ml-12 text-[#9a9a9a] font-mono">
         © {YEAR}
       </div>
-      <div className="mt-2 flex w-full items-center justify-center gap-2 sm:hidden opacity-25 font-mono text-xs">
-        <div className="text-center">STUDIO JKN © {YEAR}</div>
+      <div className="mt-2 flex w-full items-center justify-center gap-2 sm:hidden text-[#9a9a9a] font-mono text-xs">
+        <div className="text-center ">STUDIO JKN © {YEAR}</div>
       </div>
     </nav>
   );
@@ -122,11 +115,7 @@ function MenuBar({
 export default function Menu() {
   const router = useRouter();
   const pathname = usePathname();
-  const { locale, t } = useI18n();
-
-  if (pathname === "/estimate") {
-    return null;
-  }
+  const { t } = useI18n();
 
   if (pathname === "/") {
     return <LandingCta onClick={() => router.push("/about")} />;
@@ -140,61 +129,12 @@ export default function Menu() {
     label: t.nav[item.key],
   }));
 
-  const handleEstimate = () => {
-    const formId = locale === "pl" ? FORM_ID_PL : FORM_ID_EN;
-    const open = () => {
-      const tally = (window as TallyWindow).Tally;
-      if (!tally?.openPopup) return;
-      tally.openPopup(formId, {
-        doNotShowAfterSubmit: true,
-      });
-    };
-
-    if ((window as TallyWindow).Tally?.openPopup) {
-      open();
-      return;
-    }
-
-    const waitForTally = () => {
-      let attempts = 0;
-      const tick = () => {
-        attempts += 1;
-        if ((window as TallyWindow).Tally?.openPopup) {
-          open();
-          return;
-        }
-        if (attempts < 60) {
-          window.requestAnimationFrame(tick);
-        }
-      };
-      tick();
-    };
-
-    if (!document.querySelector("script[data-tally-embed]")) {
-      const script = document.createElement("script");
-      script.src = "https://tally.so/widgets/embed.js";
-      script.async = true;
-      script.dataset.tallyEmbed = "true";
-      script.onload = () => waitForTally();
-      document.body.appendChild(script);
-      return;
-    }
-
-    waitForTally();
-  };
-
   return (
     <div className={textClass}>
       <MenuBar
         items={itemsWithLabels}
         isCatalog={isCatalog}
-        onNavigate={(href) => {
-          if (href === "/estimate") {
-            handleEstimate();
-            return;
-          }
-          router.push(href);
-        }}
+        onNavigate={(href) => router.push(href)}
       />
     </div>
   );
