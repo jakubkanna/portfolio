@@ -1,0 +1,22 @@
+export type FormState = {
+  designPlan: string;
+  subscriptionPlan: string;
+  backendOption: string;
+  backendOther: string;
+  addPages: boolean;
+  addPagesCount: number;
+  businessCards: boolean;
+  mobileApp: boolean;
+  logoDesign: boolean;
+  socialPost: boolean;
+  additionalOther: boolean;
+  additionalOtherText: string;
+  acceptTerms: boolean;
+  email: string;
+  displayName: string;
+  existingWebsite: string;
+  portfolioPdf: string;
+  websiteExamples: string;
+  shortBio: string;
+  meetingDate: string;
+};

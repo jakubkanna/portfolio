@@ -9,374 +9,54 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import MiniGlobe from "../components/MiniGlobe";
 import OptionCard from "../components/OptionCard";
 import { useI18n } from "../hooks/useI18n";
-
-type FormState = {
-  designPlan: string;
-  subscriptionPlan: string;
-  backendOption: string;
-  backendOther: string;
-  addPages: boolean;
-  addPagesCount: number;
-  businessCards: boolean;
-  mobileApp: boolean;
-  logoDesign: boolean;
-  socialPost: boolean;
-  additionalOther: boolean;
-  additionalOtherText: string;
-  acceptTerms: boolean;
-  email: string;
-  displayName: string;
-  existingWebsite: string;
-  portfolioPdf: string;
-  websiteExamples: string;
-  shortBio: string;
-  meetingDate: string;
-};
-
-const INITIAL_STATE: FormState = {
-  designPlan: "standard",
-  subscriptionPlan: "standard-site",
-  backendOption: "wordpress",
-  backendOther: "",
-  addPages: false,
-  addPagesCount: 1,
-  businessCards: false,
-  mobileApp: false,
-  logoDesign: false,
-  socialPost: true,
-  additionalOther: false,
-  additionalOtherText: "",
-  acceptTerms: false,
-  email: "",
-  displayName: "",
-  existingWebsite: "",
-  portfolioPdf: "",
-  websiteExamples: "",
-  shortBio: "",
-  meetingDate: "",
-};
+import type { FormState } from "./orderTypes";
+import { INITIAL_STATE, getStepTitles } from "./orderConstants";
+import {
+  getBackendOptions,
+  getDesignPlans,
+  getSubscriptionPlans,
+} from "./orderOptions";
+import {
+  computeEstimates,
+  getBackendLockReason,
+  normalizeForm,
+} from "./orderUtils";
 
 export default function SubscriptionPage() {
   const { locale } = useI18n();
+  const router = useRouter();
   const isPolish = locale === "pl";
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState<FormState>(INITIAL_STATE);
-  const normalizeForm = (next: FormState): FormState => {
-    const normalized = { ...next };
-
-    if (normalized.designPlan === "minimal") {
-      normalized.backendOption = "static";
-      if (normalized.subscriptionPlan === "ecommerce-site") {
-        normalized.subscriptionPlan = "";
-      }
-    }
-
-    if (
-      normalized.subscriptionPlan === "standard-site" &&
-      normalized.backendOption === "woocommerce"
-    ) {
-      normalized.backendOption = "";
-    }
-
-    if (
-      normalized.subscriptionPlan === "ecommerce-site" &&
-      (normalized.backendOption === "wordpress" ||
-        normalized.backendOption === "static")
-    ) {
-      normalized.backendOption = "";
-    }
-
-    if (normalized.backendOption !== "other") {
-      normalized.backendOther = "";
-    }
-
-    return normalized;
-  };
+  const studioServerUrl = process.env.NEXT_PUBLIC_STUDIO_SERVER_URL ?? "";
 
   useEffect(() => {
     document.title = isPolish ? "Zamów stronę" : "Get a Website";
   }, [isPolish]);
 
-  const designPlans = useMemo(
-    () =>
-      isPolish
-        ? [
-            {
-              id: "minimal",
-              title: "Minimal",
-              shortLabel: "Minimal",
-              color: "#8fe3b6",
-              price: "299 €",
-              details: [
-                { text: "1 strona" },
-                { text: "indywidualny projekt" },
-                { text: "podstawowe SEO" },
-                { text: "1 spotkanie online" },
-                { text: "wersja mobilna w cenie" },
-              ],
-            },
-            {
-              id: "standard",
-              title: "Standard",
-              shortLabel: "Standard",
-              color: "#9ad8ff",
-              price: "499 €",
-              details: [
-                { text: "do 3 stron" },
-                { text: "3 spotkania online" },
-                {
-                  text: "1 breaking change",
-                  note: "Maksymalna liczba zmian. Zmiana layoutu lub koncepcji wymagająca pełnego redesignu.",
-                },
-              ],
-            },
-            {
-              id: "advanced",
-              title: "Advanced",
-              shortLabel: "Advanced",
-              color: "#ffe08a",
-              price: "1299 €",
-              details: [
-                { text: "do 5 stron" },
-                { text: "animacje / 3D" },
-                {
-                  text: "2 breaking changes",
-                  note: "Maksymalna liczba zmian. Duże zmiany layoutu lub idei z pełnym redesignem.",
-                },
-                {
-                  text: "struktura wielojęzyczna",
-                  note: "Przygotowana na kolejne wersje językowe.",
-                },
-              ],
-            },
-            {
-              id: "institutional",
-              title: "Institutional",
-              shortLabel: "Instytucja",
-              color: "#ffb3d5",
-              price: "Wycena indywidualna",
-              details: [
-                { text: "bez limitu stron" },
-                {
-                  text: "funkcje custom",
-                  note: "Np. kalendarz wydarzeń, system biletów, archiwa.",
-                },
-                {
-                  text: "3 breaking changes",
-                  note: "Maksymalna liczba zmian. Kolejne pełne redesigny po zmianie koncepcji.",
-                },
-              ],
-            },
-          ]
-        : [
-            {
-              id: "minimal",
-              title: "Minimal",
-              shortLabel: "Minimal",
-              color: "#8fe3b6",
-              price: "€299",
-              details: [
-                { text: "Single page" },
-                { text: "Individual visual design" },
-                { text: "Basic SEO setup" },
-                { text: "1 online meeting" },
-                { text: "Mobile version included" },
-              ],
-            },
-            {
-              id: "standard",
-              title: "Standard",
-              shortLabel: "Standard",
-              color: "#9ad8ff",
-              price: "€499",
-              details: [
-                { text: "Up to 3 pages" },
-                { text: "3 online meetings" },
-                {
-                  text: "1 breaking change",
-                  note: "Maximum number of changes. Layout- or idea-breaking change requiring a full redesign.",
-                },
-              ],
-            },
-            {
-              id: "advanced",
-              title: "Advanced",
-              shortLabel: "Advanced",
-              color: "#ffe08a",
-              price: "€1299",
-              details: [
-                { text: "Up to 5 pages" },
-                { text: "Motion design / 3D" },
-                {
-                  text: "2 breaking changes",
-                  note: "Maximum number of changes. Major layout or concept shifts with full redesigns.",
-                },
-                {
-                  text: "Multilingual-ready structure",
-                  note: "Prepared for additional language versions.",
-                },
-              ],
-            },
-            {
-              id: "institutional",
-              title: "Institutional",
-              shortLabel: "Institutional",
-              color: "#ffb3d5",
-              price: "Custom quote",
-              details: [
-                { text: "No page limit" },
-                {
-                  text: "Custom functions",
-                  note: "Examples: event calendars, ticketing, archives.",
-                },
-                {
-                  text: "3 breaking changes",
-                  note: "Maximum number of changes. Additional full redesigns after concept changes.",
-                },
-              ],
-            },
-          ],
-    [isPolish],
-  );
+  const designPlans = useMemo(() => getDesignPlans(isPolish), [isPolish]);
 
   const subscriptionPlans = useMemo(
-    () =>
-      isPolish
-        ? [
-            {
-              id: "standard-site",
-              title: "Standard",
-              price: "15 € / miesiąc",
-              details: [
-                { text: "hosting" },
-                { text: "daily backup" },
-                { text: "security and maintenance" },
-              ],
-            },
-            {
-              id: "ecommerce-site",
-              title: "E-commerce",
-              price: "29 € / miesiąc",
-              details: [
-                { text: "unlimited listings" },
-                { text: "no fees" },
-                { text: "secure payments" },
-              ],
-            },
-          ]
-        : [
-            {
-              id: "standard-site",
-              title: "Standard",
-              price: "€15 / month",
-              details: [
-                { text: "hosting" },
-                { text: "daily backup" },
-                { text: "security and maintenance" },
-              ],
-            },
-            {
-              id: "ecommerce-site",
-              title: "E-commerce",
-              price: "€29 / month",
-              details: [
-                { text: "unlimited listings" },
-                { text: "no fees" },
-                { text: "secure payments" },
-              ],
-            },
-          ],
+    () => getSubscriptionPlans(isPolish),
     [isPolish],
   );
 
   const backendOptions = useMemo(
-    () =>
-      isPolish
-        ? [
-            {
-              id: "wordpress",
-              title: "WordPress",
-              details: "Klasyczny CMS z panelem do treści.",
-            },
-            {
-              id: "woocommerce",
-              title: "WooCommerce",
-              details: "Sklep, katalog produktów i płatności.",
-            },
-            {
-              id: "static",
-              title: "Static",
-              details: "Content on the website won't change.",
-            },
-            {
-              id: "other",
-              title: "Inny",
-              details: "Np. headless CMS lub rozwiązanie custom.",
-            },
-          ]
-        : [
-            {
-              id: "wordpress",
-              title: "WordPress",
-              details: "Classic Admin Dashboard.",
-            },
-            {
-              id: "woocommerce",
-              title: "WooCommerce",
-              details: "Storefront, catalog, payments.",
-            },
-            {
-              id: "static",
-              title: "Static",
-              details: "Content on the website won't change.",
-            },
-            {
-              id: "other",
-              title: "Other",
-              details: "Headless CMS or custom stack.",
-            },
-          ],
+    () => getBackendOptions(isPolish),
     [isPolish],
   );
 
-  const stepTitles = isPolish
-    ? ["Plan i zamówienie", "CMS", "Dodatkowe usługi", "Wprowadzenie"]
-    : ["Plan & order", "CMS", "Additional services", "Introduction"];
-
-  const getBackendLockReason = (optionId: string) => {
-    if (!formData.designPlan) {
-      return isPolish
-        ? "Najpierw wybierz pakiet projektowy."
-        : "Choose a design package first.";
-    }
-    if (formData.designPlan === "minimal") {
-      return isPolish
-        ? "Opcja zablokowana dla pakietu Minimal."
-        : "Locked for the Minimal plan.";
-    }
-    if (
-      formData.subscriptionPlan === "ecommerce-site" &&
-      (optionId === "wordpress" || optionId === "static")
-    ) {
-      return isPolish
-        ? "Opcja niedostępna dla planu E-commerce."
-        : "Not available with the E-commerce plan.";
-    }
-    if (
-      formData.subscriptionPlan === "standard-site" &&
-      optionId === "woocommerce"
-    ) {
-      return isPolish
-        ? "Opcja niedostępna dla planu Standard Website."
-        : "Not available with the Standard hosting plan.";
-    }
-    return "";
-  };
+  const stepTitles = getStepTitles(isPolish);
+  const getBackendLockReasonForOption = (optionId: string) =>
+    getBackendLockReason(formData, optionId, isPolish);
 
   const canContinue = useMemo(() => {
     if (step === 0) {
@@ -409,7 +89,6 @@ export default function SubscriptionPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
   };
 
   const stepLabel = stepTitles[step] ?? "";
@@ -420,36 +99,103 @@ export default function SubscriptionPage() {
   const missingDescription = showErrors && isMissing(formData.shortBio);
   const missingMeeting = showErrors && isMissing(formData.meetingDate);
 
-  const { estOneTime, estMonthly } = useMemo(() => {
-    const designPriceMap: Record<string, number> = {
-      minimal: 299,
-      standard: 499,
-      advanced: 1299,
-    };
-    const monthlyPriceMap: Record<string, number> = {
-      "standard-site": 15,
-      "ecommerce-site": 29,
-    };
-    const addOnTotal =
-      (formData.addPages ? formData.addPagesCount * 200 : 0) +
-      (formData.businessCards ? 130 : 0) +
-      (formData.logoDesign ? 500 : 0);
-
-    const designBase = designPriceMap[formData.designPlan] ?? 0;
-    const monthlyBase = monthlyPriceMap[formData.subscriptionPlan] ?? 0;
-    return {
-      estOneTime: designBase + addOnTotal,
-      estMonthly: monthlyBase,
-    };
-  }, [
-    formData.addPages,
-    formData.addPagesCount,
-    formData.businessCards,
-    formData.logoDesign,
-    formData.designPlan,
-    formData.subscriptionPlan,
-  ]);
+  const { estOneTime, estMonthly } = useMemo(
+    () => computeEstimates(formData),
+    [
+      formData.addPages,
+      formData.addPagesCount,
+      formData.businessCards,
+      formData.logoDesign,
+      formData.designPlan,
+      formData.subscriptionPlan,
+    ],
+  );
   const isInstitutional = formData.designPlan === "institutional";
+  const handleFinalSubmit = async () => {
+    if (!canContinue || !formData.acceptTerms) {
+      setShowValidation(true);
+      return;
+    }
+
+    if (!studioServerUrl) {
+      setSubmitError(
+        isPolish
+          ? "Brak konfiguracji serwera wysyłki."
+          : "Submission server is not configured.",
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    const orderPayload = {
+      ...formData,
+      locale,
+      estOneTime,
+      estMonthly,
+    };
+
+    try {
+      const baseUrl = studioServerUrl.replace(/\/$/, "");
+      const signResponse = await fetch(`${baseUrl}/auth/sign`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ payload: orderPayload }),
+      });
+
+      if (!signResponse.ok) {
+        const errorBody = await signResponse.json().catch(() => null);
+        throw new Error(errorBody?.error ?? "Signing failed.");
+      }
+
+      const signResult = await signResponse.json();
+      const intakeResponse = await fetch(`${baseUrl}/order-intake`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          payload: orderPayload,
+          timestamp: signResult.timestamp,
+          token: signResult.token,
+        }),
+      });
+
+      if (!intakeResponse.ok) {
+        const errorBody = await intakeResponse.json().catch(() => null);
+        throw new Error(errorBody?.error ?? "Order intake failed.");
+      }
+
+      if (isInstitutional) {
+        setSubmitted(true);
+        return;
+      }
+
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem(
+          "orderPayload",
+          JSON.stringify({
+            email: formData.email,
+            amount: estOneTime,
+            monthly: estMonthly,
+          }),
+        );
+      }
+
+      router.push("/order/processing");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="relative min-h-screen bg-[#d9d9d9] px-6 pb-28 pt-24 text-[#0a0a0a] sm:px-12">
@@ -622,9 +368,8 @@ export default function SubscriptionPage() {
                             {backendOptions.map((option) => {
                               const isActive =
                                 formData.backendOption === option.id;
-                              const lockReason = getBackendLockReason(
-                                option.id,
-                              );
+                              const lockReason =
+                                getBackendLockReasonForOption(option.id);
                               const isLocked = Boolean(lockReason);
                               const cmsPrice =
                                 option.id === "wordpress"
@@ -1286,28 +1031,31 @@ export default function SubscriptionPage() {
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     type="button"
-                    onClick={() => {
-                      if (!canContinue || !formData.acceptTerms) {
-                        setShowValidation(true);
-                        return;
-                      }
-                      // TODO: trigger payment flow (or submit for institutional)
-                    }}
-                    aria-disabled={!canContinue || !formData.acceptTerms}
+                    onClick={handleFinalSubmit}
+                    aria-disabled={
+                      !canContinue || !formData.acceptTerms || isSubmitting
+                    }
                     className={`w-full rounded-full px-8 py-3 text-base font-medium text-white transition ${
-                      canContinue && formData.acceptTerms
+                      canContinue && formData.acceptTerms && !isSubmitting
                         ? "bg-black hover:scale-[1.02]"
                         : "cursor-not-allowed bg-black/40"
                     }`}
                   >
-                    {isInstitutional
+                    {isSubmitting
                       ? isPolish
-                        ? "Wyślij"
-                        : "Submit"
-                      : isPolish
-                        ? "Płatność"
-                        : "Payment"}
+                        ? "Wysyłanie..."
+                        : "Submitting..."
+                      : isInstitutional
+                        ? isPolish
+                          ? "Wyślij"
+                          : "Submit"
+                        : isPolish
+                          ? "Płatność"
+                          : "Payment"}
                   </button>
+                  {submitError ? (
+                    <span className="text-sm text-red-600">{submitError}</span>
+                  ) : null}
                   <span className="text-sm text-black/70">
                     {isPolish
                       ? "Po wysłaniu formularza rozpoczynamy rozliczenie subskrypcji. Opłatę za projekt wyślemy po pierwszym spotkaniu."
