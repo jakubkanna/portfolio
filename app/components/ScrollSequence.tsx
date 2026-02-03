@@ -88,13 +88,14 @@ export default function ScrollSequence({
 
   useMotionValueEvent(scrollProgress, "change", (latest) => {
     const clamped = Math.min(Math.max(latest, 0), 1);
-    setProgress(clamped); // linear mapping from scroll to frames
+    const eased = Math.pow(clamped, 1.6);
+    setProgress(eased);
 
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx || !format) return;
 
-    let frameIndex = Math.round(clamped * (frameCount - 1));
+    let frameIndex = Math.round(eased * (frameCount - 1));
     frameIndex = frameIndex - (frameIndex % step);
 
     const img = imageCache[getFrameSrc(frameIndex)] || imgRef.current;

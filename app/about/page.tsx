@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useEffect } from "react";
-import Link from "next/link";
+import React, { useEffect, useRef } from "react";
 import AnimatedText from "../components/AnimatedText";
 import { motion } from "motion/react";
 import { useI18n } from "../hooks/useI18n";
+import { useRouter } from "next/navigation";
 
 export default function AboutPage() {
   const { t } = useI18n();
+  const router = useRouter();
+  const hasNavigatedRef = useRef(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -18,6 +20,23 @@ export default function AboutPage() {
       root.style.removeProperty("--page-fg");
     };
   }, []);
+
+  useEffect(() => {
+    const threshold = 24;
+
+    const handleWheel = (event: WheelEvent) => {
+      if (hasNavigatedRef.current) return;
+      if (event.deltaY < 0 && window.scrollY <= threshold) {
+        hasNavigatedRef.current = true;
+        router.push("/");
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, [router]);
 
   return (
     <motion.main

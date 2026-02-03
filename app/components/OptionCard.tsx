@@ -12,6 +12,7 @@ type OptionCardProps = {
   disabled?: boolean;
   lockReason?: string;
   badge?: string;
+  strikePrice?: boolean;
   isActive: boolean;
   onSelect: () => void;
   children?: React.ReactNode;
@@ -27,6 +28,7 @@ export default function OptionCard({
   disabled = false,
   lockReason,
   badge,
+  strikePrice = false,
   isActive,
   onSelect,
   children,
@@ -48,7 +50,7 @@ export default function OptionCard({
     >
       <div className="flex h-full flex-col gap-4">
         <div className="flex items-start justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             {dots.length > 0 ? (
               <div className="inline-flex items-center gap-2 text-[10px] tracking-wide text-black/60">
                 <span className="group relative inline-flex items-center gap-2">
@@ -68,8 +70,8 @@ export default function OptionCard({
                 </span>
               </div>
             ) : null}
-            <div className="mt-2 flex items-center gap-2">
-              <h3 className="text-base font-semibold">{title}</h3>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <h3 className="min-w-0 text-base font-semibold">{title}</h3>
               {badge ? (
                 <span className="rounded-full border border-black/20 px-1 py-0 text-[9px] font-mono uppercase text-black/70">
                   {badge}
@@ -91,8 +93,10 @@ export default function OptionCard({
             </div>
           </div>
           {price ? (
-            <span className="text-right text-xs font-mono text-black/70">
-              <span className="block">{price}</span>
+            <span className="shrink-0 text-right text-xs font-mono text-black/70">
+              <span className={`block ${strikePrice ? "line-through" : ""}`}>
+                {price}
+              </span>
               <span className="block text-[10px] text-black/50">est.</span>
               {showVat ? (
                 <span className="block text-[10px] text-black/50">+ VAT</span>
