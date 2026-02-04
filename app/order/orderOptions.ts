@@ -176,7 +176,7 @@ export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
         {
           id: "standard-site",
           title: "Standard",
-          price: "15 € / miesiąc",
+          price: "15 € / m",
           details: [
             { text: "hosting" },
             { text: "daily backup" },
@@ -186,11 +186,11 @@ export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
         {
           id: "ecommerce-site",
           title: "E-commerce",
-          price: "29 € / miesiąc",
+          price: "29 € / m",
           details: [
-            { text: "unlimited listings" },
-            { text: "no fees" },
-            { text: "secure payments" },
+            { text: "integracje: Shopify, WooCommerce i inne" },
+            { text: "bezpieczne płatności" },
+            { text: "zarządzanie produktami" },
             { text: "Zawiera plan Standard" },
           ],
         },
@@ -211,9 +211,9 @@ export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
           title: "E-commerce",
           price: "€29 / month",
           details: [
-            { text: "unlimited listings" },
-            { text: "no fees" },
+            { text: "integrations: Shopify, WooCommerce, and more" },
             { text: "secure payments" },
+            { text: "product management" },
             { text: "Includes Standard" },
           ],
         },
@@ -225,17 +225,17 @@ export const getBackendOptions = (isPolish: boolean): BackendOption[] =>
         {
           id: "wordpress",
           title: "WordPress",
-          details: "Klasyczny CMS z panelem do treści.",
+          details: "Klasyczny CMS z panelem do edycji treści na stronie.",
         },
         {
           id: "woocommerce",
           title: "WooCommerce",
-          details: "Sklep, katalog produktów i płatności.",
+          details: "Katalog produktów, wysyłka, ceny. Zarządzanie treścią w sklepie. Bez prowizji.",
         },
         {
           id: "static",
-          title: "Static",
-          details: "Content on the website won't change.",
+          title: "Statyczna",
+          details: "Treści na stronie nie będą się zmieniać.",
         },
         {
           id: "other",
@@ -247,12 +247,12 @@ export const getBackendOptions = (isPolish: boolean): BackendOption[] =>
         {
           id: "wordpress",
           title: "WordPress",
-          details: "Classic Admin Dashboard.",
+          details: "Classic CMS with a content editing panel.",
         },
         {
           id: "woocommerce",
           title: "WooCommerce",
-          details: "Storefront, catalog, payments.",
+          details: "Product catalog, shipping, pricing. Store content management. Included at no extra cost.",
         },
         {
           id: "static",

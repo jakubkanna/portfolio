@@ -67,6 +67,7 @@ const INITIAL_STATE: FormState = {
 export default function SubscriptionPage() {
   const { locale } = useI18n();
   const isPolish = locale === "pl";
+  const EURO_TO_PLN = 4.3;
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState<FormState>(INITIAL_STATE);
@@ -239,7 +240,7 @@ export default function SubscriptionPage() {
             {
               id: "standard-site",
               title: "Standard Website",
-              price: "15 € / miesiąc",
+              price: "15 € / m",
               details: [
                 { text: "hosting + aktualizacje" },
                 { text: "backupy i monitoring" },
@@ -249,11 +250,11 @@ export default function SubscriptionPage() {
             {
               id: "ecommerce-site",
               title: "E-commerce Website",
-              price: "29 € / miesiąc",
+              price: "29 € / m",
               details: [
-                { text: "WooCommerce" },
+                { text: "integracje: Shopify, WooCommerce i inne" },
                 { text: "bezpieczne płatności" },
-                { text: "wsparcie techniczne" },
+                { text: "zarządzanie produktami" },
               ],
             },
           ]
@@ -273,9 +274,9 @@ export default function SubscriptionPage() {
               title: "E-commerce Website",
               price: "€29 / month",
               details: [
-                { text: "WooCommerce support" },
+                { text: "integrations: Shopify, WooCommerce, and more" },
                 { text: "secure payments" },
-                { text: "technical support" },
+                { text: "product management" },
               ],
             },
           ],
@@ -289,16 +290,17 @@ export default function SubscriptionPage() {
             {
               id: "wordpress",
               title: "WordPress",
-              details: "Klasyczny CMS z panelem do treści.",
+              details: "Klasyczny CMS z panelem do edycji treści na stronie.",
             },
             {
               id: "woocommerce",
               title: "WooCommerce",
-              details: "Sklep, katalog produktów i płatności.",
+              details:
+                "Katalog produktów, wysyłka, ceny. Zarządzanie treścią w sklepie. Bez prowizji.",
             },
             {
               id: "static",
-              title: "No CMS",
+              title: "Statyczna",
               details: "Strona statyczna, bez potrzeby aktualizacji.",
             },
             {
@@ -316,12 +318,13 @@ export default function SubscriptionPage() {
             {
               id: "wordpress",
               title: "WordPress",
-              details: "Classic CMS with a content panel.",
+              details: "Classic CMS with a content editing panel.",
             },
             {
               id: "woocommerce",
               title: "WooCommerce",
-              details: "Storefront, catalog, payments.",
+              details:
+                "Product catalog, shipping, pricing. Store content management. Included at no extra cost.",
             },
             {
               id: "static",
@@ -402,6 +405,21 @@ export default function SubscriptionPage() {
 
   const stepLabel = stepTitles[step] ?? "";
 
+  const formatPrice = (price: string) => {
+    if (!isPolish || !price.includes("€")) return price;
+    const match = price.match(/([0-9]+(?:[.,][0-9]+)?)/);
+    if (!match || match.index === undefined) return price;
+    const value = Number(match[1].replace(",", "."));
+    if (Number.isNaN(value)) return price;
+    const pln = Math.round(value * EURO_TO_PLN);
+    let suffix = price.slice(match.index + match[1].length);
+    suffix = suffix.replace(/€/g, "").trim();
+    suffix = suffix.replace(/\/\s*(month|mo)/gi, "/m");
+    suffix = suffix.replace(/\/\s*miesiąc/gi, "/m");
+    const suffixOut = suffix ? ` ${suffix}` : "";
+    return `${pln} zł${suffixOut}`;
+  };
+
   return (
     <main className="relative min-h-screen bg-[#d9d9d9] px-6 pb-28 pt-24 text-[#0a0a0a] sm:px-12">
       <div className="mx-auto w-full max-w-6xl space-y-10">
@@ -458,7 +476,7 @@ export default function SubscriptionPage() {
                             <OptionCard
                               key={plan.id}
                               title={plan.title}
-                              price={plan.price}
+                              price={formatPrice(plan.price)}
                               showVat
                               dots={[
                                 ...designPlans
@@ -534,7 +552,9 @@ export default function SubscriptionPage() {
                                     {plan.title}
                                   </h3>
                                   <span className="text-right text-xs font-mono text-black/70">
-                                    <span className="block">{plan.price}</span>
+                                    <span className="block">
+                                      {formatPrice(plan.price)}
+                                    </span>
                                   </span>
                                 </div>
                                 <ul className="mt-3 space-y-1 text-sm text-black/70">
@@ -553,7 +573,9 @@ export default function SubscriptionPage() {
                   {step === 1 && (
                     <div className="space-y-4">
                       <div className="flex items-center gap-2">
-                        <h2 className="text-lg font-semibold">CMS</h2>
+                        <h2 className="text-lg font-semibold">
+                          {isPolish ? "Zarządzanie treścią" : "CMS"}
+                        </h2>
                         <span className="group relative inline-flex items-center">
                           <span className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black">
                             ?
@@ -642,7 +664,11 @@ export default function SubscriptionPage() {
                       <div className="grid gap-4 md:grid-cols-2">
                         <OptionCard
                           title={isPolish ? "Dodatkowe strony" : "Add pages"}
-                          price={isPolish ? "200 € / strona" : "€200 per page"}
+                          price={
+                            isPolish
+                              ? formatPrice("200 € / strona")
+                              : "€200 per page"
+                          }
                           showVat
                           isActive={formData.addPages}
                           onSelect={() =>
@@ -683,7 +709,7 @@ export default function SubscriptionPage() {
                               ? "Dobór domeny i instalacja"
                               : "Domain choice & installation assistance"
                           }
-                          price={isPolish ? "50 €" : "€50"}
+                          price={isPolish ? formatPrice("50 €") : "€50"}
                           showVat
                           isActive={formData.domainHelp}
                           onSelect={() =>
@@ -700,7 +726,7 @@ export default function SubscriptionPage() {
                               ? "Projekt wizytówek"
                               : "Business cards design"
                           }
-                          price={isPolish ? "130 €" : "€130"}
+                          price={isPolish ? formatPrice("130 €") : "€130"}
                           showVat
                           isActive={formData.businessCards}
                           onSelect={() =>

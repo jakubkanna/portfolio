@@ -30,6 +30,7 @@ export default function SubscriptionPage() {
   const { locale } = useI18n();
   const router = useRouter();
   const isPolish = locale === "pl";
+  const EURO_TO_PLN = 4.3;
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
@@ -41,6 +42,21 @@ export default function SubscriptionPage() {
   >("idle");
   const [domainPrice, setDomainPrice] = useState<number | null>(null);
   const studioServerUrl = process.env.NEXT_PUBLIC_STUDIO_SERVER_URL ?? "";
+
+  const formatPrice = (price: string) => {
+    if (!isPolish || !price.includes("€")) return price;
+    const match = price.match(/([0-9]+(?:[.,][0-9]+)?)/);
+    if (!match || match.index === undefined) return price;
+    const value = Number(match[1].replace(",", "."));
+    if (Number.isNaN(value)) return price;
+    const pln = Math.round(value * EURO_TO_PLN);
+    let suffix = price.slice(match.index + match[1].length);
+    suffix = suffix.replace(/€/g, "").trim();
+    suffix = suffix.replace(/\/\s*(month|mo)/gi, "/m");
+    suffix = suffix.replace(/\/\s*miesiąc/gi, "/m");
+    const suffixOut = suffix ? ` ${suffix}` : "";
+    return `${pln} zł${suffixOut}`;
+  };
 
   useEffect(() => {
     document.title = isPolish ? "Zamów stronę" : "Get a Website";
@@ -310,12 +326,12 @@ export default function SubscriptionPage() {
                             </h2>
                             <div className="mt-4 grid gap-4 md:grid-cols-2">
                               {designPlans.map((plan) => (
-                                <OptionCard
-                                  key={plan.id}
-                                  title={plan.title}
-                                  price={plan.price}
-                                  showVat
-                                  details={plan.details}
+                                  <OptionCard
+                                    key={plan.id}
+                                    title={plan.title}
+                                    price={formatPrice(plan.price)}
+                                    showVat
+                                    details={plan.details}
                                   isActive={formData.designPlan === plan.id}
                                   onSelect={() =>
                                     setFormData((prev) =>
@@ -365,7 +381,7 @@ export default function SubscriptionPage() {
                                   <OptionCard
                                     key={plan.id}
                                     title={plan.title}
-                                    price={plan.price}
+                                    price={formatPrice(plan.price)}
                                     showVat={false}
                                     details={plan.details}
                                     showEst={false}
@@ -416,6 +432,7 @@ export default function SubscriptionPage() {
                                   : "I own a domain"
                               }
                               price={isPolish ? "OK" : "OK"}
+                              showEst={false}
                               isActive={formData.domainPlan === "own"}
                               onSelect={() => {
                                 setFormData((prev) => ({
@@ -431,15 +448,16 @@ export default function SubscriptionPage() {
                                   ? "Potrzebuję domeny"
                                   : "I need a domain"
                               }
-                              price={
+                              price={formatPrice(
                                 domainStatus === "available" && domainPrice
                                   ? domainPrice < 60
-                                    ? "€4.99/mo"
+                                    ? `€4.99/${isPolish ? "m" : "mo"}`
                                     : `€${domainPrice.toFixed(2)}/yr`
                                   : domainStatus === "taken"
                                     ? "TAKEN"
-                                    : "—"
-                              }
+                                    : "—",
+                              )}
+                              showEst={false}
                               isActive={formData.domainPlan === "need"}
                               onSelect={() => {
                                 setFormData((prev) => ({
@@ -544,7 +562,7 @@ export default function SubscriptionPage() {
                         <div className="space-y-4">
                           <div className="flex items-center gap-2">
                             <h2 className="text-lg font-semibold">
-                              Content Management
+                              {isPolish ? "Zarządzanie treścią" : "Content Management"}
                             </h2>
                           </div>
                           <div className="grid gap-4 md:grid-cols-2">
@@ -559,7 +577,7 @@ export default function SubscriptionPage() {
                                 option.id === "wordpress"
                                   ? "€199"
                                   : option.id === "woocommerce"
-                                    ? "€299"
+                                    ? "€469"
                                     : option.id === "static"
                                       ? "€0"
                                       : option.id === "other"
@@ -571,12 +589,12 @@ export default function SubscriptionPage() {
                                 option.id === "wordpress" ||
                                 option.id === "woocommerce";
                               return (
-                                <OptionCard
-                                  key={option.id}
-                                  title={option.title}
-                                  price={cmsPrice}
-                                  strikePrice={strikePrice}
-                                  details={[{ text: option.details }]}
+                                  <OptionCard
+                                    key={option.id}
+                                    title={option.title}
+                                    price={formatPrice(cmsPrice)}
+                                    strikePrice={strikePrice}
+                                    details={[{ text: option.details }]}
                                   badge={
                                     option.id === "wordpress" ||
                                     option.id === "woocommerce"
@@ -642,7 +660,9 @@ export default function SubscriptionPage() {
                                 isPolish ? "Dodatkowe strony" : "Add pages"
                               }
                               price={
-                                isPolish ? "200 € / strona" : "€200 per page"
+                                isPolish
+                                  ? formatPrice("200 € / strona")
+                                  : "€200 per page"
                               }
                               showVat
                               isActive={formData.addPages}
@@ -680,7 +700,7 @@ export default function SubscriptionPage() {
 
                             <OptionCard
                               title={isPolish ? "Projekt logo" : "Logo design"}
-                              price={isPolish ? "500 €" : "€500"}
+                              price={isPolish ? formatPrice("500 €") : "€500"}
                               showVat
                               isActive={formData.logoDesign}
                               onSelect={() =>
@@ -697,7 +717,7 @@ export default function SubscriptionPage() {
                                   ? "Projekt wizytówek"
                                   : "Business cards design"
                               }
-                              price={isPolish ? "130 €" : "€130"}
+                              price={isPolish ? formatPrice("130 €") : "€130"}
                               showVat
                               isActive={formData.businessCards}
                               onSelect={() =>
@@ -1170,10 +1190,16 @@ export default function SubscriptionPage() {
                           ? "—"
                           : (() => {
                               const oneTime =
-                                estOneTime > 0 ? `€${estOneTime}` : "";
+                                estOneTime > 0
+                                  ? isPolish
+                                    ? `${Math.round(estOneTime * EURO_TO_PLN)} zł`
+                                    : `€${estOneTime}`
+                                  : "";
                               const monthly =
                                 estMonthlyWithDomain > 0
-                                  ? `€${formatMoney(estMonthlyWithDomain)}/mo`
+                                  ? isPolish
+                                    ? `${Math.round(estMonthlyWithDomain * EURO_TO_PLN)} zł/m`
+                                    : `€${formatMoney(estMonthlyWithDomain)}/mo`
                                   : "";
                               if (oneTime && monthly) {
                                 return `${oneTime} + vat + ${monthly}`;
