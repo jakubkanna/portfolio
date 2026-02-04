@@ -11,6 +11,8 @@ export type FormState = {
   socialPost: boolean;
   additionalOther: boolean;
   additionalOtherText: string;
+  domainPlan: string;
+  domainName: string;
   acceptTerms: boolean;
   email: string;
   displayName: string;

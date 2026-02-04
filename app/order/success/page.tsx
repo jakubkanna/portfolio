@@ -23,6 +23,9 @@ export default function OrderSuccessPage() {
           <p>
             Thanks! We received your payment and will reach out with next steps.
           </p>
+          <p className="mt-3 text-sm text-black/70">
+            You may close this window now.
+          </p>
           {paymentId ? (
             <p className="mt-3 text-xs text-black/60">
               Payment ID: <span className="font-mono">{paymentId}</span>

@@ -50,11 +50,12 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
           price: "499 €",
           details: [
             { text: "do 3 stron" },
-            { text: "3 spotkania online" },
+            { text: "spotkania online (3)" },
             {
-              text: "1 breaking change",
-              note: "Maksymalna liczba zmian. Zmiana layoutu lub koncepcji wymagająca pełnego redesignu.",
+              text: "warianty (1)",
+              note: "Maksymalna liczba dodatkowych wariantów projektu.",
             },
+            { text: "Zawiera pakiet Minimal" },
           ],
         },
         {
@@ -67,13 +68,14 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
             { text: "do 5 stron" },
             { text: "animacje / 3D" },
             {
-              text: "2 breaking changes",
-              note: "Maksymalna liczba zmian. Duże zmiany layoutu lub idei z pełnym redesignem.",
+              text: "warianty (2)",
+              note: "Maksymalna liczba dodatkowych wariantów projektu.",
             },
             {
               text: "struktura wielojęzyczna",
               note: "Przygotowana na kolejne wersje językowe.",
             },
+            { text: "Zawiera pakiet Standard" },
           ],
         },
         {
@@ -81,7 +83,7 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
           title: "Institutional",
           shortLabel: "Instytucja",
           color: "#ffb3d5",
-          price: "Wycena indywidualna",
+          price: "Wycena",
           details: [
             { text: "bez limitu stron" },
             {
@@ -89,9 +91,10 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
               note: "Np. kalendarz wydarzeń, system biletów, archiwa.",
             },
             {
-              text: "3 breaking changes",
-              note: "Maksymalna liczba zmian. Kolejne pełne redesigny po zmianie koncepcji.",
+              text: "warianty (3)",
+              note: "Maksymalna liczba dodatkowych wariantów projektu.",
             },
+            { text: "Zawiera pakiet Advanced" },
           ],
         },
       ]
@@ -106,7 +109,7 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
             { text: "Single page" },
             { text: "Individual visual design" },
             { text: "Basic SEO setup" },
-            { text: "1 online meeting" },
+            { text: "online meeting (1)" },
             { text: "Mobile version included" },
           ],
         },
@@ -118,11 +121,12 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
           price: "€499",
           details: [
             { text: "Up to 3 pages" },
-            { text: "3 online meetings" },
+            { text: "online meetings (3)" },
             {
-              text: "1 breaking change",
-              note: "Maximum number of changes. Layout- or idea-breaking change requiring a full redesign.",
+              text: "variants (1)",
+              note: "Maximum number of additional design variants.",
             },
+            { text: "Includes Minimal" },
           ],
         },
         {
@@ -135,13 +139,14 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
             { text: "Up to 5 pages" },
             { text: "Motion design / 3D" },
             {
-              text: "2 breaking changes",
-              note: "Maximum number of changes. Major layout or concept shifts with full redesigns.",
+              text: "variants (2)",
+              note: "Maximum number of additional design variants.",
             },
             {
               text: "Multilingual-ready structure",
               note: "Prepared for additional language versions.",
             },
+            { text: "Includes Standard" },
           ],
         },
         {
@@ -157,9 +162,10 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
               note: "Examples: event calendars, ticketing, archives.",
             },
             {
-              text: "3 breaking changes",
-              note: "Maximum number of changes. Additional full redesigns after concept changes.",
+              text: "variants (3)",
+              note: "Maximum number of additional design variants.",
             },
+            { text: "Includes Advanced" },
           ],
         },
       ];
@@ -185,6 +191,7 @@ export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
             { text: "unlimited listings" },
             { text: "no fees" },
             { text: "secure payments" },
+            { text: "Zawiera plan Standard" },
           ],
         },
       ]
@@ -207,6 +214,7 @@ export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
             { text: "unlimited listings" },
             { text: "no fees" },
             { text: "secure payments" },
+            { text: "Includes Standard" },
           ],
         },
       ];

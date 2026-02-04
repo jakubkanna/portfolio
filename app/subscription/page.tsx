@@ -147,7 +147,7 @@ export default function SubscriptionPage() {
               title: "Institutional",
               shortLabel: "Instytucja",
               color: "#ff2f8c",
-              price: "Wycena indywidualna",
+              price: "Wycena",
               details: [
                 { text: "bez limitu stron" },
                 {
@@ -407,9 +407,7 @@ export default function SubscriptionPage() {
       <div className="mx-auto w-full max-w-6xl space-y-10">
         <header className="space-y-4">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {isPolish
-              ? "Zamów stronę na zamówienie."
-              : "Launch custom website."}
+            {isPolish ? "Zamów stronę" : "Launch custom website."}
           </h1>
           <p className="max-w-2xl text-base text-black/70">
             {isPolish
@@ -493,7 +491,24 @@ export default function SubscriptionPage() {
                       </div>
 
                       <div>
-                        <h2 className="text-lg font-semibold">{"Hosting"}</h2>
+                        <h2 className="text-lg font-semibold">
+                          <span className="inline-flex items-center gap-2">
+                            {isPolish ? "Hosting" : "Hosting"}
+                            <span className="group relative inline-flex items-center">
+                              <span
+                                className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black"
+                                tabIndex={0}
+                              >
+                                ?
+                              </span>
+                              <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-56 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
+                                {isPolish
+                                  ? "Zajmiemy się techniczną stroną hostowania i utrzymywania Twojej strony."
+                                  : "We will host and maintain your website."}
+                              </span>
+                            </span>
+                          </span>
+                        </h2>
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                           {subscriptionPlans.map((plan) => {
                             const isActive =
@@ -520,12 +535,6 @@ export default function SubscriptionPage() {
                                   </h3>
                                   <span className="text-right text-xs font-mono text-black/70">
                                     <span className="block">{plan.price}</span>
-                                    <span className="block text-[10px] text-black/50">
-                                      est.
-                                    </span>
-                                    <span className="block text-[10px] text-black/50">
-                                      + VAT
-                                    </span>
                                   </span>
                                 </div>
                                 <ul className="mt-3 space-y-1 text-sm text-black/70">
@@ -709,7 +718,7 @@ export default function SubscriptionPage() {
                               : "Mobile app iOS/Android"
                           }
                           price={
-                            isPolish ? "Wycena indywidualna" : "Custom quote"
+                            isPolish ? "Wycena" : "Custom quote"
                           }
                           isActive={formData.mobileApp}
                           onSelect={() =>
@@ -991,23 +1000,13 @@ export default function SubscriptionPage() {
               <h4 className="text-base font-semibold text-black">
                 {isPolish ? "Co dalej?" : "What happens next?"}
               </h4>
-              <ul className="mt-3 space-y-2">
-                <li>
+              <div className="mt-3 space-y-2">
+                <p>
                   {isPolish
-                    ? "Otrzymasz mail z podsumowaniem i czasem spotkania."
-                    : "You will receive a recap and meeting proposal via email."}
-                </li>
-                <li>
-                  {isPolish
-                    ? "Doprecyzujemy zakres i harmonogram wdrożenia."
-                    : "We will align the scope and delivery schedule."}
-                </li>
-                <li>
-                  {isPolish
-                    ? "Po akceptacji ruszamy z projektem."
-                    : "Once approved, we start the build."}
-                </li>
-                <li>
+                    ? "W ciągu 24h otrzymasz od Nas email zwrotny, w którym doprecyzujemy szczegóły projektu. Po pierwszym spotkaniu i twojej akceptacji ruszymy z projektem."
+                    : "Within 24 hours you will receive a reply email where we will clarify the project schedule. After the first meeting and your approval, we will start the project and send an invoice for the selected services."}
+                </p>
+                <p>
                   {isPolish
                     ? "Masz pytania? Skorzystaj z zakładki"
                     : "If you have any questions, please use the"}{" "}
@@ -1015,10 +1014,10 @@ export default function SubscriptionPage() {
                     href="/contact"
                     className="underline underline-offset-4"
                   >
-                    {isPolish ? "strony Kontakt" : "Contact page"}
+                    {isPolish ? "Kontakt" : "Contact page"}
                   </Link>
-                </li>
-              </ul>
+                </p>
+              </div>
             </div>
           </aside>
         </div>

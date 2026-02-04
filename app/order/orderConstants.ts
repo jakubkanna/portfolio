@@ -13,6 +13,8 @@ export const INITIAL_STATE: FormState = {
   socialPost: true,
   additionalOther: false,
   additionalOtherText: "",
+  domainPlan: "",
+  domainName: "",
   acceptTerms: false,
   email: "",
   displayName: "",
@@ -25,5 +27,11 @@ export const INITIAL_STATE: FormState = {
 
 export const getStepTitles = (isPolish: boolean) =>
   isPolish
-    ? ["Plan i zamówienie", "CMS", "Dodatkowe usługi", "Wprowadzenie"]
-    : ["Plan & order", "CMS", "Additional services", "Introduction"];
+    ? [
+        "Plan i zamówienie",
+        "Domena",
+        "CMS",
+        "Dodatkowe usługi",
+        "Wprowadzenie",
+      ]
+    : ["Plan & order", "Domain", "CMS", "Additional services", "Introduction"];

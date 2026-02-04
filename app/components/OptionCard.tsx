@@ -13,6 +13,7 @@ type OptionCardProps = {
   lockReason?: string;
   badge?: string;
   strikePrice?: boolean;
+  showEst?: boolean;
   isActive: boolean;
   onSelect: () => void;
   children?: React.ReactNode;
@@ -29,6 +30,7 @@ export default function OptionCard({
   lockReason,
   badge,
   strikePrice = false,
+  showEst = true,
   isActive,
   onSelect,
   children,
@@ -97,7 +99,9 @@ export default function OptionCard({
               <span className={`block ${strikePrice ? "line-through" : ""}`}>
                 {price}
               </span>
-              <span className="block text-[10px] text-black/50">est.</span>
+              {showEst ? (
+                <span className="block text-[10px] text-black/50">est.</span>
+              ) : null}
               {showVat ? (
                 <span className="block text-[10px] text-black/50">+ VAT</span>
               ) : null}
