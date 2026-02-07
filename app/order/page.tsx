@@ -221,6 +221,9 @@ export default function SubscriptionPage() {
   const domainForEmail = formData.domainName.trim();
 
   const isInstitutional = formData.designPlan === "institutional";
+  const institutionalQuoteLabel = "Wycena";
+  const getOptionPrice = (price: string) =>
+    isInstitutional ? institutionalQuoteLabel : price;
   const handleFinalSubmit = async () => {
     if (!canContinue || !formData.acceptTerms) {
       setShowValidation(true);
@@ -354,7 +357,7 @@ export default function SubscriptionPage() {
                   </p>
                   <Link
                     href="/"
-                    className="inline-flex w-fit items-center rounded-full bg-black px-6 py-2 text-sm font-medium !text-white no-underline transition hover:scale-[1.02] hover:!text-white visited:!text-white"
+                    className="inline-flex w-fit items-center rounded-full bg-black px-6 py-2 text-sm font-medium text-white! no-underline transition hover:scale-[1.02] hover:text-white! visited:text-white!"
                   >
                     {isPolish ? "Powrót do strony głównej" : "Back to homepage"}
                   </Link>
@@ -388,7 +391,9 @@ export default function SubscriptionPage() {
                                 <OptionCard
                                   key={plan.id}
                                   title={plan.title}
-                                  price={formatPrice(plan.price, !showNet)}
+                                  price={getOptionPrice(
+                                    formatPrice(plan.price, !showNet),
+                                  )}
                                   showVat
                                   details={plan.details}
                                   isActive={formData.designPlan === plan.id}
@@ -440,7 +445,9 @@ export default function SubscriptionPage() {
                                   <OptionCard
                                     key={plan.id}
                                     title={plan.title}
-                                    price={formatPrice(plan.price, !showNet)}
+                                    price={getOptionPrice(
+                                      formatPrice(plan.price, !showNet),
+                                    )}
                                     showVat={false}
                                     details={plan.details}
                                     showEst={false}
@@ -490,7 +497,7 @@ export default function SubscriptionPage() {
                                   ? "Mam własną domenę"
                                   : "I own a domain"
                               }
-                              price={isPolish ? "0 zł" : "OK"}
+                              price={getOptionPrice(isPolish ? "0 zł" : "OK")}
                               showEst={false}
                               isActive={formData.domainPlan === "own"}
                               onSelect={() => {
@@ -507,15 +514,17 @@ export default function SubscriptionPage() {
                                   ? "Potrzebuję domeny"
                                   : "I need a domain"
                               }
-                              price={formatPrice(
-                                domainStatus === "available" && domainPrice
-                                  ? domainPrice < 60
-                                    ? `€4.99/${isPolish ? "m" : "mo"}`
-                                    : `€${domainPrice.toFixed(2)}/yr`
-                                  : domainStatus === "taken"
-                                    ? "TAKEN"
-                                    : "—",
-                                !showNet,
+                              price={getOptionPrice(
+                                formatPrice(
+                                  domainStatus === "available" && domainPrice
+                                    ? domainPrice < 60
+                                      ? `€4.99/${isPolish ? "m" : "mo"}`
+                                      : `€${domainPrice.toFixed(2)}/yr`
+                                    : domainStatus === "taken"
+                                      ? "TAKEN"
+                                      : "—",
+                                  !showNet,
+                                ),
                               )}
                               showEst={false}
                               isActive={formData.domainPlan === "need"}
@@ -621,7 +630,9 @@ export default function SubscriptionPage() {
                             </h3>
                             <OptionCard
                               title={isPolish ? "Adres" : "Address"}
-                              price={isPolish ? "0 zł" : "Included"}
+                              price={getOptionPrice(
+                                isPolish ? "0 zł" : "Included",
+                              )}
                               showEst={false}
                               isActive={formData.customEmail}
                               onSelect={() =>
@@ -706,7 +717,9 @@ export default function SubscriptionPage() {
                                 <OptionCard
                                   key={option.id}
                                   title={option.title}
-                                  price={formatPrice(cmsPrice, !showNet)}
+                                  price={getOptionPrice(
+                                    formatPrice(cmsPrice, !showNet),
+                                  )}
                                   strikePrice={strikePrice}
                                   details={[{ text: option.details }]}
                                   badge={
@@ -773,11 +786,11 @@ export default function SubscriptionPage() {
                               title={
                                 isPolish ? "Dodatkowe strony" : "Add pages"
                               }
-                              price={
+                              price={getOptionPrice(
                                 isPolish
                                   ? formatPrice("200 € / strona", !showNet)
-                                  : formatPrice("€200 per page", !showNet)
-                              }
+                                  : formatPrice("€200 per page", !showNet),
+                              )}
                               showVat
                               isActive={formData.addPages}
                               onSelect={() =>
@@ -814,11 +827,11 @@ export default function SubscriptionPage() {
 
                             <OptionCard
                               title={isPolish ? "Projekt logo" : "Logo design"}
-                              price={
+                              price={getOptionPrice(
                                 isPolish
                                   ? formatPrice("500 €", !showNet)
-                                  : formatPrice("€500", !showNet)
-                              }
+                                  : formatPrice("€500", !showNet),
+                              )}
                               showVat
                               isActive={formData.logoDesign}
                               onSelect={() =>
@@ -835,11 +848,11 @@ export default function SubscriptionPage() {
                                   ? "Projekt wizytówek"
                                   : "Business cards design"
                               }
-                              price={
+                              price={getOptionPrice(
                                 isPolish
                                   ? formatPrice("130 €", !showNet)
-                                  : formatPrice("€130", !showNet)
-                              }
+                                  : formatPrice("€130", !showNet),
+                              )}
                               showVat
                               isActive={formData.businessCards}
                               onSelect={() =>
@@ -856,7 +869,9 @@ export default function SubscriptionPage() {
                                   ? "Aplikacja mobilna iOS/Android"
                                   : "Mobile App iOS/Android"
                               }
-                              price={isPolish ? "Wycena" : "Custom quote"}
+                              price={getOptionPrice(
+                                isPolish ? "Wycena" : "Custom quote",
+                              )}
                               isActive={formData.mobileApp}
                               onSelect={() =>
                                 setFormData((prev) => ({
@@ -868,7 +883,9 @@ export default function SubscriptionPage() {
 
                             <OptionCard
                               title={isPolish ? "Post" : "Post"}
-                              price={isPolish ? "W cenie" : "Included"}
+                              price={getOptionPrice(
+                                isPolish ? "W cenie" : "Included",
+                              )}
                               isActive={formData.socialPost}
                               disabled
                               lockReason={
@@ -879,7 +896,9 @@ export default function SubscriptionPage() {
 
                             <OptionCard
                               title={isPolish ? "Inne" : "Other"}
-                              price={isPolish ? "Wycena" : "Custom quote"}
+                              price={getOptionPrice(
+                                isPolish ? "Wycena" : "Custom quote",
+                              )}
                               isActive={formData.additionalOther}
                               onSelect={() =>
                                 setFormData((prev) => ({
@@ -1314,10 +1333,10 @@ export default function SubscriptionPage() {
                       ) || (isPolish ? "Brak" : "None")}
                   </div>
                 </div>
-                {!isInstitutional ? (
-                  <div>
-                    <div className="flex items-center gap-2 text-xs font-mono uppercase text-black/40">
-                      <span>{isPolish ? "Cena" : "Price"}</span>
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-mono uppercase text-black/40">
+                    <span>{isPolish ? "Cena" : "Price"}</span>
+                    {!isInstitutional ? (
                       <button
                         type="button"
                         onClick={() => setShowNet((prev) => !prev)}
@@ -1332,61 +1351,65 @@ export default function SubscriptionPage() {
                             ? "brutto"
                             : "gross"}
                       </button>
-                    </div>
-                    <div className="inline-flex items-center gap-1 pt-2">
-                      <span className="font-mono text-black/70">
-                        {isPolish ? "est." : "est."}{" "}
-                        {estOneTime === 0 && estMonthlyWithDomain === 0
-                          ? "—"
-                          : (() => {
-                              const oneTime =
-                                estOneTime > 0
-                                  ? formatEstimateNet(
-                                      estOneTime * (showNet ? 1 : 1 + VAT_RATE),
-                                      "",
-                                    )
-                                  : "";
-                              const monthly =
-                                estMonthlyWithDomainDisplay > 0
-                                  ? isPolish
-                                    ? `${Math.round(
-                                        estMonthlyWithDomainDisplay *
-                                          (showNet ? 1 : 1 + VAT_RATE),
-                                      )} zł/m`
-                                    : formatEstimateNet(
-                                        estMonthlyWithDomain *
-                                          (showNet ? 1 : 1 + VAT_RATE),
-                                        "/mo",
-                                      )
-                                  : "";
-                              if (oneTime && monthly) {
-                                return `${oneTime} + ${monthly}`;
-                              }
-                              if (oneTime) {
-                                return `${oneTime}`;
-                              }
-                              if (monthly) {
-                                return `${monthly}`;
-                              }
-                              return "—";
-                            })()}
-                      </span>
-                      <span className="group relative inline-flex items-center">
-                        <span
-                          className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black"
-                          tabIndex={0}
-                        >
-                          ?
-                        </span>
-                        <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-64 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
-                          {isPolish
-                            ? "Projekty są wyceniane indywidualnie i cena może się nieznacznie zmienić. Przed pierwszym spotkaniem konieczne jest opłacenie stałej subskrypcji za obsługę zlecenia."
-                            : "Projects are priced individually and the price may change slightly. You will be asked to pay for the design after the first meeting."}
-                        </span>
-                      </span>
-                    </div>
+                    ) : null}
                   </div>
-                ) : null}
+                  <div className="inline-flex items-center gap-1 pt-2">
+                    <span className="font-mono text-black/70">
+                      {isInstitutional
+                        ? institutionalQuoteLabel
+                        : `${isPolish ? "est." : "est."} ${
+                            estOneTime === 0 && estMonthlyWithDomain === 0
+                              ? "—"
+                              : (() => {
+                                  const oneTime =
+                                    estOneTime > 0
+                                      ? formatEstimateNet(
+                                          estOneTime *
+                                            (showNet ? 1 : 1 + VAT_RATE),
+                                          "",
+                                        )
+                                      : "";
+                                  const monthly =
+                                    estMonthlyWithDomainDisplay > 0
+                                      ? isPolish
+                                        ? `${Math.round(
+                                            estMonthlyWithDomainDisplay *
+                                              (showNet ? 1 : 1 + VAT_RATE),
+                                          )} zł/m`
+                                        : formatEstimateNet(
+                                            estMonthlyWithDomain *
+                                              (showNet ? 1 : 1 + VAT_RATE),
+                                            "/mo",
+                                          )
+                                      : "";
+                                  if (oneTime && monthly) {
+                                    return `${oneTime} + ${monthly}`;
+                                  }
+                                  if (oneTime) {
+                                    return `${oneTime}`;
+                                  }
+                                  if (monthly) {
+                                    return `${monthly}`;
+                                  }
+                                  return "—";
+                                })()
+                          }`}
+                    </span>
+                    <span className="group relative inline-flex items-center">
+                      <span
+                        className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black"
+                        tabIndex={0}
+                      >
+                        ?
+                      </span>
+                      <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-64 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
+                        {isPolish
+                          ? "Projekty są wyceniane indywidualnie i cena może się nieznacznie zmienić."
+                          : "Projects are priced individually and the price may change slightly."}
+                      </span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="rounded-3xl border border-black/20 bg-[#f0ff5e] p-6 text-sm text-black/70">
