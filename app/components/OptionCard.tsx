@@ -102,9 +102,7 @@ export default function OptionCard({
               {showEst ? (
                 <span className="block text-[10px] text-black/50">est.</span>
               ) : null}
-              {showVat ? (
-                <span className="block text-[10px] text-black/50">+ VAT</span>
-              ) : null}
+              {showVat ? null : null}
             </span>
           ) : null}
         </div>

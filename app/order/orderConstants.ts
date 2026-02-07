@@ -15,6 +15,8 @@ export const INITIAL_STATE: FormState = {
   additionalOtherText: "",
   domainPlan: "",
   domainName: "",
+  customEmail: false,
+  customEmailAlias: "",
   acceptTerms: false,
   email: "",
   displayName: "",

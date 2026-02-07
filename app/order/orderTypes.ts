@@ -13,6 +13,8 @@ export type FormState = {
   additionalOtherText: string;
   domainPlan: string;
   domainName: string;
+  customEmail: boolean;
+  customEmailAlias: string;
   acceptTerms: boolean;
   email: string;
   displayName: string;

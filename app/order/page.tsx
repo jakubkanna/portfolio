@@ -30,7 +30,9 @@ export default function SubscriptionPage() {
   const { locale } = useI18n();
   const router = useRouter();
   const isPolish = locale === "pl";
-  const EURO_TO_PLN = 4.3;
+  const VAT_RATE = 0.23;
+  const [euroToPln, setEuroToPln] = useState(4.3);
+  const [showNet, setShowNet] = useState(false);
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
@@ -43,24 +45,61 @@ export default function SubscriptionPage() {
   const [domainPrice, setDomainPrice] = useState<number | null>(null);
   const studioServerUrl = process.env.NEXT_PUBLIC_STUDIO_SERVER_URL ?? "";
 
-  const formatPrice = (price: string) => {
-    if (!isPolish || !price.includes("€")) return price;
+  const formatPrice = (price: string, includeVat = false) => {
     const match = price.match(/([0-9]+(?:[.,][0-9]+)?)/);
     if (!match || match.index === undefined) return price;
     const value = Number(match[1].replace(",", "."));
     if (Number.isNaN(value)) return price;
-    const pln = Math.round(value * EURO_TO_PLN);
-    let suffix = price.slice(match.index + match[1].length);
-    suffix = suffix.replace(/€/g, "").trim();
-    suffix = suffix.replace(/\/\s*(month|mo)/gi, "/m");
-    suffix = suffix.replace(/\/\s*miesiąc/gi, "/m");
-    const suffixOut = suffix ? ` ${suffix}` : "";
-    return `${pln} zł${suffixOut}`;
+    const withVat = includeVat ? value * (1 + VAT_RATE) : value;
+
+    if (isPolish && price.includes("€")) {
+      const pln = Math.round(withVat * euroToPln);
+      let suffix = price.slice(match.index + match[1].length);
+      suffix = suffix.replace(/€/g, "").trim();
+      suffix = suffix.replace(/\/\s*(month|mo)/gi, "/m");
+      suffix = suffix.replace(/\/\s*miesiąc/gi, "/m");
+      const suffixOut = suffix ? ` ${suffix}` : "";
+      return `${pln} zł${suffixOut}`;
+    }
+
+    const hasPlnCurrency = /zł/i.test(price);
+    const formatted = hasPlnCurrency
+      ? String(Math.round(withVat))
+      : Number.isInteger(withVat)
+        ? String(withVat)
+        : withVat.toFixed(2);
+    const before = price.slice(0, match.index);
+    const after = price.slice(match.index + match[1].length);
+    return `${before}${formatted}${after}`;
   };
 
   useEffect(() => {
     document.title = isPolish ? "Zamów stronę" : "Get a Website";
   }, [isPolish]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadRate = async () => {
+      try {
+        const response = await fetch(
+          "https://api.nbp.pl/api/exchangerates/rates/A/EUR/?format=json",
+        );
+        if (!response.ok) return;
+        const data = await response.json();
+        const rate = data?.rates?.[0]?.mid;
+        if (typeof rate !== "number") return;
+        const rounded = Math.ceil(rate * 10) / 10;
+        if (isMounted) setEuroToPln(rounded);
+      } catch {
+        // Keep default fallback rate.
+      }
+    };
+
+    loadRate();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const designPlans = useMemo(() => getDesignPlans(isPolish), [isPolish]);
 
@@ -158,6 +197,10 @@ export default function SubscriptionPage() {
   );
   const formatMoney = (value: number) =>
     Number.isInteger(value) ? String(value) : value.toFixed(2);
+  const formatEstimateNet = (value: number, suffix: string) =>
+    isPolish
+      ? `${Math.round(value * euroToPln)} zł${suffix}`
+      : `€${formatMoney(value)}${suffix}`;
   const domainMonthlyAdd =
     formData.domainPlan === "need" &&
     domainStatus === "available" &&
@@ -166,6 +209,16 @@ export default function SubscriptionPage() {
       ? 4.99
       : 0;
   const estMonthlyWithDomain = estMonthly + domainMonthlyAdd;
+  const subscriptionMonthlyNetPln =
+    formData.subscriptionPlan === "standard-site"
+      ? 48
+      : formData.subscriptionPlan === "ecommerce-site"
+        ? 102
+        : 0;
+  const estMonthlyWithDomainDisplay = isPolish
+    ? subscriptionMonthlyNetPln + domainMonthlyAdd * euroToPln
+    : estMonthlyWithDomain;
+  const domainForEmail = formData.domainName.trim();
 
   const isInstitutional = formData.designPlan === "institutional";
   const handleFinalSubmit = async () => {
@@ -296,9 +349,15 @@ export default function SubscriptionPage() {
                   </h2>
                   <p className="text-black/70">
                     {isPolish
-                      ? "Wrócimy z ofertą i propozycją spotkania w ciągu 48h."
-                      : "We will follow up with a proposal and meeting options within 48 hours."}
+                      ? "Prześlemy ofertę na Twojego maila."
+                      : "We will send an offer to your email."}
                   </p>
+                  <Link
+                    href="/"
+                    className="inline-flex w-fit items-center rounded-full bg-black px-6 py-2 text-sm font-medium !text-white no-underline transition hover:scale-[1.02] hover:!text-white visited:!text-white"
+                  >
+                    {isPolish ? "Powrót do strony głównej" : "Back to homepage"}
+                  </Link>
                 </div>
               ) : (
                 <form
@@ -326,12 +385,12 @@ export default function SubscriptionPage() {
                             </h2>
                             <div className="mt-4 grid gap-4 md:grid-cols-2">
                               {designPlans.map((plan) => (
-                                  <OptionCard
-                                    key={plan.id}
-                                    title={plan.title}
-                                    price={formatPrice(plan.price)}
-                                    showVat
-                                    details={plan.details}
+                                <OptionCard
+                                  key={plan.id}
+                                  title={plan.title}
+                                  price={formatPrice(plan.price, !showNet)}
+                                  showVat
+                                  details={plan.details}
                                   isActive={formData.designPlan === plan.id}
                                   onSelect={() =>
                                     setFormData((prev) =>
@@ -381,7 +440,7 @@ export default function SubscriptionPage() {
                                   <OptionCard
                                     key={plan.id}
                                     title={plan.title}
-                                    price={formatPrice(plan.price)}
+                                    price={formatPrice(plan.price, !showNet)}
                                     showVat={false}
                                     details={plan.details}
                                     showEst={false}
@@ -431,7 +490,7 @@ export default function SubscriptionPage() {
                                   ? "Mam własną domenę"
                                   : "I own a domain"
                               }
-                              price={isPolish ? "OK" : "OK"}
+                              price={isPolish ? "0 zł" : "OK"}
                               showEst={false}
                               isActive={formData.domainPlan === "own"}
                               onSelect={() => {
@@ -456,6 +515,7 @@ export default function SubscriptionPage() {
                                   : domainStatus === "taken"
                                     ? "TAKEN"
                                     : "—",
+                                !showNet,
                               )}
                               showEst={false}
                               isActive={formData.domainPlan === "need"}
@@ -555,6 +615,58 @@ export default function SubscriptionPage() {
                               )}
                             </div>
                           ) : null}
+                          <div className="space-y-3">
+                            <h3 className="text-lg font-semibold">
+                              {isPolish ? "Biznesowy email" : "Branded email"}
+                            </h3>
+                            <OptionCard
+                              title={isPolish ? "Adres" : "Address"}
+                              price={isPolish ? "0 zł" : "Included"}
+                              showEst={false}
+                              isActive={formData.customEmail}
+                              onSelect={() =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  customEmail: !prev.customEmail,
+                                  customEmailAlias: prev.customEmail
+                                    ? ""
+                                    : prev.customEmailAlias,
+                                }))
+                              }
+                            >
+                              {formData.customEmail ? (
+                                <div className="mt-2 flex flex-col gap-2 text-xs text-black/70">
+                                  <span>
+                                    {isPolish ? "Alias e-mail" : "Email alias"}
+                                  </span>
+                                  <div className="flex w-full items-center gap-1 rounded-lg border border-black/20 bg-[#f0ff5e] px-2 py-2 text-xs text-black focus-within:border-black/60">
+                                    <input
+                                      type="text"
+                                      value={formData.customEmailAlias}
+                                      onChange={(event) => {
+                                        const raw = event.target.value;
+                                        const local = raw.split("@")[0] ?? "";
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          customEmailAlias: local,
+                                        }));
+                                      }}
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
+                                      placeholder={
+                                        isPolish ? "np. studio" : "e.g. hello"
+                                      }
+                                      className="w-full bg-transparent text-xs text-black focus:outline-none"
+                                    />
+                                    <span className="text-black/50">
+                                      @{domainForEmail || "twojadomena.pl"}
+                                    </span>
+                                  </div>
+                                </div>
+                              ) : null}
+                            </OptionCard>
+                          </div>
                         </div>
                       )}
 
@@ -562,7 +674,9 @@ export default function SubscriptionPage() {
                         <div className="space-y-4">
                           <div className="flex items-center gap-2">
                             <h2 className="text-lg font-semibold">
-                              {isPolish ? "Zarządzanie treścią" : "Content Management"}
+                              {isPolish
+                                ? "Zarządzanie treścią"
+                                : "Content Management"}
                             </h2>
                           </div>
                           <div className="grid gap-4 md:grid-cols-2">
@@ -589,12 +703,12 @@ export default function SubscriptionPage() {
                                 option.id === "wordpress" ||
                                 option.id === "woocommerce";
                               return (
-                                  <OptionCard
-                                    key={option.id}
-                                    title={option.title}
-                                    price={formatPrice(cmsPrice)}
-                                    strikePrice={strikePrice}
-                                    details={[{ text: option.details }]}
+                                <OptionCard
+                                  key={option.id}
+                                  title={option.title}
+                                  price={formatPrice(cmsPrice, !showNet)}
+                                  strikePrice={strikePrice}
+                                  details={[{ text: option.details }]}
                                   badge={
                                     option.id === "wordpress" ||
                                     option.id === "woocommerce"
@@ -661,8 +775,8 @@ export default function SubscriptionPage() {
                               }
                               price={
                                 isPolish
-                                  ? formatPrice("200 € / strona")
-                                  : "€200 per page"
+                                  ? formatPrice("200 € / strona", !showNet)
+                                  : formatPrice("€200 per page", !showNet)
                               }
                               showVat
                               isActive={formData.addPages}
@@ -700,7 +814,11 @@ export default function SubscriptionPage() {
 
                             <OptionCard
                               title={isPolish ? "Projekt logo" : "Logo design"}
-                              price={isPolish ? formatPrice("500 €") : "€500"}
+                              price={
+                                isPolish
+                                  ? formatPrice("500 €", !showNet)
+                                  : formatPrice("€500", !showNet)
+                              }
                               showVat
                               isActive={formData.logoDesign}
                               onSelect={() =>
@@ -717,7 +835,11 @@ export default function SubscriptionPage() {
                                   ? "Projekt wizytówek"
                                   : "Business cards design"
                               }
-                              price={isPolish ? formatPrice("130 €") : "€130"}
+                              price={
+                                isPolish
+                                  ? formatPrice("130 €", !showNet)
+                                  : formatPrice("€130", !showNet)
+                              }
                               showVat
                               isActive={formData.businessCards}
                               onSelect={() =>
@@ -734,11 +856,7 @@ export default function SubscriptionPage() {
                                   ? "Aplikacja mobilna iOS/Android"
                                   : "Mobile App iOS/Android"
                               }
-                              price={
-                                isPolish
-                                  ? "Wycena"
-                                  : "Custom quote"
-                              }
+                              price={isPolish ? "Wycena" : "Custom quote"}
                               isActive={formData.mobileApp}
                               onSelect={() =>
                                 setFormData((prev) => ({
@@ -761,11 +879,7 @@ export default function SubscriptionPage() {
 
                             <OptionCard
                               title={isPolish ? "Inne" : "Other"}
-                              price={
-                                isPolish
-                                  ? "Wycena"
-                                  : "Custom quote"
-                              }
+                              price={isPolish ? "Wycena" : "Custom quote"}
                               isActive={formData.additionalOther}
                               onSelect={() =>
                                 setFormData((prev) => ({
@@ -983,11 +1097,13 @@ export default function SubscriptionPage() {
                               >
                                 {isPolish ? "Płatność" : "Payment"}
                               </button>
-                              <span className="text-sm text-black/50">
-                                {isPolish
-                                  ? "Po wysłaniu formularza rozpoczynamy rozliczenie subskrypcji za obsługę zamówienia. Fakturę za pozostałe wybrane usługi prześlemy po pierwszym spotkaniu."
-                                  : "By completing this form you start the subscription billing. The design fee will be sent after the first meeting."}
-                              </span>
+                              {!isInstitutional ? (
+                                <span className="text-sm text-black/50">
+                                  {isPolish
+                                    ? "Po wysłaniu formularza rozpoczynamy rozliczenie subskrypcji za obsługę zamówienia. Fakturę za pozostałe wybrane usługi prześlemy po pierwszym spotkaniu."
+                                    : "By completing this form you start the subscription billing. The design fee will be sent after the first meeting."}
+                                </span>
+                              ) : null}
                             </div>
                           </div>
                         </div>
@@ -1145,6 +1261,26 @@ export default function SubscriptionPage() {
                               (isPolish ? "Inne" : "Other"),
                           }
                         : null,
+                      formData.customEmail
+                        ? {
+                            key: "email",
+                            label: isPolish
+                              ? `E-mail: ${
+                                  formData.customEmailAlias
+                                    ? `${formData.customEmailAlias}@${
+                                        domainForEmail || "—"
+                                      }`
+                                    : "—"
+                                }`
+                              : `Email: ${
+                                  formData.customEmailAlias
+                                    ? `${formData.customEmailAlias}@${
+                                        domainForEmail || "—"
+                                      }`
+                                    : "—"
+                                }`,
+                          }
+                        : null,
                     ]
                       .filter(Boolean)
                       .map(
@@ -1180,10 +1316,24 @@ export default function SubscriptionPage() {
                 </div>
                 {!isInstitutional ? (
                   <div>
-                    <div className="text-xs font-mono uppercase text-black/40">
-                      {isPolish ? "Cena" : "Price"}
+                    <div className="flex items-center gap-2 text-xs font-mono uppercase text-black/40">
+                      <span>{isPolish ? "Cena" : "Price"}</span>
+                      <button
+                        type="button"
+                        onClick={() => setShowNet((prev) => !prev)}
+                        className="cursor-pointer underline underline-offset-4"
+                        aria-pressed={showNet}
+                      >
+                        {showNet
+                          ? isPolish
+                            ? "netto"
+                            : "net"
+                          : isPolish
+                            ? "brutto"
+                            : "gross"}
+                      </button>
                     </div>
-                    <div className="inline-flex items-center gap-1">
+                    <div className="inline-flex items-center gap-1 pt-2">
                       <span className="font-mono text-black/70">
                         {isPolish ? "est." : "est."}{" "}
                         {estOneTime === 0 && estMonthlyWithDomain === 0
@@ -1191,24 +1341,32 @@ export default function SubscriptionPage() {
                           : (() => {
                               const oneTime =
                                 estOneTime > 0
-                                  ? isPolish
-                                    ? `${Math.round(estOneTime * EURO_TO_PLN)} zł`
-                                    : `€${estOneTime}`
+                                  ? formatEstimateNet(
+                                      estOneTime * (showNet ? 1 : 1 + VAT_RATE),
+                                      "",
+                                    )
                                   : "";
                               const monthly =
-                                estMonthlyWithDomain > 0
+                                estMonthlyWithDomainDisplay > 0
                                   ? isPolish
-                                    ? `${Math.round(estMonthlyWithDomain * EURO_TO_PLN)} zł/m`
-                                    : `€${formatMoney(estMonthlyWithDomain)}/mo`
+                                    ? `${Math.round(
+                                        estMonthlyWithDomainDisplay *
+                                          (showNet ? 1 : 1 + VAT_RATE),
+                                      )} zł/m`
+                                    : formatEstimateNet(
+                                        estMonthlyWithDomain *
+                                          (showNet ? 1 : 1 + VAT_RATE),
+                                        "/mo",
+                                      )
                                   : "";
                               if (oneTime && monthly) {
-                                return `${oneTime} + vat + ${monthly}`;
+                                return `${oneTime} + ${monthly}`;
                               }
                               if (oneTime) {
-                                return `${oneTime} + vat`;
+                                return `${oneTime}`;
                               }
                               if (monthly) {
-                                return `${monthly} + vat`;
+                                return `${monthly}`;
                               }
                               return "—";
                             })()}
@@ -1222,7 +1380,7 @@ export default function SubscriptionPage() {
                         </span>
                         <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-64 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
                           {isPolish
-                            ? "Projekty są wyceniane indywidualnie i cena może się nieznacznie zmienić. Przed pierwszym spotkaniem konieczne jest opłacenie subskrypcji za obsługę zlecenia."
+                            ? "Projekty są wyceniane indywidualnie i cena może się nieznacznie zmienić. Przed pierwszym spotkaniem konieczne jest opłacenie stałej subskrypcji za obsługę zlecenia."
                             : "Projects are priced individually and the price may change slightly. You will be asked to pay for the design after the first meeting."}
                         </span>
                       </span>
@@ -1242,19 +1400,16 @@ export default function SubscriptionPage() {
                     : "Within 24 hours you will receive a reply email where we will clarify the project schedule. After the first meeting and your approval, we will start the project and send an invoice for the selected services."}
                 </p>
                 <p>
-                  {isPolish
-                    ? "Masz pytania? Skorzystaj z zakładki"
-                    : "If you have any questions, please use the"}{" "}
                   <Link
                     href="/contact"
                     className="underline underline-offset-4"
                   >
-                    {isPolish ? "Kontakt" : "Contact page"}
+                    {isPolish ? "Zadaj nam pytanie" : "Contact page"}
                   </Link>
                 </p>
               </div>
             </div>
-            {step === stepTitles.length - 1 ? (
+            {step === stepTitles.length - 1 && !submitted ? (
               <div className="text-sm text-black/70">
                 <div className="flex flex-wrap items-center gap-3">
                   <button
@@ -1284,11 +1439,13 @@ export default function SubscriptionPage() {
                   {submitError ? (
                     <span className="text-sm text-red-600">{submitError}</span>
                   ) : null}
-                  <span className="text-sm text-black/50">
-                    {isPolish
-                      ? "Po wysłaniu formularza rozpoczynamy rozliczenie subskrypcji za obsługę zamówienia. Fakturę za pozostałe wybrane usługi prześlemy po pierwszym spotkaniu."
-                      : "By completing this form you start the subscription billing. The design fee will be sent after the first meeting."}
-                  </span>
+                  {!isInstitutional ? (
+                    <span className="text-sm text-black/50">
+                      {isPolish
+                        ? "Po wysłaniu formularza rozpoczynamy rozliczenie subskrypcji za obsługę zamówienia. Fakturę za pozostałe wybrane usługi prześlemy po pierwszym spotkaniu."
+                        : "By completing this form you start the subscription billing. The design fee will be sent after the first meeting."}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             ) : null}

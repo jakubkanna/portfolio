@@ -68,7 +68,7 @@ function MenuBar({
 
   return (
     <nav className={containerClass} aria-label="Primary">
-      <div className="hidden text-xs sm:block mr-12 text-[#9a9a9a] font-mono">
+      <div className="pointer-events-none hidden text-xs sm:block mr-12 text-[#9a9a9a] font-mono">
         STUDIO JKN
       </div>
       <motion.div
@@ -105,8 +105,8 @@ function MenuBar({
       <div className="hidden text-xs text-center sm:block ml-12 text-[#9a9a9a] font-mono">
         © {YEAR}
       </div>
-      <div className="mt-2 flex w-full items-center justify-center gap-2 sm:hidden text-[#9a9a9a] font-mono text-xs">
-        <div className="text-center ">STUDIO JKN © {YEAR}</div>
+      <div className="pointer-events-none mt-2 flex w-full items-center justify-center gap-2 sm:hidden text-[#9a9a9a] font-mono text-xs">
+        <div className="text-center">STUDIO JKN © {YEAR}</div>
       </div>
     </nav>
   );

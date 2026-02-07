@@ -63,9 +63,9 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
           title: "Advanced",
           shortLabel: "Advanced",
           color: "#ffe08a",
-          price: "1299 €",
+          price: "1057 €",
           details: [
-            { text: "do 5 stron" },
+            { text: "do 7 stron" },
             { text: "animacje / 3D" },
             {
               text: "warianty (2)",
@@ -134,7 +134,7 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
           title: "Advanced",
           shortLabel: "Advanced",
           color: "#ffe08a",
-          price: "€1299",
+          price: "€1057",
           details: [
             { text: "Up to 5 pages" },
             { text: "Motion design / 3D" },
@@ -176,7 +176,7 @@ export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
         {
           id: "standard-site",
           title: "Standard",
-          price: "15 € / m",
+          price: "48 zł / m",
           details: [
             { text: "hosting" },
             { text: "daily backup" },
@@ -186,7 +186,7 @@ export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
         {
           id: "ecommerce-site",
           title: "E-commerce",
-          price: "29 € / m",
+          price: "102 zł / m",
           details: [
             { text: "integracje: Shopify, WooCommerce i inne" },
             { text: "bezpieczne płatności" },
