@@ -19,19 +19,19 @@ const cards: Card[] = [
     title: "Artbubble",
     href: "https://artbubble.in",
     poster: "/portfolio/artbubble.jpg",
-    video: "/portfolio/artbubble.mp4",
+    video: "/portfolio/ab_prev.mp4",
   },
   {
     title: "Jakub Kanna",
     href: "https://jakubkanna.com",
     poster: "/portfolio/jakubkanna.jpg",
-    video: "/portfolio/jakubkanna.mp4",
+    video: "/portfolio/jk_prev.mp4",
   },
   {
     title: "Dimitra Sofroniou",
     href: "https://dimitrasofroniou.com/",
     poster: "/portfolio/dimitra.png",
-    video: "/portfolio/dimitra.mp4",
+    video: "/portfolio/dimitra_prev.mp4",
   },
   {
     title: "Rita Borralho Silva",
@@ -43,12 +43,13 @@ const cards: Card[] = [
     title: "INSIDE JOB",
     href: "https://michalknychaus.com/",
     poster: "/portfolio/insidejob.jpg",
-    video: "/portfolio/insidejob.mp4",
+    video: "/portfolio/ij_prev.mp4",
   },
   {
     title: "IZABELA SITARSKA",
     href: "https://izabelasitarska.com",
     poster: "/portfolio/is.jpg",
+    video: "/portfolio/iza_prev.mp4",
   },
   {
     title: "Jakub Kanna",

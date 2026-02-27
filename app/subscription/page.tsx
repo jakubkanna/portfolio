@@ -117,6 +117,7 @@ export default function SubscriptionPage() {
               details: [
                 { text: "do 3 stron" },
                 { text: "podstawowe SEO" },
+                { text: "wsparcie dla wszystkich mediów: video, zdjęcia, dźwięk w wysokiej jakości" },
                 { text: "3 spotkania online" },
                 {
                   text: "1 breaking change",
@@ -185,6 +186,7 @@ export default function SubscriptionPage() {
               details: [
                 { text: "Up to 3 pages" },
                 { text: "Basic SEO setup" },
+                { text: "Support for all media: high-quality video, photos, and audio" },
                 { text: "3 online meetings" },
                 {
                   text: "1 breaking change",

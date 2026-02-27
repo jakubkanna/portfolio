@@ -51,6 +51,7 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
           details: [
             { text: "do 3 stron" },
             { text: "spotkania online (3)" },
+            { text: "wsparcie dla wszystkich mediów: video, zdjęcia, dźwięk w wysokiej jakości" },
             {
               text: "warianty (1)",
               note: "Maksymalna liczba dodatkowych wariantów projektu.",
@@ -122,6 +123,7 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
           details: [
             { text: "Up to 3 pages" },
             { text: "online meetings (3)" },
+            { text: "Support for all media: high-quality video, photos, and audio" },
             {
               text: "variants (1)",
               note: "Maximum number of additional design variants.",

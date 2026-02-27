@@ -1,0 +1,41 @@
+name: Supabase Keepalive
+
+on:
+  schedule:
+    # GitHub cron nie wspiera idealnie "co 6 dni".
+    # To uruchomi workflow 1,7,13,19,25,31 dnia miesiąca o 03:17 UTC.
+    - cron: "17 3 */6 * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Supabase REST API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "Missing required secrets: SUPABASE_URL and/or SUPABASE_ANON_KEY"
+            exit 1
+          fi
+
+          URL="${SUPABASE_URL%/}/rest/v1/"
+
+          STATUS=$(curl -sS -o /tmp/response.txt -w "%{http_code}" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "$URL")
+
+          echo "Supabase responded with HTTP $STATUS"
+
+          if [ "$STATUS" -ge 400 ]; then
+            echo "Request failed. Response body:"
+            cat /tmp/response.txt
+            exit 1
+          fi
