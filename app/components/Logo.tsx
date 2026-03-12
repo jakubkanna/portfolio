@@ -25,7 +25,7 @@ const ModelViewer = React.forwardRef<ModelViewerElement, ModelViewerAttributes>(
     React.createElement("model-viewer", {
       ...props,
       ref,
-    } as Record<string, unknown>)
+    } as Record<string, unknown>),
 );
 
 ModelViewer.displayName = "ModelViewer";

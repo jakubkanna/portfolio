@@ -16,6 +16,12 @@ type Card = {
 
 const cards: Card[] = [
   {
+    title: "Kornelia Nowak",
+    href: "https://kornelianowak.com",
+    poster: "/portfolio/kornelia.jpg",
+    video: "/portfolio/kornelia_prev.mp4",
+  },
+  {
     title: "Artbubble",
     href: "https://artbubble.in",
     poster: "/portfolio/artbubble.jpg",
@@ -228,7 +234,7 @@ export default function CatalogPage() {
                   <div
                     className="pointer-events-none absolute inset-0"
                     style={{
-                      background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) ${gradientStart}, rgba(0,0,0,1) 100%)`,
+                      background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.95) ${gradientStart}, rgba(0,0,0,1) 100%)`,
                     }}
                   />
                   <motion.div

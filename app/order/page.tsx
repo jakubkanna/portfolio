@@ -9,6 +9,7 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { Macondo } from "next/font/google";
 import { useRouter } from "next/navigation";
 import MiniGlobe from "../components/MiniGlobe";
 import OptionCard from "../components/OptionCard";
@@ -25,6 +26,11 @@ import {
   getBackendLockReason,
   normalizeForm,
 } from "./orderUtils";
+
+const macondo = Macondo({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export default function SubscriptionPage() {
   const { locale } = useI18n();
@@ -316,7 +322,9 @@ export default function SubscriptionPage() {
         <header className="flex items-center gap-6">
           <MiniGlobe className="hidden md:flex" />
           <div className="space-y-3">
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h1
+              className={`${macondo.className} text-3xl font-semibold tracking-tight sm:text-8xl`}
+            >
               {isPolish ? "Zamów stronę" : "Launch custom website."}
             </h1>
             <p className="text-base text-black/70">
