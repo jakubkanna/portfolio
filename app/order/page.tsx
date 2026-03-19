@@ -213,8 +213,8 @@ export default function SubscriptionPage() {
     if (!studioServerUrl) {
       setSubmitError(
         isPolish
-          ? "Brak konfiguracji serwera wysyłki."
-          : "Submission server is not configured.",
+          ? "Brak konfiguracji serwera wysylki (NEXT_PUBLIC_STUDIO_SERVER_URL)."
+          : "Submission server is not configured (NEXT_PUBLIC_STUDIO_SERVER_URL).",
       );
       return;
     }

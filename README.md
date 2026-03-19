@@ -24,6 +24,21 @@ npm run dev
 # open http://localhost:3000
 ```
 
+## Environment variables
+
+Create `.env` for local development:
+
+```bash
+NEXT_PUBLIC_STUDIO_SERVER_URL=http://localhost:4000
+NEXT_PUBLIC_STRIPE_CHECKOUT_URL=https://buy.stripe.com/...
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+For production hosting (for example Vercel), add the same variables in project settings.
+
+- `NEXT_PUBLIC_STUDIO_SERVER_URL` is required for `/order` form submission.
+- `NEXT_PUBLIC_*` values are embedded at build time, so you must redeploy after changing them.
+
 ## Commands
 
 - `npm run dev` — start dev server
