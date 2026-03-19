@@ -60,6 +60,20 @@ export default function LegalPage() {
               współpracy.
             </li>
             <li>
+              Strona korzysta z narzędzia Google Analytics 4 (GA4) w celu
+              analizy ruchu i kliknięć (statystyki odwiedzin, interakcje z
+              elementami strony, podstawowe dane techniczne o urządzeniu i
+              przeglądarce).
+            </li>
+            <li>
+              Google Analytics wykorzystuje pliki cookies. Narzędzie jest
+              uruchamiane dopiero po wyrażeniu zgody w banerze cookies.
+            </li>
+            <li>
+              Możesz odmówić zgody na cookies analityczne; w takim przypadku dane
+              analityczne nie są wysyłane do Google Analytics.
+            </li>
+            <li>
               Dane są przechowywane w naszej skrzynce e-mail i nie są
               sprzedawane podmiotom trzecim.
             </li>
@@ -131,7 +145,7 @@ export default function LegalPage() {
               zainstalowana strona, w ustalonym terminie.
             </li>
             <li>
-              W przypadku niedostarczenia wymaganych dostępów w wyznaczonym
+              W przypadku niedostarczenia wymaganych dostępów w uzgodnionym
               terminie zastrzegamy sobie prawo do anulowania zlecenia bez
               obowiązku zwrotu wpłaconej zaliczki (depozytu).
             </li>
@@ -144,6 +158,11 @@ export default function LegalPage() {
             <li>
               Harmonogram realizacji jest ustalany indywidualnie po spotkaniu i
               potwierdzeniu zakresu.
+            </li>
+            <li>
+              Zastrzegamy sobie prawo do zmiany terminu realizacji lub terminu
+              spotkania; klient zostanie o tym poinformowany na adres e-mail
+              podany w formularzu.
             </li>
             <li>
               Rozpoczęcie prac następuje po akceptacji oferty, podpisaniu umowy
@@ -160,6 +179,14 @@ export default function LegalPage() {
             <li>
               Istotna zmiana zakresu po akceptacji projektu może wymagać aneksu,
               aktualizacji wyceny lub wydłużenia terminu realizacji.
+            </li>
+            <li>
+              Poprawki projektu oraz dodatkowe warianty mogą zostać wycenione
+              w stawce godzinowej 35 € / h.
+            </li>
+            <li>
+              Obowiązuje limit wariantów (wersji projektów wizualnych) dla
+              pakietów, zgodnie z opisem pakietów poniżej.
             </li>
             <li>
               Odpowiadamy za realizację usługi w granicach uzgodnionych w umowie;
@@ -180,21 +207,22 @@ export default function LegalPage() {
             <li>
               <span className="font-semibold">Minimal</span>: projekt strony
               typu one-page, podstawowe SEO, 1 spotkanie online, wersja mobilna.
+              Limit wariantów: 0.
             </li>
             <li>
               <span className="font-semibold">Standard</span>: do 3 podstron,
               rozszerzony proces projektowy, wsparcie multimediów (wideo, zdjęcia,
-              audio), 3 spotkania online.
+              audio), 3 spotkania online. Limit wariantów: 1.
             </li>
             <li>
               <span className="font-semibold">Advanced</span>: do 7 podstron,
               animacje/3D, struktura wielojęzyczna i szerszy zakres zmian
-              projektowych.
+              projektowych. Limit wariantów: 2.
             </li>
             <li>
               <span className="font-semibold">Institutional</span>: zakres
               indywidualny dla większych projektów, funkcje custom, wycena
-              ustalana po analizie potrzeb.
+              ustalana po analizie potrzeb. Limit wariantów: 3.
             </li>
           </ul>
         </section>

@@ -5,6 +5,7 @@ import "./globals.css";
 import Logo from "./components/Logo";
 import Menu from "./components/Menu";
 import PageName from "./components/PageName";
+import GaCookieConsent from "./components/GaCookieConsent";
 import en from "./locales/en.json";
 import pl from "./locales/pl.json";
 
@@ -52,6 +53,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID ?? "";
+  const hasGa = Boolean(gaId);
+
   return (
     <html lang="en">
       <head>
@@ -66,6 +70,7 @@ export default function RootLayout({
       <body
         className={`${googleSans.variable} ${geistMono.variable} text-foreground antialiased`}
       >
+        {hasGa ? <GaCookieConsent gaId={gaId} /> : null}
         {" "}
         <header>
           <Logo />

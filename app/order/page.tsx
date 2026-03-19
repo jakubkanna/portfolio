@@ -275,7 +275,8 @@ export default function SubscriptionPage() {
             <AnimatedText
               message={isPolish ? "Zamów stronę" : "Launch custom website."}
               sessionKey="order-hero-title"
-              className="w-full !mx-0 text-left text-3xl font-semibold tracking-tight text-[#0a0a0a] sm:text-8xl"
+              className="w-full max-w-none !mx-0 text-left text-3xl font-semibold tracking-tight text-[#0a0a0a] sm:text-8xl"
+              textStyle={{ whiteSpace: "nowrap" }}
             />
             <p className="text-base text-black/70">
               {isPolish
@@ -835,7 +836,7 @@ export default function SubscriptionPage() {
                               title={
                                 isPolish
                                   ? "Potrzebuję pomocy z instalacją"
-                                  : "I need assistance in installing"
+                                  : "I want you to install"
                               }
                               price={getOptionPrice(
                                 formatPrice("€100", !showNet),
