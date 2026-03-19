@@ -12,13 +12,6 @@ type DesignPlan = {
   details: PlanDetail[];
 };
 
-type SubscriptionPlan = {
-  id: string;
-  title: string;
-  price: string;
-  details: PlanDetail[];
-};
-
 type BackendOption = {
   id: string;
   title: string;
@@ -168,55 +161,6 @@ export const getDesignPlans = (isPolish: boolean): DesignPlan[] =>
               note: "Maximum number of additional design variants.",
             },
             { text: "Includes Advanced" },
-          ],
-        },
-      ];
-
-export const getSubscriptionPlans = (isPolish: boolean): SubscriptionPlan[] =>
-  isPolish
-    ? [
-        {
-          id: "standard-site",
-          title: "Standard",
-          price: "48 zł / m",
-          details: [
-            { text: "hosting" },
-            { text: "daily backup" },
-            { text: "security and maintenance" },
-          ],
-        },
-        {
-          id: "ecommerce-site",
-          title: "E-commerce",
-          price: "102 zł / m",
-          details: [
-            { text: "integracje: Shopify, WooCommerce i inne" },
-            { text: "bezpieczne płatności" },
-            { text: "zarządzanie produktami" },
-            { text: "Zawiera plan Standard" },
-          ],
-        },
-      ]
-    : [
-        {
-          id: "standard-site",
-          title: "Standard",
-          price: "€15 / month",
-          details: [
-            { text: "hosting" },
-            { text: "daily backup" },
-            { text: "security and maintenance" },
-          ],
-        },
-        {
-          id: "ecommerce-site",
-          title: "E-commerce",
-          price: "€29 / month",
-          details: [
-            { text: "integrations: Shopify, WooCommerce, and more" },
-            { text: "secure payments" },
-            { text: "product management" },
-            { text: "Includes Standard" },
           ],
         },
       ];

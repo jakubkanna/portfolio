@@ -1,6 +1,5 @@
 export type FormState = {
   designPlan: string;
-  subscriptionPlan: string;
   backendOption: string;
   backendOther: string;
   addPages: boolean;
@@ -11,7 +10,8 @@ export type FormState = {
   socialPost: boolean;
   additionalOther: boolean;
   additionalOtherText: string;
-  domainPlan: string;
+  installationPlan: string;
+  domainOwnership: string;
   domainName: string;
   customEmail: boolean;
   customEmailAlias: string;

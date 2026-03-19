@@ -2,7 +2,6 @@ import type { FormState } from "./orderTypes";
 
 export const INITIAL_STATE: FormState = {
   designPlan: "standard",
-  subscriptionPlan: "standard-site",
   backendOption: "wordpress",
   backendOther: "",
   addPages: false,
@@ -13,7 +12,8 @@ export const INITIAL_STATE: FormState = {
   socialPost: true,
   additionalOther: false,
   additionalOtherText: "",
-  domainPlan: "",
+  installationPlan: "",
+  domainOwnership: "",
   domainName: "",
   customEmail: false,
   customEmailAlias: "",
@@ -30,10 +30,18 @@ export const INITIAL_STATE: FormState = {
 export const getStepTitles = (isPolish: boolean) =>
   isPolish
     ? [
-        "Plan i zamówienie",
+        "Plan",
         "Domena",
         "CMS",
         "Dodatkowe usługi",
+        "Instalacja",
         "Wprowadzenie",
       ]
-    : ["Plan & order", "Domain", "CMS", "Additional services", "Introduction"];
+    : [
+        "Plan",
+        "Domain",
+        "CMS",
+        "Additional services",
+        "Installation",
+        "Introduction",
+      ];

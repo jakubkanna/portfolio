@@ -9,32 +9,21 @@ import {
 } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { Macondo } from "next/font/google";
-import { useRouter } from "next/navigation";
+import AnimatedText from "../components/AnimatedText";
 import MiniGlobe from "../components/MiniGlobe";
 import OptionCard from "../components/OptionCard";
 import { useI18n } from "../hooks/useI18n";
 import type { FormState } from "./orderTypes";
 import { INITIAL_STATE, getStepTitles } from "./orderConstants";
-import {
-  getBackendOptions,
-  getDesignPlans,
-  getSubscriptionPlans,
-} from "./orderOptions";
+import { getBackendOptions, getDesignPlans } from "./orderOptions";
 import {
   computeEstimates,
   getBackendLockReason,
   normalizeForm,
 } from "./orderUtils";
 
-const macondo = Macondo({
-  weight: "400",
-  subsets: ["latin"],
-});
-
 export default function SubscriptionPage() {
   const { locale } = useI18n();
-  const router = useRouter();
   const isPolish = locale === "pl";
   const VAT_RATE = 0.23;
   const [euroToPln, setEuroToPln] = useState(4.3);
@@ -48,18 +37,17 @@ export default function SubscriptionPage() {
   const [domainStatus, setDomainStatus] = useState<
     "idle" | "checking" | "available" | "taken" | "invalid" | "error"
   >("idle");
-  const [domainPrice, setDomainPrice] = useState<number | null>(null);
   const studioServerUrl = process.env.NEXT_PUBLIC_STUDIO_SERVER_URL ?? "";
 
-  const formatPrice = (price: string, includeVat = false) => {
+  const formatPrice = (price: string, showGross = true) => {
     const match = price.match(/([0-9]+(?:[.,][0-9]+)?)/);
     if (!match || match.index === undefined) return price;
     const value = Number(match[1].replace(",", "."));
     if (Number.isNaN(value)) return price;
-    const withVat = includeVat ? value * (1 + VAT_RATE) : value;
+    const displayValue = showGross ? value : value / (1 + VAT_RATE);
 
     if (isPolish && price.includes("€")) {
-      const pln = Math.round(withVat * euroToPln);
+      const pln = Math.round(displayValue * euroToPln);
       let suffix = price.slice(match.index + match[1].length);
       suffix = suffix.replace(/€/g, "").trim();
       suffix = suffix.replace(/\/\s*(month|mo)/gi, "/m");
@@ -70,10 +58,10 @@ export default function SubscriptionPage() {
 
     const hasPlnCurrency = /zł/i.test(price);
     const formatted = hasPlnCurrency
-      ? String(Math.round(withVat))
-      : Number.isInteger(withVat)
-        ? String(withVat)
-        : withVat.toFixed(2);
+      ? String(Math.round(displayValue))
+      : Number.isInteger(displayValue)
+        ? String(displayValue)
+        : displayValue.toFixed(2);
     const before = price.slice(0, match.index);
     const after = price.slice(match.index + match[1].length);
     return `${before}${formatted}${after}`;
@@ -109,11 +97,6 @@ export default function SubscriptionPage() {
 
   const designPlans = useMemo(() => getDesignPlans(isPolish), [isPolish]);
 
-  const subscriptionPlans = useMemo(
-    () => getSubscriptionPlans(isPolish),
-    [isPolish],
-  );
-
   const backendOptions = useMemo(() => getBackendOptions(isPolish), [isPolish]);
 
   const stepTitles = getStepTitles(isPolish);
@@ -122,14 +105,14 @@ export default function SubscriptionPage() {
 
   const canContinue = useMemo(() => {
     if (step === 0) {
-      return Boolean(formData.designPlan && formData.subscriptionPlan);
+      return Boolean(formData.designPlan);
     }
     if (step === 1) {
-      if (!formData.domainPlan || !formData.domainName.trim()) {
+      if (!formData.domainOwnership) {
         return false;
       }
-      if (formData.domainPlan === "need") {
-        return domainStatus === "available";
+      if (formData.domainOwnership === "need") {
+        return Boolean(formData.domainName.trim() && domainStatus === "available");
       }
       return true;
     }
@@ -140,6 +123,9 @@ export default function SubscriptionPage() {
       return true;
     }
     if (step === 4) {
+      return Boolean(formData.installationPlan);
+    }
+    if (step === 5) {
       return Boolean(
         formData.email &&
         formData.displayName &&
@@ -166,11 +152,8 @@ export default function SubscriptionPage() {
     const domain = rawDomain.trim().toLowerCase();
     if (!domain) return;
     setDomainStatus("checking");
-    setDomainPrice(null);
     try {
-      const response = await fetch(
-        `/api/whois?domain=${encodeURIComponent(domain)}`,
-      );
+      const response = await fetch(`/api/whois?domain=${encodeURIComponent(domain)}`);
       const result = await response.json().catch(() => null);
       if (!response.ok || !result) {
         setDomainStatus("error");
@@ -181,9 +164,6 @@ export default function SubscriptionPage() {
         return;
       }
       setDomainStatus(result.available ? "available" : "taken");
-      if (result.available && typeof result.price === "number") {
-        setDomainPrice(result.price + 5);
-      }
     } catch {
       setDomainStatus("error");
     }
@@ -197,33 +177,16 @@ export default function SubscriptionPage() {
   const missingDescription = showErrors && isMissing(formData.shortBio);
   const missingMeeting = showErrors && isMissing(formData.meetingDate);
 
-  const { estOneTime, estMonthly } = useMemo(
+  const { estOneTime } = useMemo(
     () => computeEstimates(formData),
     [formData],
   );
   const formatMoney = (value: number) =>
     Number.isInteger(value) ? String(value) : value.toFixed(2);
-  const formatEstimateNet = (value: number, suffix: string) =>
+  const formatEstimate = (value: number, suffix: string) =>
     isPolish
       ? `${Math.round(value * euroToPln)} zł${suffix}`
       : `€${formatMoney(value)}${suffix}`;
-  const domainMonthlyAdd =
-    formData.domainPlan === "need" &&
-    domainStatus === "available" &&
-    domainPrice !== null &&
-    domainPrice < 60
-      ? 4.99
-      : 0;
-  const estMonthlyWithDomain = estMonthly + domainMonthlyAdd;
-  const subscriptionMonthlyNetPln =
-    formData.subscriptionPlan === "standard-site"
-      ? 48
-      : formData.subscriptionPlan === "ecommerce-site"
-        ? 102
-        : 0;
-  const estMonthlyWithDomainDisplay = isPolish
-    ? subscriptionMonthlyNetPln + domainMonthlyAdd * euroToPln
-    : estMonthlyWithDomain;
   const domainForEmail = formData.domainName.trim();
 
   const isInstitutional = formData.designPlan === "institutional";
@@ -252,7 +215,7 @@ export default function SubscriptionPage() {
       ...formData,
       locale,
       estOneTime,
-      estMonthly,
+      estMonthly: 0,
     };
 
     try {
@@ -288,23 +251,7 @@ export default function SubscriptionPage() {
         throw new Error(errorBody?.error ?? "Order intake failed.");
       }
 
-      if (isInstitutional) {
-        setSubmitted(true);
-        return;
-      }
-
-      if (typeof window !== "undefined") {
-        window.sessionStorage.setItem(
-          "orderPayload",
-          JSON.stringify({
-            email: formData.email,
-            amount: estOneTime,
-            monthly: estMonthly,
-          }),
-        );
-      }
-
-      router.push("/order/processing");
+      setSubmitted(true);
     } catch (error) {
       setSubmitError(
         error instanceof Error
@@ -322,11 +269,14 @@ export default function SubscriptionPage() {
         <header className="flex items-center gap-6">
           <MiniGlobe className="hidden md:flex" />
           <div className="space-y-3">
-            <h1
-              className={`${macondo.className} text-3xl font-semibold tracking-tight sm:text-8xl`}
-            >
+            <h1 className="sr-only">
               {isPolish ? "Zamów stronę" : "Launch custom website."}
             </h1>
+            <AnimatedText
+              message={isPolish ? "Zamów stronę" : "Launch custom website."}
+              sessionKey="order-hero-title"
+              className="w-full !mx-0 text-left text-3xl font-semibold tracking-tight text-[#0a0a0a] sm:text-8xl"
+            />
             <p className="text-base text-black/70">
               {isPolish
                 ? "Zaprojektujemy, zaprogramujemy i uruchomimy stronę dla Ciebie. Nie musisz nic robić — po prostu podziel się pomysłem! Fajnie, prawda?"
@@ -418,63 +368,6 @@ export default function SubscriptionPage() {
                             </div>
                           </div>
 
-                          <div>
-                            <h2 className="text-lg font-semibold">
-                              <span className="inline-flex items-center gap-2">
-                                {isPolish ? "Hosting" : "Hosting"}
-                                <span className="group relative inline-flex items-center">
-                                  <span
-                                    className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black"
-                                    tabIndex={0}
-                                  >
-                                    ?
-                                  </span>
-                                  <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-56 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
-                                    {isPolish
-                                      ? "Zajmiemy się techniczną stroną hostowania i utrzymywania Twojej strony."
-                                      : "We will host and maintain your website."}
-                                  </span>
-                                </span>
-                              </span>
-                            </h2>
-                            <div className="mt-4 grid gap-4 md:grid-cols-2">
-                              {subscriptionPlans.map((plan) => {
-                                const isActive =
-                                  formData.subscriptionPlan === plan.id;
-                                const isLocked =
-                                  formData.designPlan === "minimal" &&
-                                  plan.id === "ecommerce-site";
-                                const lockReason = isLocked
-                                  ? isPolish
-                                    ? "Opcja niedostępna dla pakietu Minimal."
-                                    : "Not available with the Minimal plan."
-                                  : undefined;
-                                return (
-                                  <OptionCard
-                                    key={plan.id}
-                                    title={plan.title}
-                                    price={getOptionPrice(
-                                      formatPrice(plan.price, !showNet),
-                                    )}
-                                    showVat={false}
-                                    details={plan.details}
-                                    showEst={false}
-                                    isActive={isActive}
-                                    disabled={isLocked}
-                                    lockReason={lockReason}
-                                    onSelect={() =>
-                                      setFormData((prev) =>
-                                        normalizeForm({
-                                          ...prev,
-                                          subscriptionPlan: plan.id,
-                                        }),
-                                      )
-                                    }
-                                  />
-                                );
-                              })}
-                            </div>
-                          </div>
                         </div>
                       )}
 
@@ -502,19 +395,17 @@ export default function SubscriptionPage() {
                             <OptionCard
                               title={
                                 isPolish
-                                  ? "Mam własną domenę"
-                                  : "I own a domain"
+                                  ? "Jestem właścicielem domeny"
+                                  : "I'm owner of the domain"
                               }
-                              price={getOptionPrice(isPolish ? "0 zł" : "OK")}
                               showEst={false}
-                              isActive={formData.domainPlan === "own"}
-                              onSelect={() => {
+                              isActive={formData.domainOwnership === "owner"}
+                              onSelect={() =>
                                 setFormData((prev) => ({
                                   ...prev,
-                                  domainPlan: "own",
-                                }));
-                                setDomainStatus("idle");
-                              }}
+                                  domainOwnership: "owner",
+                                }))
+                              }
                             />
                             <OptionCard
                               title={
@@ -522,170 +413,154 @@ export default function SubscriptionPage() {
                                   ? "Potrzebuję domeny"
                                   : "I need a domain"
                               }
-                              price={getOptionPrice(
-                                formatPrice(
-                                  domainStatus === "available" && domainPrice
-                                    ? domainPrice < 60
-                                      ? `€4.99/${isPolish ? "m" : "mo"}`
-                                      : `€${domainPrice.toFixed(2)}/yr`
-                                    : domainStatus === "taken"
-                                      ? "TAKEN"
-                                      : "—",
-                                  !showNet,
-                                ),
-                              )}
                               showEst={false}
-                              isActive={formData.domainPlan === "need"}
-                              onSelect={() => {
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  domainPlan: "need",
-                                }));
-                                setDomainStatus("idle");
-                                setDomainPrice(null);
-                              }}
-                            />
-                          </div>
-                          {formData.domainPlan ? (
-                            <div className="rounded-2xl border border-black/20 bg-[#f0ff5e] p-4">
-                              <label className="flex flex-col gap-2 text-sm">
-                                {isPolish ? "Nazwa domeny" : "Domain name"}
-                                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                                  <input
-                                    name="domainName"
-                                    type="text"
-                                    value={formData.domainName}
-                                    onChange={(event) => {
-                                      setFormData((prev) => ({
-                                        ...prev,
-                                        domainName: event.target.value,
-                                      }));
-                                      setDomainStatus("idle");
-                                      setDomainPrice(null);
-                                    }}
-                                    placeholder={
-                                      isPolish
-                                        ? "np. twojadomena.pl"
-                                        : "e.g. yourdomain.com"
-                                    }
-                                    className="w-full rounded-xl border border-black/20 bg-[#f0ff5e] px-3 py-2 text-sm focus:border-black/60 focus:outline-none"
-                                  />
-                                  {formData.domainPlan === "need" ? (
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        handleDomainCheck(formData.domainName)
-                                      }
-                                      disabled={
-                                        !formData.domainName.trim() ||
-                                        domainStatus === "checking"
-                                      }
-                                      className="rounded-full border border-black/30 px-4 py-2 text-xs text-black/70 transition hover:border-black/60 disabled:cursor-not-allowed disabled:opacity-50"
-                                    >
-                                      {domainStatus === "checking"
-                                        ? isPolish
-                                          ? "Sprawdzam..."
-                                          : "Checking..."
-                                        : isPolish
-                                          ? "Sprawdź dostępność"
-                                          : "Check availability"}
-                                    </button>
-                                  ) : null}
-                                </div>
-                              </label>
-                              {formData.domainPlan === "need" ? (
-                                <p
-                                  className={`mt-2 text-xs ${
-                                    domainStatus === "available"
-                                      ? "text-emerald-600"
-                                      : domainStatus === "taken"
-                                        ? "text-red-600"
-                                        : "text-black/60"
-                                  }`}
-                                >
-                                  {domainStatus === "available"
-                                    ? isPolish
-                                      ? "Domena jest dostępna."
-                                      : "This domain is available."
-                                    : domainStatus === "taken"
-                                      ? isPolish
-                                        ? "Domena jest zajęta."
-                                        : "This domain is taken."
-                                      : domainStatus === "invalid"
-                                        ? isPolish
-                                          ? "Nieprawidłowy format domeny."
-                                          : "Invalid domain format."
-                                        : domainStatus === "error"
-                                          ? isPolish
-                                            ? "Nie udało się sprawdzić domeny."
-                                            : "Unable to check availability."
-                                          : isPolish
-                                            ? "Sprawdzimy dostępność domeny."
-                                            : "We will verify availability."}
-                                </p>
-                              ) : (
-                                <p className="mt-2 text-xs text-black/60">
-                                  {isPolish
-                                    ? "Podłączymy Twoją domenę do nowej strony."
-                                    : "We will connect your domain to the new site."}
-                                </p>
-                              )}
-                            </div>
-                          ) : null}
-                          <div className="space-y-3">
-                            <h3 className="text-lg font-semibold">
-                              {isPolish ? "Biznesowy email" : "Branded email"}
-                            </h3>
-                            <OptionCard
-                              title={isPolish ? "Adres" : "Address"}
-                              price={getOptionPrice(
-                                isPolish ? "0 zł" : "Included",
-                              )}
-                              showEst={false}
-                              isActive={formData.customEmail}
+                              isActive={formData.domainOwnership === "need"}
                               onSelect={() =>
                                 setFormData((prev) => ({
                                   ...prev,
-                                  customEmail: !prev.customEmail,
-                                  customEmailAlias: prev.customEmail
-                                    ? ""
-                                    : prev.customEmailAlias,
+                                  domainOwnership: "need",
                                 }))
                               }
-                            >
-                              {formData.customEmail ? (
-                                <div className="mt-2 flex flex-col gap-2 text-xs text-black/70">
-                                  <span>
-                                    {isPolish ? "Alias e-mail" : "Email alias"}
-                                  </span>
-                                  <div className="flex w-full items-center gap-1 rounded-lg border border-black/20 bg-[#f0ff5e] px-2 py-2 text-xs text-black focus-within:border-black/60">
+                            />
+                          </div>
+                          {formData.domainOwnership ? (
+                            <>
+                              <div className="rounded-2xl border border-black/20 bg-[#f0ff5e] p-4">
+                                <label className="flex flex-col gap-2 text-sm">
+                                  {isPolish ? "Nazwa domeny" : "Domain name"}
+                                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                                     <input
+                                      name="domainName"
                                       type="text"
-                                      value={formData.customEmailAlias}
+                                      value={formData.domainName}
                                       onChange={(event) => {
-                                        const raw = event.target.value;
-                                        const local = raw.split("@")[0] ?? "";
                                         setFormData((prev) => ({
                                           ...prev,
-                                          customEmailAlias: local,
+                                          domainName: event.target.value,
                                         }));
+                                        setDomainStatus("idle");
                                       }}
-                                      onClick={(event) =>
-                                        event.stopPropagation()
-                                      }
                                       placeholder={
-                                        isPolish ? "np. studio" : "e.g. hello"
+                                        isPolish
+                                          ? "np. twojadomena.pl"
+                                          : "e.g. yourdomain.com"
                                       }
-                                      className="w-full bg-transparent text-xs text-black focus:outline-none"
+                                      className="w-full rounded-xl border border-black/20 bg-[#f0ff5e] px-3 py-2 text-sm focus:border-black/60 focus:outline-none"
                                     />
-                                    <span className="text-black/50">
-                                      @{domainForEmail || "twojadomena.pl"}
-                                    </span>
+                                    {formData.domainOwnership === "need" ? (
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleDomainCheck(formData.domainName)
+                                        }
+                                        disabled={
+                                          !formData.domainName.trim() ||
+                                          domainStatus === "checking"
+                                        }
+                                        className="rounded-full border border-black/30 px-4 py-2 text-xs text-black/70 transition hover:border-black/60 disabled:cursor-not-allowed disabled:opacity-50"
+                                      >
+                                        {domainStatus === "checking"
+                                          ? isPolish
+                                            ? "Sprawdzam..."
+                                            : "Checking..."
+                                          : isPolish
+                                            ? "Sprawdź dostępność"
+                                            : "Check availability"}
+                                      </button>
+                                    ) : null}
                                   </div>
-                                </div>
-                              ) : null}
-                            </OptionCard>
-                          </div>
+                                </label>
+                                {formData.domainOwnership === "need" ? (
+                                  <p
+                                    className={`mt-2 text-xs ${
+                                      domainStatus === "available"
+                                        ? "text-emerald-600"
+                                        : domainStatus === "taken"
+                                          ? "text-red-600"
+                                          : "text-black/60"
+                                    }`}
+                                  >
+                                    {domainStatus === "available"
+                                      ? isPolish
+                                        ? "Domena jest dostępna."
+                                        : "This domain is available."
+                                      : domainStatus === "taken"
+                                        ? isPolish
+                                          ? "Domena jest zajęta."
+                                          : "This domain is taken."
+                                        : domainStatus === "invalid"
+                                          ? isPolish
+                                            ? "Nieprawidłowy format domeny."
+                                            : "Invalid domain format."
+                                          : domainStatus === "error"
+                                            ? isPolish
+                                              ? "Nie udało się sprawdzić domeny."
+                                              : "Unable to check availability."
+                                            : isPolish
+                                              ? "Sprawdzimy dostępność domeny."
+                                              : "We will verify availability."}
+                                  </p>
+                                ) : (
+                                  <p className="mt-2 text-xs text-black/60">
+                                    {isPolish
+                                      ? "To pole jest opcjonalne. Możesz uzupełnić później."
+                                      : "Optional field. You can provide it later."}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="space-y-3">
+                                <h3 className="text-lg font-semibold">
+                                  {isPolish ? "Biznesowy email" : "Branded email"}
+                                </h3>
+                                <OptionCard
+                                  title={isPolish ? "Adres" : "Address"}
+                                  showEst={false}
+                                  isActive={formData.customEmail}
+                                  onSelect={() =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      customEmail: !prev.customEmail,
+                                      customEmailAlias: prev.customEmail
+                                        ? ""
+                                        : prev.customEmailAlias,
+                                    }))
+                                  }
+                                >
+                                  {formData.customEmail ? (
+                                    <div className="mt-2 flex flex-col gap-2 text-xs text-black/70">
+                                      <span>
+                                        {isPolish ? "Alias e-mail" : "Email alias"}
+                                      </span>
+                                      <div className="flex w-full items-center gap-1 rounded-lg border border-black/20 bg-[#f0ff5e] px-2 py-2 text-xs text-black focus-within:border-black/60">
+                                        <input
+                                          type="text"
+                                          value={formData.customEmailAlias}
+                                          onChange={(event) => {
+                                            const raw = event.target.value;
+                                            const local = raw.split("@")[0] ?? "";
+                                            setFormData((prev) => ({
+                                              ...prev,
+                                              customEmailAlias: local,
+                                            }));
+                                          }}
+                                          onClick={(event) =>
+                                            event.stopPropagation()
+                                          }
+                                          placeholder={
+                                            isPolish ? "np. studio" : "e.g. hello"
+                                          }
+                                          className="w-full bg-transparent text-xs text-black focus:outline-none"
+                                        />
+                                        <span className="text-black/50">
+                                          @{domainForEmail || "twojadomena.pl"}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ) : null}
+                                </OptionCard>
+                              </div>
+                            </>
+                          ) : null}
                         </div>
                       )}
 
@@ -718,9 +593,6 @@ export default function SubscriptionPage() {
                                           ? "Wycena"
                                           : "Custom quote"
                                         : "";
-                              const strikePrice =
-                                option.id === "wordpress" ||
-                                option.id === "woocommerce";
                               return (
                                 <OptionCard
                                   key={option.id}
@@ -728,7 +600,6 @@ export default function SubscriptionPage() {
                                   price={getOptionPrice(
                                     formatPrice(cmsPrice, !showNet),
                                   )}
-                                  strikePrice={strikePrice}
                                   details={[{ text: option.details }]}
                                   badge={
                                     option.id === "wordpress" ||
@@ -940,6 +811,65 @@ export default function SubscriptionPage() {
                       )}
 
                       {step === 4 && (
+                        <div className="space-y-4">
+                          <h2 className="text-lg font-semibold">
+                            <span className="inline-flex items-center gap-2">
+                              {isPolish ? "Instalacja" : "Installation"}
+                              <span className="group relative inline-flex items-center">
+                                <span
+                                  className="flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-black/60 transition group-hover:text-black"
+                                  tabIndex={0}
+                                >
+                                  ?
+                                </span>
+                                <span className="pointer-events-none absolute left-1/2 top-6 z-10 w-72 -translate-x-1/2 rounded-lg border border-black/10 bg-black/90 px-3 py-2 text-xs text-white/85 opacity-0 shadow-lg transition group-hover:opacity-100 group-focus-within:opacity-100">
+                                  {isPolish
+                                    ? "Potrzebujesz pomocy z instalacją strony?"
+                                    : "Do you need help with installing your website?"}
+                                </span>
+                              </span>
+                            </span>
+                          </h2>
+                          <div className="grid gap-4 md:grid-cols-2">
+                            <OptionCard
+                              title={
+                                isPolish
+                                  ? "Potrzebuję pomocy z instalacją"
+                                  : "I need assistance in installing"
+                              }
+                              price={getOptionPrice(
+                                formatPrice("€100", !showNet),
+                              )}
+                              showVat
+                              isActive={formData.installationPlan === "assist"}
+                              onSelect={() =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  installationPlan: "assist",
+                                }))
+                              }
+                            />
+                            <OptionCard
+                              title={
+                                isPolish
+                                  ? "Zainstaluję samodzielnie"
+                                  : "I will install on my own"
+                              }
+                              price={getOptionPrice(isPolish ? "0 zł" : "€0")}
+                              showEst={false}
+                              isActive={formData.installationPlan === "self"}
+                              onSelect={() =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  installationPlan: "self",
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {step === 5 && (
                         <div className="grid gap-4 sm:grid-cols-2">
                           <label className="flex flex-col gap-2 text-sm">
                             {isPolish ? "Email *" : "Email *"}
@@ -1122,15 +1052,8 @@ export default function SubscriptionPage() {
                                     : "cursor-not-allowed bg-black/40"
                                 }`}
                               >
-                                {isPolish ? "Płatność" : "Payment"}
+                                {isPolish ? "Wyślij" : "Submit"}
                               </button>
-                              {!isInstitutional ? (
-                                <span className="text-sm text-black/50">
-                                  {isPolish
-                                    ? "Po wysłaniu formularza rozpoczynamy rozliczenie subskrypcji za obsługę zamówienia. Fakturę za pozostałe wybrane usługi prześlemy po pierwszym spotkaniu."
-                                    : "By completing this form you start the subscription billing. The design fee will be sent after the first meeting."}
-                                </span>
-                              ) : null}
                             </div>
                           </div>
                         </div>
@@ -1189,20 +1112,6 @@ export default function SubscriptionPage() {
                 </div>
                 <div>
                   <div className="text-xs font-mono uppercase text-black/40">
-                    {isPolish ? "Zamówienie" : "Order"}
-                  </div>
-                  <div>
-                    {formData.subscriptionPlan
-                      ? subscriptionPlans.find(
-                          (plan) => plan.id === formData.subscriptionPlan,
-                        )?.title
-                      : isPolish
-                        ? "Nie wybrano"
-                        : "Not selected"}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-mono uppercase text-black/40">
                     {isPolish ? "CMS" : "CMS"}
                   </div>
                   <div>
@@ -1220,13 +1129,25 @@ export default function SubscriptionPage() {
                     {isPolish ? "Domena" : "Domain"}
                   </div>
                   <div>
-                    {!formData.domainPlan
-                      ? isPolish
-                        ? "Nie wybrano"
-                        : "Not selected"
-                      : formData.domainPlan === "own"
-                        ? formData.domainName || "—"
-                        : formData.domainName || "—"}
+                    {formData.domainOwnership
+                      ? `${formData.domainOwnership === "owner"
+                          ? isPolish
+                            ? "Własna domena"
+                            : "Own domain"
+                          : isPolish
+                            ? "Potrzebna nowa domena"
+                            : "Need a new domain"} - ${
+                          !formData.domainName
+                            ? isPolish
+                              ? "Nie wybrano"
+                              : "Not selected"
+                            : formData.domainName
+                        }`
+                      : !formData.domainName
+                        ? isPolish
+                          ? "Nie wybrano"
+                          : "Not selected"
+                        : formData.domainName}
                   </div>
                 </div>
                 <div>
@@ -1286,6 +1207,19 @@ export default function SubscriptionPage() {
                             label:
                               formData.additionalOtherText ||
                               (isPolish ? "Inne" : "Other"),
+                          }
+                        : null,
+                      formData.installationPlan
+                        ? {
+                            key: "installation",
+                            label:
+                              formData.installationPlan === "assist"
+                                ? isPolish
+                                  ? "Instalacja: pomoc (+100 €)"
+                                  : "Installation: assistance (+€100)"
+                                : isPolish
+                                  ? "Instalacja: samodzielnie"
+                                  : "Installation: self-managed",
                           }
                         : null,
                       formData.customEmail
@@ -1366,40 +1300,15 @@ export default function SubscriptionPage() {
                       {isInstitutional
                         ? institutionalQuoteLabel
                         : `${isPolish ? "est." : "est."} ${
-                            estOneTime === 0 && estMonthlyWithDomain === 0
+                            estOneTime === 0
                               ? "—"
                               : (() => {
-                                  const oneTime =
-                                    estOneTime > 0
-                                      ? formatEstimateNet(
-                                          estOneTime *
-                                            (showNet ? 1 : 1 + VAT_RATE),
-                                          "",
-                                        )
-                                      : "";
-                                  const monthly =
-                                    estMonthlyWithDomainDisplay > 0
-                                      ? isPolish
-                                        ? `${Math.round(
-                                            estMonthlyWithDomainDisplay *
-                                              (showNet ? 1 : 1 + VAT_RATE),
-                                          )} zł/m`
-                                        : formatEstimateNet(
-                                            estMonthlyWithDomain *
-                                              (showNet ? 1 : 1 + VAT_RATE),
-                                            "/mo",
-                                          )
-                                      : "";
-                                  if (oneTime && monthly) {
-                                    return `${oneTime} + ${monthly}`;
-                                  }
-                                  if (oneTime) {
-                                    return `${oneTime}`;
-                                  }
-                                  if (monthly) {
-                                    return `${monthly}`;
-                                  }
-                                  return "—";
+                                  if (estOneTime <= 0) return "—";
+                                  return formatEstimate(
+                                    estOneTime *
+                                      (showNet ? 1 / (1 + VAT_RATE) : 1),
+                                    "",
+                                  );
                                 })()
                           }`}
                     </span>
@@ -1428,7 +1337,15 @@ export default function SubscriptionPage() {
                 <p>
                   {isPolish
                     ? "W ciągu 24h otrzymasz od Nas email zwrotny, w którym doprecyzujemy szczegóły projektu. Po pierwszym spotkaniu i twojej akceptacji ruszymy z projektem."
-                    : "Within 24 hours you will receive a reply email where we will clarify the project schedule. After the first meeting and your approval, we will start the project and send an invoice for the selected services."}
+                    : "Within 24 hours you will receive a reply email where we clarify the project schedule. After the first meeting and your approval, you will be asked to pay a 50% deposit for the selected services. Right after that we will start to build your website."}
+                </p>
+                <p className="font-semibold text-black">
+                  {isPolish ? "Jaki jest finalny produkt?" : "What is the final product?"}
+                </p>
+                <p>
+                  {isPolish
+                    ? "Najpierw otrzymasz indywidualny projekt Twojej strony. Następnie zaprogramujemy dla Ciebie aplikację frontendową headless i przekażemy pliki albo zainstalujemy ją na Twoim hostingu, w zależności od wybranej opcji."
+                    : "First, you will receive an individual design for your website. Then we will develop a headless frontend application for you and deliver the files or install it on your hosting, depending on the option you choose."}
                 </p>
                 <p>
                   <Link
@@ -1459,23 +1376,12 @@ export default function SubscriptionPage() {
                       ? isPolish
                         ? "Wysyłanie..."
                         : "Submitting..."
-                      : isInstitutional
-                        ? isPolish
-                          ? "Wyślij"
-                          : "Submit"
-                        : isPolish
-                          ? "Płatność"
-                          : "Payment"}
+                      : isPolish
+                        ? "Wyślij"
+                        : "Submit"}
                   </button>
                   {submitError ? (
                     <span className="text-sm text-red-600">{submitError}</span>
-                  ) : null}
-                  {!isInstitutional ? (
-                    <span className="text-sm text-black/50">
-                      {isPolish
-                        ? "Po wysłaniu formularza rozpoczynamy rozliczenie subskrypcji za obsługę zamówienia. Fakturę za pozostałe wybrane usługi prześlemy po pierwszym spotkaniu."
-                        : "By completing this form you start the subscription billing. The design fee will be sent after the first meeting."}
-                    </span>
                   ) : null}
                 </div>
               </div>
