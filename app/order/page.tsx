@@ -22,6 +22,9 @@ import {
   normalizeForm,
 } from "./orderUtils";
 
+const DOMAIN_PATTERN =
+  /^(?=.{1,253}$)(?!-)(?:[a-z0-9-]{1,63}\.)+[a-z]{2,63}$/i;
+
 export default function SubscriptionPage() {
   const { locale } = useI18n();
   const isPolish = locale === "pl";
@@ -151,19 +154,27 @@ export default function SubscriptionPage() {
   const handleDomainCheck = async (rawDomain: string) => {
     const domain = rawDomain.trim().toLowerCase();
     if (!domain) return;
+    if (!DOMAIN_PATTERN.test(domain)) {
+      setDomainStatus("invalid");
+      return;
+    }
+
     setDomainStatus("checking");
     try {
-      const response = await fetch(`/api/whois?domain=${encodeURIComponent(domain)}`);
-      const result = await response.json().catch(() => null);
-      if (!response.ok || !result) {
-        setDomainStatus("error");
+      const response = await fetch(
+        `https://rdap.org/domain/${encodeURIComponent(domain)}`,
+        { method: "GET" },
+      );
+
+      if (response.status === 404) {
+        setDomainStatus("available");
         return;
       }
-      if (result.status === "invalid") {
-        setDomainStatus("invalid");
+      if (response.ok) {
+        setDomainStatus("taken");
         return;
       }
-      setDomainStatus(result.available ? "available" : "taken");
+      setDomainStatus("error");
     } catch {
       setDomainStatus("error");
     }

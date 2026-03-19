@@ -11,6 +11,8 @@ type Card = {
   href: string;
   poster: string;
   video?: string;
+  kind?: "website" | "other";
+  description?: string;
   titleKey?: "comingSoon" | "portfolioOld";
 };
 
@@ -20,52 +22,70 @@ const cards: Card[] = [
     href: "https://kornelianowak.com",
     poster: "/portfolio/kornelia.jpg",
     video: "/portfolio/kornelia_prev.mp4",
+    kind: "website",
+    description: "React + React Router · WordPress",
   },
   {
     title: "Artbubble",
     href: "https://artbubble.in",
     poster: "/portfolio/artbubble.jpg",
     video: "/portfolio/ab_prev.mp4",
+    kind: "website",
+    description: "React + Expo",
   },
   {
     title: "Jakub Kanna",
     href: "https://jakubkanna.com",
     poster: "/portfolio/jakubkanna.jpg",
     video: "/portfolio/jk_prev.mp4",
+    kind: "website",
+    description: "React + static website",
   },
   {
     title: "Dimitra Sofroniou",
     href: "https://dimitrasofroniou.com/",
     poster: "/portfolio/dimitra.png",
     video: "/portfolio/dimitra_prev.mp4",
+    kind: "website",
+    description: "Next.js + WordPress",
   },
   {
     title: "Rita Borralho Silva",
     href: "https://ritaborralhosilva.com/",
     poster: "/portfolio/pillow.jpg",
     video: "/portfolio/pillow.mp4",
+    kind: "website",
+    description: "React + React Router · Labguy CMS · Three.js",
   },
   {
     title: "INSIDE JOB",
     href: "https://michalknychaus.com/",
     poster: "/portfolio/insidejob.jpg",
     video: "/portfolio/ij_prev.mp4",
+    kind: "website",
+    description: "React + React Router · Labguy CMS",
   },
   {
     title: "IZABELA SITARSKA",
     href: "https://izabelasitarska.com",
     poster: "/portfolio/is.jpg",
     video: "/portfolio/iza_prev.mp4",
+    kind: "website",
+    description: "React + React Router · Labguy CMS",
   },
   {
     title: "Jakub Kanna",
     href: "https://archive.jakubkanna.com/works",
     poster: "/portfolio/jknew.jpg",
+    kind: "other",
+    description: "Archive",
   },
   {
     title: "",
     href: "/",
     poster: "/portfolio/jkold.jpg",
+    kind: "other",
+    description: "Portfolio archive",
     titleKey: "portfolioOld",
   },
 ];
@@ -93,6 +113,8 @@ function PortfolioCard({
   href,
   poster,
   video,
+  kind = "website",
+  description = "",
   locked = false,
   index,
 }: Card & { locked?: boolean; index: number }) {
@@ -172,7 +194,14 @@ function PortfolioCard({
           />
         )}
         <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-3 py-2 text-sm uppercase tracking-wide text-foreground">
-          <span className="truncate">{title}</span>
+          <div className="min-w-0">
+            <span className="block truncate">{title}</span>
+            {description ? (
+              <span className="mt-0.5 block truncate text-[10px] tracking-normal normal-case text-foreground/80">
+                {description}
+              </span>
+            ) : null}
+          </div>
           <div className="flex h-8 w-8 items-center justify-center rounded-full transition group-hover:opacity-100">
             <Arrow />
           </div>
