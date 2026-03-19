@@ -15,15 +15,6 @@ export default function AboutPage() {
   const [activeSection, setActiveSection] = useState(0);
   const [introAnimationDone, setIntroAnimationDone] = useState(false);
   const sectionsCount = 3;
-  const [bgLayout, setBgLayout] = useState({
-    first: { x: 50, y: 50, h: 200 },
-    secondA: { x: 50, y: 50, h: 200 },
-    secondB: { x: 50, y: 50, h: 200 },
-    secondC: { x: 50, y: 50, h: 200 },
-    third: { x: 50, y: 50, h: 200 },
-    thirdSecondary: { x: 50, y: 50, h: 200 },
-    thirdTertiary: { x: 50, y: 50, h: 200 },
-  });
 
   useEffect(() => {
     const root = document.documentElement;
@@ -36,6 +27,9 @@ export default function AboutPage() {
   }, []);
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
     const randomWithinMargins = () => {
       const marginX = 12;
       const marginY = 12;
@@ -46,14 +40,12 @@ export default function AboutPage() {
     };
     const randomHeight = () => 200 * (0.8 + Math.random() * 0.4);
 
-    setBgLayout({
-      first: { ...randomWithinMargins(), h: randomHeight() },
-      secondA: { ...randomWithinMargins(), h: randomHeight() },
-      secondB: { ...randomWithinMargins(), h: randomHeight() },
-      secondC: { ...randomWithinMargins(), h: randomHeight() },
-      third: { ...randomWithinMargins(), h: randomHeight() },
-      thirdSecondary: { ...randomWithinMargins(), h: randomHeight() },
-      thirdTertiary: { ...randomWithinMargins(), h: randomHeight() },
+    const backgrounds = container.querySelectorAll<HTMLElement>(".about-bg");
+    backgrounds.forEach((background) => {
+      const pos = randomWithinMargins();
+      const height = randomHeight();
+      background.style.backgroundPosition = `${pos.x}% ${pos.y}%`;
+      background.style.backgroundSize = `auto ${height.toFixed(0)}px`;
     });
   }, []);
 
@@ -175,10 +167,6 @@ export default function AboutPage() {
           <div
             className="about-bg about-bg-first"
             aria-hidden="true"
-            style={{
-              backgroundPosition: `${bgLayout.first.x}% ${bgLayout.first.y}%`,
-              backgroundSize: `auto ${bgLayout.first.h}px`,
-            }}
           />
         </div>
         <motion.div
@@ -216,10 +204,6 @@ export default function AboutPage() {
           <div
             className="about-bg about-bg-second-a"
             aria-hidden="true"
-            style={{
-              backgroundPosition: `${bgLayout.secondA.x}% ${bgLayout.secondA.y}%`,
-              backgroundSize: `auto ${bgLayout.secondA.h}px`,
-            }}
           />
         </div>
         <div
@@ -229,10 +213,6 @@ export default function AboutPage() {
           <div
             className="about-bg about-bg-second-b"
             aria-hidden="true"
-            style={{
-              backgroundPosition: `${bgLayout.secondB.x}% ${bgLayout.secondB.y}%`,
-              backgroundSize: `auto ${bgLayout.secondB.h}px`,
-            }}
           />
         </div>
         <div
@@ -242,10 +222,6 @@ export default function AboutPage() {
           <div
             className="about-bg about-bg-second-c"
             aria-hidden="true"
-            style={{
-              backgroundPosition: `${bgLayout.secondC.x}% ${bgLayout.secondC.y}%`,
-              backgroundSize: `auto ${bgLayout.secondC.h}px`,
-            }}
           />
         </div>
         <motion.div
@@ -291,10 +267,6 @@ export default function AboutPage() {
           <div
             className="about-bg about-bg-third-secondary"
             aria-hidden="true"
-            style={{
-              backgroundPosition: `${bgLayout.thirdSecondary.x}% ${bgLayout.thirdSecondary.y}%`,
-              backgroundSize: `auto ${bgLayout.thirdSecondary.h}px`,
-            }}
           />
         </div>
         <div
@@ -304,10 +276,6 @@ export default function AboutPage() {
           <div
             className="about-bg about-bg-third"
             aria-hidden="true"
-            style={{
-              backgroundPosition: `${bgLayout.third.x}% ${bgLayout.third.y}%`,
-              backgroundSize: `auto ${bgLayout.third.h}px`,
-            }}
           />
         </div>
         <div
@@ -317,10 +285,6 @@ export default function AboutPage() {
           <div
             className="about-bg about-bg-third-tertiary"
             aria-hidden="true"
-            style={{
-              backgroundPosition: `${bgLayout.thirdTertiary.x}% ${bgLayout.thirdTertiary.y}%`,
-              backgroundSize: `auto ${bgLayout.thirdTertiary.h}px`,
-            }}
           />
         </div>
         <motion.div
@@ -391,6 +355,8 @@ export default function AboutPage() {
         .about-bg {
           position: absolute;
           inset: 0;
+          background-position: 50% 50%;
+          background-size: auto 200px;
           background-repeat: no-repeat;
           opacity: 0;
           animation:

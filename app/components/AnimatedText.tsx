@@ -188,7 +188,7 @@ export default function AnimatedText({
   return (
     <div className="flex flex-col items-center justify-center text-center">
       <span
-        className={`relative mx-auto block max-w-3xl font-normal text-balance break-words leading-tight whitespace-pre-wrap ${className}`.trim()}
+        className={`relative mx-auto block max-w-3xl font-normal text-balance wrap-break-word leading-tight whitespace-pre-wrap ${className}`.trim()}
         style={textStyle}
       >
         <span aria-hidden className="block opacity-0">
