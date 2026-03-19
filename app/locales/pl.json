@@ -21,7 +21,12 @@
     "catalogLink": "katalog",
     "line3Or": "lub",
     "contactLink": "skontaktuj się z nami",
-    "line3Suffix": "i podziel się swoim pomysłem. 🌸"
+    "line3Suffix": "i podziel się swoim pomysłem. 🌸",
+    "introSuffix": " łączy technologię z wyobraźnią. Tworzymy projekty, które łączą swobodę konceptualną z ewoluującym językiem współczesnego designu.",
+    "section2Title": "dla brandów i artystów",
+    "section2Desc": "Oferujemy umiejętności programistyczne i projektowe skoncentrowane na tożsamości marki i wpływie produktu: aplikacje mobilne, strony internetowe, doświadczenia creative coding, projektowanie logo, strategia marki i rozwój koncepcji.",
+    "section3Title": "dla inżynierów",
+    "section3Desc": "Pracujemy również nad procesami projektowania przemysłowego: CNC, projekty do druku 3D."
   },
   "contact": {
     "emailLabel": "Napisz na",

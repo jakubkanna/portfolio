@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -15,6 +16,7 @@ type AnimatedTextProps = {
   sessionKey?: string;
   className?: string;
   textStyle?: CSSProperties;
+  onComplete?: () => void;
 };
 
 const cursorStyle: CSSProperties = {
@@ -123,6 +125,7 @@ export default function AnimatedText({
   sessionKey,
   className = "",
   textStyle,
+  onComplete,
 }: AnimatedTextProps) {
   const segments = useMemo(
     () => (Array.isArray(message) ? message : [message]),
@@ -140,6 +143,7 @@ export default function AnimatedText({
   }, [segments, sessionKey]);
 
   const [typed, setTyped] = useState(0);
+  const completionNotifiedRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -164,6 +168,12 @@ export default function AnimatedText({
     if (!isDone || typeof window === "undefined") return;
     sessionStorage.setItem(storageKey, "seen");
   }, [isDone, storageKey]);
+
+  useEffect(() => {
+    if (!isDone || !onComplete || completionNotifiedRef.current) return;
+    completionNotifiedRef.current = true;
+    onComplete();
+  }, [isDone, onComplete]);
 
   const partial = useMemo(
     () => renderWithLimit(segments, typed, false).nodes,

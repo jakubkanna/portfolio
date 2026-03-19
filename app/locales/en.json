@@ -21,7 +21,12 @@
     "catalogLink": "catalog",
     "line3Or": "or",
     "contactLink": "get in touch",
-    "line3Suffix": "to bring your idea to life. 🌸"
+    "line3Suffix": "to bring your idea to life. 🌸",
+    "introSuffix": " merges technology with imagination. We create work that embraces conceptual freedom and responds to the evolving language of contemporary design.",
+    "section2Title": "for Brands & Artists",
+    "section2Desc": "Programming and design services focused on brand identity and product impact: mobile apps, websites, creative coding experiences, logo design, brand strategy, and concept development.",
+    "section3Title": "for Engineers",
+    "section3Desc": "Industrial design workflows include CNC and 3D print designs."
   },
   "contact": {
     "emailLabel": "Email",
