@@ -43,5 +43,5 @@ export const getStepTitles = (isPolish: boolean) =>
         "CMS",
         "Additional services",
         "Installation",
-        "Introduction",
+        "Finish",
       ];

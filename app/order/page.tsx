@@ -847,7 +847,7 @@ export default function SubscriptionPage() {
                               title={
                                 isPolish
                                   ? "Potrzebuję pomocy z instalacją"
-                                  : "I want you to install"
+                                  : "Install service"
                               }
                               price={getOptionPrice(
                                 formatPrice("€100", !showNet),

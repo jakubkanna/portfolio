@@ -349,7 +349,7 @@ export default function SubscriptionPage() {
 
   const stepTitles = isPolish
     ? ["Plan i zamówienie", "CMS", "Dodatkowe usługi", "Wprowadzenie"]
-    : ["Plan & order", "CMS", "Additional services", "Introduction"];
+    : ["Plan & order", "CMS", "Additional services", "Finish"];
 
   const cmsHint = isPolish
     ? "CMS to system zarządzania treścią strony."
