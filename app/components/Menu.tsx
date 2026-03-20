@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Button from "./Button";
 import { motion, useReducedMotion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
@@ -52,10 +53,12 @@ function MenuBar({
   items,
   onNavigate,
   isCatalog,
+  bottomPopNonce,
 }: {
   items: Array<NavItem & { label: string }>;
   onNavigate: (href: string) => void;
   isCatalog: boolean;
+  bottomPopNonce: number;
 }) {
   const YEAR = new Date().getFullYear(); // ← add this line
   const shouldReduceMotion = useReducedMotion();
@@ -72,7 +75,7 @@ function MenuBar({
         STUDIO JAKUB KANNA
       </div>
       <motion.div
-        className="flex w-full max-w-[90vw] flex-wrap items-center justify-center gap-2 rounded-full bg-[rgb(18,18,18)]/85 p-1 sm:w-auto sm:max-w-none"
+        className="w-full max-w-[90vw] sm:w-auto sm:max-w-none"
         style={{ transformOrigin: "center" }}
         initial={
           shouldReduceMotion
@@ -87,20 +90,39 @@ function MenuBar({
         transition={
           shouldReduceMotion
             ? { duration: 0 }
-            : { duration: 0.38, ease: [0.22, 1.25, 0.36, 1] }
+            : {
+                duration: 0.38,
+                ease: [0.22, 1.25, 0.36, 1],
+              }
         }
       >
-        {items.map((item) => (
-          <Button
-            key={item.label}
-            label={item.label}
-            variant="link"
-            className={`rounded-full md:text-lg p-5 text-white hover:bg-black hover:text-white ${
-              item.key === "home" ? "hidden sm:inline-flex" : ""
-            }`.trim()}
-            action={() => onNavigate(item.href)}
-          />
-        ))}
+        <motion.div
+          className="flex w-full flex-wrap items-center justify-center gap-2 rounded-full bg-[rgb(18,18,18)]/85 p-1"
+          animate={
+            shouldReduceMotion
+              ? { scale: 1, y: 0 }
+              : bottomPopNonce > 0
+                ? { scale: [1, 1.07, 0.985, 1], y: [0, -2, 0, 0] }
+                : { scale: 1, y: 0 }
+          }
+          transition={
+            shouldReduceMotion
+              ? { duration: 0 }
+              : { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+          }
+        >
+          {items.map((item) => (
+            <Button
+              key={item.label}
+              label={item.label}
+              variant="link"
+              className={`rounded-full md:text-lg p-5 text-white hover:bg-black hover:text-white ${
+                item.key === "home" ? "hidden sm:inline-flex" : ""
+              }`.trim()}
+              action={() => onNavigate(item.href)}
+            />
+          ))}
+        </motion.div>
       </motion.div>
       <div className="hidden text-xs text-center sm:block ml-12 text-[#9a9a9a] font-mono">
         © {YEAR}
@@ -116,6 +138,34 @@ export default function Menu() {
   const router = useRouter();
   const pathname = usePathname();
   const { t } = useI18n();
+  const [bottomPopNonce, setBottomPopNonce] = useState(0);
+
+  useEffect(() => {
+    if (pathname !== "/about") return;
+
+    const root = document.getElementById("about-scroll-root");
+    if (!root) return;
+
+    let wasAtBottom = false;
+    const threshold = 24;
+
+    const onScroll = () => {
+      const distanceToBottom =
+        root.scrollHeight - root.scrollTop - root.clientHeight;
+      const isAtBottom = distanceToBottom <= threshold;
+      if (isAtBottom && !wasAtBottom) {
+        setBottomPopNonce((value) => value + 1);
+      }
+      wasAtBottom = isAtBottom;
+    };
+
+    onScroll();
+    root.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      root.removeEventListener("scroll", onScroll);
+    };
+  }, [pathname]);
 
   if (pathname === "/") {
     return <LandingCta onClick={() => router.push("/about")} />;
@@ -134,6 +184,7 @@ export default function Menu() {
       <MenuBar
         items={itemsWithLabels}
         isCatalog={isCatalog}
+        bottomPopNonce={bottomPopNonce}
         onNavigate={(href) => router.push(href)}
       />
     </div>

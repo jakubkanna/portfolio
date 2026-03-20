@@ -147,8 +147,9 @@ export default function AboutPage() {
 
   return (
     <motion.main
+      id="about-scroll-root"
       ref={containerRef}
-      className="relative h-screen snap-y snap-mandatory overflow-y-hidden bg-[#f8f8f8] text-[#0a0a0a]"
+      className="relative h-[100svh] snap-y snap-mandatory overflow-y-hidden bg-[#f8f8f8] text-[#0a0a0a]"
       initial={{ backgroundColor: "#f8f8f8", color: "#0a0a0a", opacity: 0 }}
       animate={{ backgroundColor: "#f8f8f8", color: "#0a0a0a", opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
@@ -158,7 +159,7 @@ export default function AboutPage() {
           sectionRefs.current[0] = el;
         }}
         data-section-index="0"
-        className="relative flex min-h-screen snap-start flex-col items-center justify-center overflow-hidden px-6 text-center"
+        className="relative flex min-h-[100svh] snap-start flex-col items-center justify-center overflow-hidden px-6 text-center"
       >
         <div
           className="about-bg-wrap"
@@ -195,7 +196,7 @@ export default function AboutPage() {
           sectionRefs.current[1] = el;
         }}
         data-section-index="1"
-        className="relative flex min-h-screen snap-start items-center justify-center overflow-hidden px-6 text-center"
+        className="relative flex min-h-[100svh] snap-start items-center justify-center overflow-hidden px-6 text-center"
       >
         <div
           className="about-bg-wrap"
@@ -258,7 +259,7 @@ export default function AboutPage() {
           sectionRefs.current[2] = el;
         }}
         data-section-index="2"
-        className="relative flex min-h-screen snap-start items-center justify-center overflow-hidden px-6 pb-24 text-center"
+        className="relative flex min-h-[100svh] snap-start items-center justify-center overflow-hidden px-6 pb-24 text-center"
       >
         <div
           className="about-bg-wrap"
@@ -319,7 +320,7 @@ export default function AboutPage() {
       {showChevron ? (
         <button
           type="button"
-          className="pointer-events-auto fixed bottom-20 left-1/2 z-30 -translate-x-1/2 transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30"
+          className="pointer-events-auto fixed bottom-[90px] left-1/2 z-30 -translate-x-1/2 transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 sm:bottom-20"
           onClick={scrollToNextSection}
           aria-label="Scroll to next section"
         >

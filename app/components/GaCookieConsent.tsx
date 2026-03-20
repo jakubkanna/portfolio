@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import GoogleAnalytics from "./GoogleAnalytics";
+import { useI18n } from "../hooks/useI18n";
 
 declare global {
   interface Window {
@@ -39,16 +40,12 @@ const initGa = (gaId: string) => {
 };
 
 export default function GaCookieConsent({ gaId }: GaCookieConsentProps) {
-  const [consent, setConsent] = useState<ConsentState>("loading");
-
-  useEffect(() => {
+  const { locale } = useI18n();
+  const [consent, setConsent] = useState<ConsentState>(() => {
+    if (typeof window === "undefined") return "loading";
     const stored = window.localStorage.getItem(CONSENT_KEY);
-    if (stored === "accepted" || stored === "rejected") {
-      setConsent(stored);
-      return;
-    }
-    setConsent("unknown");
-  }, []);
+    return stored === "accepted" || stored === "rejected" ? stored : "unknown";
+  });
 
   useEffect(() => {
     if (consent !== "accepted") return;
@@ -57,21 +54,39 @@ export default function GaCookieConsent({ gaId }: GaCookieConsentProps) {
 
   const canTrack = useMemo(() => consent === "accepted", [consent]);
   const showBanner = useMemo(() => consent === "unknown", [consent]);
+  const copy = useMemo(
+    () =>
+      locale === "pl"
+        ? {
+            message:
+              "Jeśli wyrazisz zgodę, użyjemy analitycznych plików cookies, aby lepiej zrozumieć ruch na stronie.",
+            detailsPrefix: "Więcej informacji znajdziesz w ",
+            detailsLink: "polityce prywatności",
+            accept: "Akceptuję",
+            reject: "Odrzucam",
+          }
+        : {
+            message:
+              "If you agree, we will use analytical cookies to better understand website traffic.",
+            detailsPrefix: "You can find more details in the ",
+            detailsLink: "privacy policy",
+            accept: "Accept",
+            reject: "Reject",
+          },
+    [locale],
+  );
 
   return (
     <>
       {canTrack ? <GoogleAnalytics gaId={gaId} /> : null}
 
       {showBanner ? (
-        <aside className="fixed bottom-20 right-4 z-50 max-w-sm rounded-2xl border border-black/15 bg-[#e6e6e6] p-4 text-xs text-black/80 shadow-[0_12px_30px_rgba(0,0,0,0.18)] sm:right-6">
-          <p>
-            Używamy plików cookies analitycznych (Google Analytics), aby mierzyć
-            kliknięcia i ruch na stronie.
-          </p>
+        <aside className="fixed bottom-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 rounded-2xl border border-black/15 bg-[#e6e6e6] p-4 text-xs text-black/80 shadow-[0_12px_30px_rgba(0,0,0,0.18)] sm:bottom-20 sm:left-auto sm:right-6 sm:w-auto sm:translate-x-0">
+          <p>{copy.message}</p>
           <p className="mt-2">
-            Szczegóły znajdziesz w{" "}
+            {copy.detailsPrefix}
             <Link href="/legal" className="underline underline-offset-2">
-              polityce prywatności
+              {copy.detailsLink}
             </Link>
             .
           </p>
@@ -84,7 +99,7 @@ export default function GaCookieConsent({ gaId }: GaCookieConsentProps) {
               }}
               className="rounded-full bg-black px-3 py-1.5 text-[11px] text-white"
             >
-              Akceptuję
+              {copy.accept}
             </button>
             <button
               type="button"
@@ -94,7 +109,7 @@ export default function GaCookieConsent({ gaId }: GaCookieConsentProps) {
               }}
               className="rounded-full border border-black/30 px-3 py-1.5 text-[11px] text-black/80"
             >
-              Odrzucam
+              {copy.reject}
             </button>
           </div>
         </aside>
