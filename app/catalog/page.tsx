@@ -17,14 +17,14 @@ type Card = {
 };
 
 const cards: Card[] = [
-  {
-    title: "Kornelia Nowak",
-    href: "https://kornelianowak.com",
-    poster: "/portfolio/kornelia.jpg",
-    video: "/portfolio/kornelia_prev.mp4",
-    kind: "website",
-    description: "React + React Router · WordPress",
-  },
+  // {
+  //   title: "Kornelia Nowak",
+  //   href: "https://kornelianowak.com",
+  //   poster: "/portfolio/kornelia.jpg",
+  //   video: "/portfolio/kornelia_prev.mp4",
+  //   kind: "website",
+  //   description: "React + React Router · WordPress",
+  // },
   {
     title: "Artbubble",
     href: "https://artbubble.in",
